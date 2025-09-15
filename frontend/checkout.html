@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout</title>
+
+  <!-- Fonts and Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Toastify CSS -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+  <!-- Custom CSS -->
+  <style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background-color: #f3f4f6;
+    }
+
+    .popup {
+      display: none;
+    }
+
+    .popup.show {
+      display: flex;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      outline: none;
+    }
+
+    .address-modal {
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .shadow-hover:hover {
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    .coupon-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 400px;
+      z-index: 1000;
+    }
+
+    .coupon-modal .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      cursor: pointer;
+      font-size: 20px;
+    }
+
+    .coupon-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .coupon-item button {
+      background: #ff4d4d;
+      color: white;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .coupon-item button:hover {
+      background: #e60000;
+    }
+
+    input:invalid:not(:placeholder-shown) {
+      border-color: #f87171;
+    }
+
+    .error-text {
+      color: #f87171;
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+      display: none;
+    }
+
+    input:invalid:not(:placeholder-shown) + .error-text {
+      display: block;
+    }
+  </style>
+
+  <!-- Toastify JS -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+</head>
+
+<body class="min-h-screen flex flex-col">
+  <nav class="bg-white shadow-md p-4 sticky top-0 z-50">
+    <div class="flex justify-between items-center">
+      <a href="index.html" class="flex justify-center gap-2 flex-shrink-0">
+        <img src="images/Asset 4.jpg" alt="GlobalShopify Logo" class="h-12 w-auto" />
+      </a>
+      <a href="cart.html" class="hover:text-orange-500 transition-colors flex items-center gap-1 relative">
+        <span class="material-symbols-outlined text-2xl">shopping_cart</span>
+        <span id="cart-count"
+          class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full absolute -top-2 -right-3 hidden">0</span>
+      </a>
+    </div>
+    <!-- Category Section -->
+    <div
+      class="flex overflow-x-auto whitespace-nowrap scrollbar-hide md:justify-center gap-6 py-3 px-4 text-sm font-bold"
+      id="categoryBar">
+      <div class="group relative inline-block">
+        <a href="lightings.html" class="category-link hover:text-orange-500">LIGHTINGS</a>
+      </div>
+      <div class="group relative inline-block">
+        <a href="accessory.html" class="category-link hover:text-orange-500">ACCESSORIES</a>
+      </div>
+      <div class="group relative inline-block">
+        <a href="utility.html" class="category-link hover:text-orange-500">UTILITY</a>
+      </div>
+      <div class="group relative inline-block">
+        <a href="wooden.html" class="category-link hover:text-orange-500">WOODEN</a>
+      </div>
+      <div class="group relative inline-block">
+        <a href="pottery.html" class="category-link hover:text-orange-500">POTTERY</a>
+      </div>
+      <a href="wall.html" class="category-link inline-block hover:text-orange-500">WALL DECOR</a>
+      <div class="group relative inline-block">
+        <a href="textile.html" class="category-link hover:text-orange-500">TEXTILE</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="min-w-full ml-6 mr-12 mx-auto mt-6 mb-4 p-6 bg-white rounded-xl shadow-lg flex-grow">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Shipping Info -->
+      <div class="lg:col-span-2">
+        <h3 class="text-2xl font-semibold text-gray-800 border-b pb-2 mb-6">Shipping Information</h3>
+        <!-- Saved Addresses Section -->
+        <div class="mb-6 flex items-center gap-4">
+          <div class="flex-1">
+            <label for="saved-addresses" class="block text-sm font-medium text-gray-700 mb-1">Select Saved
+              Address</label>
+            <select id="saved-addresses"
+              class="w-full p-3 border rounded-lg focus:outline-none transition duration-200">
+              <option value="">Choose an address</option>
+            </select>
+          </div>
+          <button id="add-address-btn"
+            class="mt-6 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow-hover">
+            Add New Address
+          </button>
+        </div>
+        <form id="checkout-form" class="space-y-5">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label for="first-name" class="block text-sm font-medium text-gray-700">First Name</label>
+              <input type="text" id="first-name" placeholder="First Name"
+                class="w-full p-3 border rounded-lg mt-1 focus:outline-none transition duration-200" required>
+              <p class="error-text">Please enter a valid first name.</p>
+            </div>
+            <div>
+              <label for="last-name" class="block text-sm font-medium text-gray-700">Last Name</label>
+              <input type="text" id="last-name" placeholder="Last Name"
+                class="w-full p-3 border rounded-lg mt-1 focus:outline-none transition duration-200" required>
+              <p class="error-text">Please enter a valid last name.</p>
+            </div>
+          </div>
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+            <input type="email" id="email" placeholder="Email Address"
+              class="w-full p-3 border rounded-lg mt-1 focus:outline-none transition duration-200" required>
+            <p class="error-text">Please enter a valid email address.</p>
+          </div>
+          <div>
+            <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
+            <input type="text" id="address" placeholder="Street Address"
+              class="w-full p-3 border rounded-lg mt-1 focus:outline-none transition duration-200" required>
+            <p class="error-text">Please enter a valid street address.</p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label for="city" class="block text-sm font-medium text-gray-700">City</label>
+              <input type="text" id="city" placeholder="City"
+                class="w-full p-3 border rounded-lg mt-1 focus:outline-none transition duration-200" required>
+              <p class="error-text">Please enter a valid city.</p>
+            </div>
+            <div>
+              <label for="pincode" class="block text-sm font-medium text-gray-700">Postal Code / Pincode</label>
+              <input type="text" id="pincode" placeholder="Postal Code / Pincode"
+                class="w-full p-3 border rounded-lg mt-1 focus:outline-none transition duration-200" required pattern="\d{6}">
+              <p class="error-text">Please enter a valid 6-digit pincode.</p>
+            </div>
+          </div>
+          <div>
+            <label for="state" class="block text-sm font-medium text-gray-700">State</label>
+            <input type="text" id="state" placeholder="State"
+              class="w-full p-3 border rounded-lg mt-1 focus:outline-none transition duration-200" required>
+            <p class="error-text">Please enter a valid state.</p>
+          </div>
+          <div>
+            <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
+            <input type="tel" id="phone" placeholder="Phone Number"
+              class="w-full p-3 border rounded-lg mt-1 focus:outline-none transition duration-200" required pattern="\d{10}">
+            <p class="error-text">Please enter a valid 10-digit phone number.</p>
+          </div>
+        </form>
+      </div>
+
+      <!-- Order Summary -->
+      <div class="order-summary bg-gray-50 p-6 rounded-lg border shadow-md">
+        <h3 class="text-2xl font-semibold text-gray-800 border-b pb-2 mb-6">Order Summary</h3>
+        <!-- Coupon Section -->
+        <div class="mb-6">
+          <label class="font-semibold block text-sm text-gray-700 mb-1">Apply Coupon</label>
+          <div class="flex items-center gap-2">
+            <input type="text" id="coupon-input" placeholder="Enter coupon code"
+              class="w-full p-2 border rounded-lg focus:outline-none transition duration-200">
+            <button onclick="openCouponModal()"
+              class="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition shadow-hover">Apply</button>
+          </div>
+        </div>
+        <!-- Cart Items -->
+        <div id="order-items" class="mt-6 divide-y divide-gray-200 space-y-4"></div>
+        <!-- Pricing Summary -->
+        <div class="mt-6 text-sm">
+          <table class="w-full">
+            <tbody>
+              <tr>
+                <td class="py-2 px-2 text-gray-700">Original Price:</td>
+                <td class="py-2 px-2 text-right" id="original-price">Rs 0.00</td>
+              </tr>
+              <tr>
+                <td class="py-2 px-2 text-gray-700">Delivery Charges:</td>
+                <td class="py-2 px-2 text-right" id="delivery-charges">Rs 50.00</td>
+              </tr>
+              <tr>
+                <td class="py-2 px-2 text-gray-700">GST (18%):</td>
+                <td class="py-2 px-2 text-right" id="gst">Rs 0.00</td>
+              </tr>
+              <tr id="discount-row" class="hidden">
+                <td class="py-2 px-2 text-green-600">Coupon Discount:</td>
+                <td class="py-2 px-2 text-right text-green-600" id="coupon-discount">- Rs 0.00</td>
+              </tr>
+              <tr class="font-semibold border-t">
+                <td class="py-2 px-2 text-gray-800">Total:</td>
+                <td class="py-2 px-2 text-right" id="total-price">Rs 0.00</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mt-6 flex flex-col gap-3">
+          <button id="proceed-to-payment-btn"
+            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow-hover disabled:opacity-50"
+            disabled>
+            <span id="proceed-to-payment-text">Proceed to Payment</span>
+            <span id="proceed-to-payment-loading" class="hidden">Processing...</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order Popup -->
+    <div id="order-popup" class="popup fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+      <div class="popup-content bg-white p-6 rounded-lg shadow-lg text-center w-80">
+        <div class="text-green-500 text-4xl"><i class="fas fa-check-circle"></i></div>
+        <h2 class="text-xl font-semibold mt-2 text-gray-800">Order Placed Successfully!</h2>
+        <p class="text-gray-600 mt-2">Your Order ID: <span id="order-id" class="font-bold text-blue-600"></span></p>
+        <button onclick="closePopup()"
+          class="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow-hover">Close</button>
+      </div>
+    </div>
+
+    <!-- Add Address Modal -->
+    <div id="add-address-modal"
+      class="popup fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+      <div class="address-modal bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">Add New Address</h2>
+        <form id="add-address-form" class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label for="new-first-name" class="block text-sm font-medium text-gray-700">First Name</label>
+              <input type="text" id="new-first-name" placeholder="First Name"
+                class="w-full p-3 border rounded-lg mt-1 focus:outline-none transition duration-200" required>
+              <p class="error-text">Please enter a valid first name.</p>
+            </div>
+            <div>
+              <label for="new-last-name" class="block text-sm font-medium text-gray-700">Last Name</label>
+              <input type="text" id="new-last-name" placeholder="Last Name"
+                class="w-full p-3 border rounded-lg mt-1 focus:outline-none transition duration-200" required>
+              <p class="error-text">Please enter a valid last name.</p>
+            </div>
+          </div>
+          <div>
+            <label for="new-email" class="block text-sm font-medium text-gray-700">Email Address</label>
+            <input type="email" id="new-email" placeholder="Email Address"
+              class="w-full p-3 border rounded-lg mt-1 focus:outline-none transition duration-200" required>
+            <p class="error-text">Please enter a valid email address.</p>
+          </div>
+          <div>
+            <label for="new-address" class="block text-sm font-medium text-gray-700">Street Address</label>
+            <input type="text" id="new-address" placeholder="Street Address"
+              class="w-full p-3 border rounded-lg mt-1 focus:outline-none transition duration-200" required>
+            <p class="error-text">Please enter a valid street address.</p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label for="new-city" class="block text-sm font-medium text-gray-700">City</label>
+            <input type="text" id="new-city" placeholder="City"
+              class="w-full p-3 border rounded-lg mt-1 focus:outline-none transition duration-200" required>
+            <p class="error-text">Please enter a valid city.</p>
+            </div>
+            <div>
+              <label for="new-pincode" class="block text-sm font-medium text-gray-700">Postal Code / Pincode</label>
+              <input type="text" id="new-pincode" placeholder="Postal Code / Pincode"
+                class="w-full p-3 border rounded-lg mt-1 focus:outline-none transition duration-200" required pattern="\d{6}">
+              <p class="error-text">Please enter a valid 6-digit pincode.</p>
+            </div>
+          </div>
+          <div>
+            <label for="new-state" class="block text-sm font-medium text-gray-700">State</label>
+            <input type="text" id="new-state" placeholder="State"
+              class="w-full p-3 border rounded-lg mt-1 focus:outline-none transition duration-200" required>
+            <p class="error-text">Please enter a valid state.</p>
+          </div>
+          <div>
+            <label for="new-phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
+            <input type="tel" id="new-phone" placeholder="Phone Number"
+              class="w-full p-3 border rounded-lg mt-1 focus:outline-none transition duration-200" required pattern="\d{10}">
+            <p class="error-text">Please enter a valid 10-digit phone number.</p>
+          </div>
+          <div>
+            <label for="new-type" class="block text-sm font-medium text-gray-700">Address Type</label>
+            <select id="new-type" class="w-full p-3 border rounded-lg mt-1 focus:outline-none transition duration-200" required>
+              <option value="Home">Home</option>
+              <option value="Work">Work</option>
+              <option value="Other">Other</option>
+            </select>
+            <p class="error-text">Please select an address type.</p>
+          </div>
+          <div class="flex items-center">
+            <input type="checkbox" id="set-default" class="mr-2">
+            <label for="set-default" class="text-sm text-gray-700">Set as default address</label>
+          </div>
+          <div class="flex justify-end gap-2">
+            <button type="button" onclick="closeAddressModal()"
+              class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition shadow-hover">Cancel</button>
+            <button type="submit"
+              class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow-hover">Save
+              Address</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Coupon Modal -->
+    <div id="coupon-modal" class="popup fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+      <div class="coupon-modal">
+        <span class="close-btn" onclick="closeCouponModal()">&times;</span>
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">Apply Coupon</h3>
+        <div class="mb-4">
+          <input type="text" id="coupon-modal-input" placeholder="Enter coupon code"
+            class="w-full p-2 border rounded-lg focus:outline-none transition duration-200">
+          <button onclick="applyManualCoupon()"
+            class="mt-2 w-full bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition shadow-hover">Apply</button>
+        </div>
+        <div id="coupon-list" class="max-h-40 overflow-y-auto">
+          <div class="coupon-item">
+            <span>SAVE10 - 10% Off</span>
+            <button onclick="applyCoupon('SAVE10')">Apply</button>
+          </div>
+          <div class="coupon-item">
+            <span>FESTIVE15 - 15% Off</span>
+            <button onclick="applyCoupon('FESTIVE15')">Apply</button>
+          </div>
+          <div class="coupon-item">
+            <span>MEGA20 - 20% Off</span>
+            <button onclick="applyCoupon('MEGA20')">Apply</button>
+          </div>
+        </div>
+        <div class="mt-4 text-sm text-gray-600">
+          <span>Maximum savings:</span>
+          <span id="max-savings">₹0</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <div id="footer-container"></div>
+
+  <script>
+    let discountAmount = 0;
+    let addresses = JSON.parse(localStorage.getItem("addresses")) || [];
+    let selectedCoupon = null;
+
+    const validCoupons = {
+      SAVE10: { discountRate: 0.10, description: "10% Off" },
+      FESTIVE15: { discountRate: 0.15, description: "15% Off" },
+      MEGA20: { discountRate: 0.20, description: "20% Off" }
+    };
+
+    document.addEventListener("DOMContentLoaded", function () {
+      // Initialize popups as hidden
+      const popups = ["order-popup", "add-address-modal", "coupon-modal"];
+      popups.forEach(id => {
+        const popup = document.getElementById(id);
+        if (popup) {
+          popup.classList.add("hidden");
+          popup.classList.remove("show");
+        }
+      });
+
+      // Load initial data
+      loadCartAndSummary();
+      loadSavedAddresses();
+      attachInputListeners();
+      checkFormCompletion();
+      updateCartCount();
+
+      // Attach event listeners
+      document.getElementById("add-address-btn")?.addEventListener("click", openAddressModal);
+      document.getElementById("add-address-form")?.addEventListener("submit", saveNewAddress);
+      document.getElementById("saved-addresses")?.addEventListener("change", selectSavedAddress);
+      document.getElementById("proceed-to-payment-btn")?.addEventListener("click", proceedToPayment);
+    });
+
+    function attachInputListeners() {
+      const requiredFields = ["first-name", "last-name", "email", "address", "city", "pincode", "state", "phone"];
+      const newAddressFields = ["new-first-name", "new-last-name", "new-email", "new-address", "new-city", "new-pincode", "new-state", "new-phone", "new-type"];
+      [...requiredFields, ...newAddressFields].forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.removeEventListener('input', validateField);
+          element.addEventListener('input', validateField);
+          element.removeEventListener('blur', validateField);
+          element.addEventListener('blur', validateField);
+          if (requiredFields.includes(id)) {
+            element.removeEventListener('input', checkFormCompletion);
+            element.addEventListener('input', checkFormCompletion);
+          }
+        }
+      });
+    }
+
+    function validateField(event) {
+      const input = event.target;
+      const id = input.id;
+      const errorText = input.nextElementSibling;
+      if (id.includes("email")) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(input.value) && input.value.trim() !== "") {
+          input.setCustomValidity("Invalid email address");
+        } else {
+          input.setCustomValidity("");
+        }
+      } else if (id.includes("phone")) {
+        const phoneRegex = /^\d{10}$/;
+        if (!phoneRegex.test(input.value) && input.value.trim() !== "") {
+          input.setCustomValidity("Invalid phone number");
+        } else {
+          input.setCustomValidity("");
+        }
+      } else if (id.includes("pincode")) {
+        const pincodeRegex = /^\d{6}$/;
+        if (!pincodeRegex.test(input.value) && input.value.trim() !== "") {
+          input.setCustomValidity("Invalid pincode");
+        } else {
+          input.setCustomValidity("");
+        }
+      } else if (id.includes("type")) {
+        if (input.value === "") {
+          input.setCustomValidity("Please select an address type");
+        } else {
+          input.setCustomValidity("");
+        }
+      } else {
+        if (input.value.trim() === "") {
+          input.setCustomValidity("This field is required");
+        } else {
+          input.setCustomValidity("");
+        }
+      }
+    }
+
+    function updateCartCount() {
+      const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+      const cartCount = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+      const cartCountElement = document.getElementById("cart-count");
+      if (cartCountElement) {
+        cartCountElement.innerText = cartCount;
+        cartCountElement.classList.toggle("hidden", cartCount === 0);
+      }
+    }
+
+    function loadCartAndSummary() {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const container = document.getElementById("order-items");
+      if (!container) return;
+
+      container.innerHTML = "";
+      const proceedToPaymentBtn = document.getElementById("proceed-to-payment-btn");
+      if (cart.length === 0) {
+        proceedToPaymentBtn.disabled = true;
+        container.innerHTML = '<p class="text-gray-600">Your cart is empty.</p>';
+        document.getElementById("original-price").innerText = "Rs 0.00";
+        document.getElementById("gst").innerText = "Rs 0.00";
+        document.getElementById("delivery-charges").innerText = "Rs 0.00";
+        document.getElementById("total-price").innerText = "Rs 0.00";
+        document.getElementById("discount-row").classList.add("hidden");
+        return;
+      }
+
+      let subtotal = 0;
+      cart.forEach(item => {
+        const price = parseFloat(item.price.replace(/[^\d.]/g, ""));
+        if (isNaN(price)) return;
+        const quantity = item.quantity || 1;
+        const total = price * quantity;
+        subtotal += total;
+        const itemDiv = document.createElement("div");
+        itemDiv.className = "flex items-center gap-4 py-2";
+        itemDiv.innerHTML = `
+          <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded border">
+          <div class="flex-1">
+            <h4 class="font-medium text-gray-800">${item.name}</h4>
+            <p class="text-sm text-gray-600">Qty: ${quantity}</p>
+            <p class="text-sm text-gray-800">Rs ${total.toFixed(2)}</p>
+          </div>
+        `;
+        container.appendChild(itemDiv);
+      });
+
+      const gst = subtotal * 0.18;
+      const delivery = 50;
+      const finalTotal = subtotal + gst + delivery - discountAmount;
+
+      document.getElementById("original-price").innerText = `Rs ${subtotal.toFixed(2)}`;
+      document.getElementById("gst").innerText = `Rs ${gst.toFixed(2)}`;
+      document.getElementById("delivery-charges").innerText = `Rs ${delivery.toFixed(2)}`;
+      document.getElementById("total-price").innerText = `Rs ${finalTotal.toFixed(2)}`;
+      updateMaxSavings(subtotal);
+      updateCartCount();
+      checkFormCompletion();
+    }
+
+    function updateMaxSavings(subtotal) {
+      const maxSavings = Math.min(subtotal * 0.20, 1000);
+      document.getElementById("max-savings").innerText = `₹${maxSavings.toFixed(2)}`;
+    }
+
+    function openCouponModal() {
+      const couponModal = document.getElementById("coupon-modal");
+      if (couponModal) {
+        couponModal.classList.remove("hidden");
+        couponModal.classList.add("show");
+        document.getElementById("coupon-modal-input").value = '';
+        selectedCoupon = null;
+      }
+    }
+
+    function closeCouponModal() {
+      const couponModal = document.getElementById("coupon-modal");
+      if (couponModal) {
+        couponModal.classList.add("hidden");
+        couponModal.classList.remove("show");
+      }
+    }
+
+    function applyCoupon(code) {
+      if (selectedCoupon) {
+        Toastify({
+          text: "Only one coupon can be applied at a time.",
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#f87171",
+        }).showToast();
+        return;
+      }
+
+      const coupon = validCoupons[code];
+      if (!coupon) {
+        Toastify({
+          text: "Invalid coupon code.",
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#f87171",
+        }).showToast();
+        return;
+      }
+
+      const subtotal = parseFloat(document.getElementById("original-price").innerText.replace(/[^\d.]/g, ""));
+      const gst = parseFloat(document.getElementById("gst").innerText.replace(/[^\d.]/g, ""));
+      const deliveryCharges = parseFloat(document.getElementById("delivery-charges").innerText.replace(/[^\d.]/g, ""));
+
+      discountAmount = Math.min(subtotal * coupon.discountRate, 1000);
+      const finalTotal = subtotal + gst + deliveryCharges - discountAmount;
+
+      document.getElementById("discount-row").classList.remove("hidden");
+      document.getElementById("coupon-discount").innerText = `- Rs ${discountAmount.toFixed(2)}`;
+      document.getElementById("total-price").innerText = `Rs ${finalTotal.toFixed(2)}`;
+      selectedCoupon = code;
+
+      Toastify({
+        text: `Coupon ${code} applied successfully! (${coupon.description})`,
+        duration: 3000,
+        gravity: "top",
+        position: "right",
+        backgroundColor: "#34d399",
+      }).showToast();
+
+      closeCouponModal();
+    }
+
+    function applyManualCoupon() {
+      const code = document.getElementById("coupon-modal-input").value.trim().toUpperCase();
+      if (!code) {
+        Toastify({
+          text: "Please enter a coupon code.",
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#f87171",
+        }).showToast();
+        return;
+      }
+      applyCoupon(code);
+    }
+
+    function loadSavedAddresses() {
+      const savedAddressesSelect = document.getElementById("saved-addresses");
+      if (!savedAddressesSelect) return;
+
+      savedAddressesSelect.innerHTML = '<option value="">Choose an address</option>';
+      savedAddressesSelect.disabled = addresses.length === 0;
+
+      addresses.forEach((addr, index) => {
+        if (addr && typeof addr === "object" && addr.name && addr.email && addr.street && addr.city && addr.pincode && addr.state && addr.mobile) {
+          const option = document.createElement("option");
+          option.value = index;
+          option.text = `${addr.name} - ${addr.street}, ${addr.city}, ${addr.state} ${addr.pincode}${addr.isDefault ? " (Default)" : ""}`;
+          savedAddressesSelect.appendChild(option);
+        }
+      });
+
+      const defaultAddress = addresses.find(addr => addr && addr.isDefault);
+      if (defaultAddress) {
+        const index = addresses.indexOf(defaultAddress);
+        savedAddressesSelect.value = index;
+        selectSavedAddress({ target: { value: index } });
+      }
+    }
+
+    function selectSavedAddress(event) {
+      const index = event.target.value;
+      const formFields = ["first-name", "last-name", "email", "address", "city", "pincode", "state", "phone"];
+
+      if (index === "") {
+        formFields.forEach(id => document.getElementById(id).value = "");
+        checkFormCompletion();
+        return;
+      }
+
+      const addr = addresses[index];
+      if (!addr || !addr.name || !addr.email || !addr.street || !addr.city || !addr.pincode || !addr.state || !addr.mobile) {
+        Toastify({
+          text: "Invalid address selected. Please add a new address.",
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#f87171",
+        }).showToast();
+        return;
+      }
+
+      const nameParts = addr.name.trim().split(" ");
+      document.getElementById("first-name").value = nameParts[0] || "";
+      document.getElementById("last-name").value = nameParts.slice(1).join(" ") || "";
+      document.getElementById("email").value = addr.email || "";
+      document.getElementById("address").value = addr.street || "";
+      document.getElementById("city").value = addr.city || "";
+      document.getElementById("pincode").value = addr.pincode || "";
+      document.getElementById("state").value = addr.state || "";
+      document.getElementById("phone").value = addr.mobile || "";
+
+      Toastify({
+        text: `Address for ${addr.name} selected`,
+        duration: 3000,
+        gravity: "top",
+        position: "right",
+        backgroundColor: "#34d399",
+      }).showToast();
+
+      attachInputListeners();
+      checkFormCompletion();
+    }
+
+    function openAddressModal() {
+      const modal = document.getElementById("add-address-modal");
+      if (modal) {
+        modal.classList.remove("hidden");
+        modal.classList.add("show");
+        const formFields = ["new-first-name", "new-last-name", "new-email", "new-address", "new-city", "new-pincode", "new-state", "new-phone", "new-type"];
+        formFields.forEach(id => document.getElementById(id).value = "");
+        document.getElementById("set-default").checked = false;
+      }
+    }
+
+    function closeAddressModal() {
+      const modal = document.getElementById("add-address-modal");
+      if (modal) {
+        modal.classList.add("hidden");
+        modal.classList.remove("show");
+      }
+    }
+
+    function saveNewAddress(event) {
+      event.preventDefault();
+      const formData = {
+        firstName: document.getElementById("new-first-name").value.trim(),
+        lastName: document.getElementById("new-last-name").value.trim(),
+        email: document.getElementById("new-email").value.trim(),
+        street: document.getElementById("new-address").value.trim(),
+        city: document.getElementById("new-city").value.trim(),
+        pincode: document.getElementById("new-pincode").value.trim(),
+        state: document.getElementById("new-state").value.trim(),
+        mobile: document.getElementById("new-phone").value.trim(),
+        type: document.getElementById("new-type").value,
+        isDefault: document.getElementById("set-default").checked
+      };
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const phoneRegex = /^\d{10}$/;
+      const pincodeRegex = /^\d{6}$/;
+
+      if (!emailRegex.test(formData.email)) {
+        Toastify({
+          text: "Please enter a valid email address.",
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#f87171",
+        }).showToast();
+        return;
+      }
+      if (!phoneRegex.test(formData.mobile)) {
+        Toastify({
+          text: "Please enter a valid 10-digit phone number.",
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#f87171",
+        }).showToast();
+        return;
+      }
+      if (!pincodeRegex.test(formData.pincode)) {
+        Toastify({
+          text: "Please enter a valid 6-digit pincode.",
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#f87171",
+        }).showToast();
+        return;
+      }
+
+      const requiredFields = ["firstName", "lastName", "email", "street", "city", "pincode", "state", "mobile", "type"];
+      if (requiredFields.some(field => !formData[field])) {
+        Toastify({
+          text: "Please fill in all required fields.",
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#f87171",
+        }).showToast();
+        return;
+      }
+
+      if (formData.isDefault) {
+        addresses = addresses.map(addr => ({ ...addr, isDefault: false }));
+      }
+
+      const newAddress = {
+        name: `${formData.firstName} ${formData.lastName}`.trim(),
+        email: formData.email,
+        street: formData.street,
+        city: formData.city,
+        pincode: formData.pincode,
+        state: formData.state,
+        mobile: formData.mobile,
+        type: formData.type,
+        isDefault: formData.isDefault
+      };
+
+      addresses.push(newAddress);
+      localStorage.setItem("addresses", JSON.stringify(addresses));
+      loadSavedAddresses();
+
+      Toastify({
+        text: "Address saved successfully!",
+        duration: 3000,
+        gravity: "top",
+        position: "right",
+        backgroundColor: "#34d399",
+      }).showToast();
+
+      closeAddressModal();
+      const savedAddressesSelect = document.getElementById("saved-addresses");
+      savedAddressesSelect.value = addresses.length - 1;
+      selectSavedAddress({ target: { value: addresses.length - 1 } });
+    }
+
+    function checkFormCompletion() {
+      const requiredFields = ["first-name", "last-name", "email", "address", "city", "pincode", "state", "phone"];
+      const proceedToPaymentBtn = document.getElementById("proceed-to-payment-btn");
+      if (!proceedToPaymentBtn) return;
+
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      if (cart.length === 0) {
+        proceedToPaymentBtn.disabled = true;
+        return;
+      }
+
+      const allFilled = requiredFields.every(id => {
+        const element = document.getElementById(id);
+        return element && element.value.trim() !== '';
+      });
+
+      const email = document.getElementById("email").value;
+      const phone = document.getElementById("phone").value;
+      const pincode = document.getElementById("pincode").value;
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const phoneRegex = /^\d{10}$/;
+      const pincodeRegex = /^\d{6}$/;
+      const isValidEmail = emailRegex.test(email);
+      const isValidPhone = phoneRegex.test(phone);
+      const isValidPincode = pincodeRegex.test(pincode);
+
+      proceedToPaymentBtn.disabled = !(allFilled && isValidEmail && isValidPhone && isValidPincode);
+    }
+
+    function proceedToPayment() {
+      const proceedToPaymentBtn = document.getElementById("proceed-to-payment-btn");
+      const proceedToPaymentText = document.getElementById("proceed-to-payment-text");
+      const proceedToPaymentLoading = document.getElementById("proceed-to-payment-loading");
+
+      proceedToPaymentBtn.disabled = true;
+      proceedToPaymentText.classList.add("hidden");
+      proceedToPaymentLoading.classList.remove("hidden");
+
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      if (cart.length === 0) {
+        Toastify({
+          text: "Your cart is empty. Please add items to proceed.",
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#f87171",
+        }).showToast();
+        proceedToPaymentText.classList.remove("hidden");
+        proceedToPaymentLoading.classList.add("hidden");
+        proceedToPaymentBtn.disabled = false;
+        return;
+      }
+
+      const requiredFields = ["first-name", "last-name", "email", "address", "city", "pincode", "state", "phone"];
+      const allFilled = requiredFields.every(id => document.getElementById(id).value.trim() !== '');
+      const email = document.getElementById("email").value;
+      const phone = document.getElementById("phone").value;
+      const pincode = document.getElementById("pincode").value;
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const phoneRegex = /^\d{10}$/;
+      const pincodeRegex = /^\d{6}$/;
+      const isValidEmail = emailRegex.test(email);
+      const isValidPhone = phoneRegex.test(phone);
+      const isValidPincode = pincodeRegex.test(pincode);
+
+      if (!(allFilled && isValidEmail && isValidPhone && isValidPincode)) {
+        Toastify({
+          text: "Please fill in all required fields with valid data.",
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#f87171",
+        }).showToast();
+        proceedToPaymentText.classList.remove("hidden");
+        proceedToPaymentLoading.classList.add("hidden");
+        proceedToPaymentBtn.disabled = false;
+        return;
+      }
+
+      const checkoutDetails = {
+        address: {
+          name: `${document.getElementById("first-name").value} ${document.getElementById("last-name").value}`.trim(),
+          email: document.getElementById("email").value,
+          street: document.getElementById("address").value,
+          city: document.getElementById("city").value,
+          pincode: document.getElementById("pincode").value,
+          state: document.getElementById("state").value,
+          mobile: document.getElementById("phone").value
+        },
+        coupon: selectedCoupon,
+        discountAmount: discountAmount
+      };
+
+      localStorage.setItem("checkoutDetails", JSON.stringify(checkoutDetails));
+      window.location.href = "pay.html";
+    }
+
+    function closePopup() {
+      const popup = document.getElementById("order-popup");
+      if (popup) {
+        popup.classList.add("hidden");
+        popup.classList.remove("show");
+      }
+    }
+  </script>
+  <script src="navbar.js"></script>
+  <script src="footer.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Saved Addresses</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+    }
+
+    .sidebar-link {
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .sidebar-link:hover {
+      background-color: #e5eaf0;
+      color: #3791CF;
+    }
+
+    .active-link {
+      background-color: #e5eaf0;
+      color: #3791CF;
+      font-weight: 600;
+    }
+
+    aside {
+      position: sticky;
+      top: 0;
+      height: calc(100vh - 64px);
+      overflow-y: auto;
+    }
+
+    @media (max-width: 768px) {
+      aside {
+        position: static;
+        height: auto;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col" data-current="addresses">
+
+  <!-- Navbar -->
+  <div class="sticky top-0 z-50" id="navbar-container"></div>
+
+  <!-- Main Layout -->
+  <main class="flex-grow flex flex-col md:flex-row">
+
+    <!-- Sidebar -->
+    <aside class="w-full md:w-72 bg-white shadow-lg border-r">
+      <div class="p-6 border-b">
+        <h2 class="text-2xl font-bold text-gray-800">My Account</h2>
+      </div>
+      <nav class="px-6 py-6 space-y-4 text-sm">
+        <a href="overview.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded" data-link="overview">
+          <i class="fas fa-chart-line"></i> Overview
+        </a>
+
+        <div>
+          <p class="text-xs text-gray-500 uppercase mb-2">Orders</p>
+          <a href="order.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded" data-link="orders">
+            <i class="fas fa-box"></i> Orders & Returns
+          </a>
+        </div>
+
+        <div>
+          <p class="text-xs text-gray-500 uppercase mt-4 mb-2">Credits</p>
+          <a href="coupons.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded" data-link="coupons">
+            <i class="fas fa-ticket-alt"></i> Coupons
+          </a>
+        </div>
+
+        <div>
+          <p class="text-xs text-gray-500 uppercase mt-4 mb-2">Account</p>
+          <a href="user.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded" data-link="profile">
+            <i class="fas fa-user-circle"></i> Profile
+          </a>
+          <a href="address.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded" data-link="addresses">
+            <i class="fas fa-address-book"></i> Addresses
+          </a>
+          <a href="delete.html"
+            class="flex items-center gap-2 sidebar-link px-3 py-2 rounded text-red-500 hover:bg-red-100"
+            data-link="delete">
+            <i class="fas fa-trash-alt"></i> Delete Account
+          </a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <section id="main-content" class="flex-grow p-6 bg-gray-50 w-full">
+      <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-6 gap-4">
+        <h2 class="text-2xl font-bold text-gray-800">Saved Addresses</h2>
+        <a href="newAddress.html"
+          class="px-5 py-2 text-sm font-bold text-white bg-blue-600 rounded hover:bg-blue-700 shadow-md transition">
+          + ADD NEW ADDRESS
+        </a>
+      </div>
+
+      <!-- Address Cards -->
+      <div id="address-container" class="grid gap-6 sm:grid-cols-1 lg:grid-cols-2"></div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t mt-auto">
+    <div id="footer-container"></div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="navbar.js"></script>
+  <script src="footer.js"></script>
+  <script>
+    // Highlight active link
+    const current = document.body.getAttribute("data-current");
+    const links = document.querySelectorAll(".sidebar-link");
+    links.forEach(link => {
+      if (link.getAttribute("data-link") === current) {
+        link.classList.add("active-link");
+      } else {
+        link.classList.remove("active-link");
+      }
+    });
+
+    const addressContainer = document.getElementById('address-container');
+
+    function showToast(message, color = "#22c55e") {
+      Toastify({
+        text: message,
+        duration: 3000,
+        gravity: "top",
+        position: "right",
+        backgroundColor: color,
+        stopOnFocus: true
+      }).showToast();
+    }
+
+    async function fetchAddresses() {
+      const token = localStorage.getItem("authToken");
+      if (!token || token === "undefined") {
+        addressContainer.innerHTML = `<p class="text-gray-500">Please log in to view addresses.</p>`;
+        showToast("Please log in to view addresses", "#EF4444");
+        setTimeout(() => window.location.href = "signin.html", 2000);
+        return;
+      }
+
+      try {
+        const response = await fetch("http://localhost:5000/api/users/addresses", {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        });
+
+        const data = await response.json();
+        if (response.ok && data?.data?.addresses) {
+          renderAddresses(data.data.addresses);
+        } else {
+          addressContainer.innerHTML = `<p class="text-gray-500">No addresses saved yet.</p>`;
+          showToast(data.message || "Failed to fetch addresses", "#EF4444");
+        }
+      } catch (error) {
+        console.error("Error fetching addresses:", error.message);
+        addressContainer.innerHTML = `<p class="text-gray-500">No addresses saved yet.</p>`;
+        showToast("Failed to fetch addresses", "#EF4444");
+      }
+    }
+
+    function renderAddresses(addresses) {
+      if (!addresses || !addresses.length) {
+        addressContainer.innerHTML = `<p class="text-gray-500">No addresses saved yet.</p>`;
+        return;
+      }
+
+      let htmlContent = '';
+      addresses.forEach((addr) => {
+        if (!addr) return;
+
+        htmlContent += `
+        <div class="bg-white shadow-lg rounded-lg border p-4 flex flex-col justify-between">
+          <div class="flex justify-between items-start">
+            <div>
+              ${addr.isDefault ? `<span class="mt-0 inline-block bg-green-100 text-green-700 text-xs px-3 py-1 rounded-full font-medium">Default</span>` : ""}
+              <p class="font-bold text-lg text-gray-800"><strong>Name:</strong> ${addr.name || ''}</p>
+              <p class="text-gray-600"><strong>Address:</strong> ${addr.street || ''}</p>
+              <p class="text-gray-600"><strong>City:</strong> ${addr.city || ''}</p>
+              <p class="text-gray-600"><strong>State:</strong> ${addr.state || ''}</p>
+              <p class="text-gray-600"><strong>Pincode:</strong> ${addr.pincode || ''}</p>
+              ${addr.mobile ? `<p class="mt-2 text-sm text-gray-700"><strong>Mobile:</strong> <i class="fas fa-phone-alt mr-1"></i>${addr.mobile}</p>` : ""}
+            </div>
+            <span class="text-xs bg-gray-100 px-3 py-1 rounded-full font-semibold text-gray-600">${addr.type || ''}</span>
+          </div>
+
+          <div class="flex divide-x border-t mt-4 pt-3 text-orange-700">
+            <button class="px-4 hover:text-blue-600" onclick="editAddress('${addr._id}')">
+              <span class="material-symbols-outlined">edit</span>
+            </button>
+            <button class="px-4 hover:text-red-600" onclick="removeAddress('${addr._id}', '${addr.name}')">
+              <span class="material-symbols-outlined">delete</span>
+            </button>
+          </div>
+        </div>`;
+      });
+
+      addressContainer.innerHTML = htmlContent;
+    }
+
+    function editAddress(addressId) {
+      localStorage.setItem('editAddressId', addressId);
+      window.location.href = 'edit-address.html';
+    }
+
+    async function removeAddress(addressId, name) {
+      const token = localStorage.getItem("authToken");
+      if (!token || token === "undefined") {
+        showToast("Please log in to delete an address", "#EF4444");
+        setTimeout(() => window.location.href = "signin.html", 2000);
+        return;
+      }
+
+      try {
+        const response = await fetch(`http://localhost:5000/api/users/addresses/${addressId}`, {
+          method: "DELETE",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+          showToast(`Address for ${name} deleted successfully`, "#22c55e");
+          fetchAddresses(); // Refresh the address list
+        } else {
+          showToast(data.message || "Failed to delete address", "#EF4444");
+        }
+      } catch (error) {
+        console.error("Error deleting address:", error.message);
+        showToast("Failed to delete address", "#EF4444");
+      }
+    }
+
+    // Initial fetch
+    fetchAddresses();
+  </script>
+</body>
+
+</html>

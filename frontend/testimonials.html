@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artisan Gift Cards</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+    <style>
+        .swiper-slide {
+            opacity: 0.5;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .swiper-slide-active {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="container mx-auto p-8">
+        <h1 class="text-4xl font-bold text-center text-gray-900 mb-12">What Our Customers Say</h1>
+        <div class="relative w-full mx-auto">
+            <div class="swiper mySwiper rounded-xl overflow-hidden shadow-lg">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide bg-white p-6 rounded-lg shadow-lg flex flex-col items-center justify-center text-center">
+                        <img src="https://via.placeholder.com/80" alt="Priya Sharma" class="w-20 h-20 rounded-full mb-4 object-cover">
+                        <p class="text-gray-700 mb-4 italic">"Amazing quality and unique designs! Highly recommend this platform."</p>
+                        <div class="flex items-center mb-2">
+                            <span class="material-symbols-outlined text-yellow-500">star</span>
+                            <span class="material-symbols-outlined text-yellow-500">star</span>
+                            <span class="material-symbols-outlined text-yellow-500">star</span>
+                            <span class="material-symbols-outlined text-yellow-500">star</span>
+                            <span class="material-symbols-outlined text-gray-300">star</span>
+                        </div>
+                        <p class="font-semibold">Priya Sharma</p>
+                        <p class="text-sm text-gray-500">New Delhi, India</p>
+                    </div>
+                    <div class="swiper-slide bg-white p-6 rounded-lg shadow-lg flex flex-col items-center justify-center text-center">
+                        <img src="https://via.placeholder.com/80" alt="Ravi Kumar" class="w-20 h-20 rounded-full mb-4 object-cover">
+                        <p class="text-gray-700 mb-4 italic">"The artisans' work is incredible. Fast shipping too!"</p>
+                        <div class="flex items-center mb-2">
+                            <span class="material-symbols-outlined text-yellow-500">star</span>
+                            <span class="material-symbols-outlined text-yellow-500">star</span>
+                            <span class="material-symbols-outlined text-yellow-500">star</span>
+                            <span class="material-symbols-outlined text-yellow-500">star</span>
+                            <span class="material-symbols-outlined text-yellow-500">star</span>
+                        </div>
+                        <p class="font-semibold">Ravi Kumar</p>
+                        <p class="text-sm text-gray-500">Jaipur, India</p>
+                    </div>
+                    <div class="swiper-slide bg-white p-6 rounded-lg shadow-lg flex flex-col items-center justify-center text-center">
+                        <img src="https://via.placeholder.com/80" alt="Anjali Patel" class="w-20 h-20 rounded-full mb-4 object-cover">
+                        <p class="text-gray-700 mb-4 italic">"Love the personalized gifts. Great experience overall."</p>
+                        <div class="flex items-center mb-2">
+                            <span class="material-symbols-outlined text-yellow-500">star</span>
+                            <span class="material-symbols-outlined text-yellow-500">star</span>
+                            <span class="material-symbols-outlined text-yellow-500">star</span>
+                            <span class="material-symbols-outlined text-yellow-500">star</span>
+                            <span class="material-symbols-outlined text-gray-300">star</span>
+                        </div>
+                        <p class="font-semibold">Anjali Patel</p>
+                        <p class="text-sm text-gray-500">Mumbai, India</p>
+                    </div>
+                </div>
+                <div class="absolute top-1/2 left-0 w-full flex justify-between px-4 z-10 transform -translate-y-1/2">
+                    <button id="prev" class="bg-gray-800 text-white p-3 rounded-full shadow-lg hover:bg-gray-700 transition">❮</button>
+                    <button id="next" class="bg-gray-800 text-white p-3 rounded-full shadow-lg hover:bg-gray-700 transition">❯</button>
+                </div>
+                <div class="swiper-pagination mt-4 flex justify-center space-x-2"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+        const swiper = new Swiper('.mySwiper', {
+            slidesPerView: 3, // Show all 3 slides in one row
+            spaceBetween: 20,
+            loop: false, // Disable loop since all slides are visible
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+                renderBullet: function (index, className) {
+                    return '<span class="' + className + ' w-2 h-2 bg-gray-400 rounded-full"></span>';
+                },
+            },
+            navigation: {
+                nextEl: '#next',
+                prevEl: '#prev',
+            },
+        });
+    </script>
+</body>
+</html>

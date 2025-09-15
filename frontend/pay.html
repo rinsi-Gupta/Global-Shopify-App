@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Payment</title>
+
+  <!-- Fonts and Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Toastify CSS -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+  <!-- Custom CSS -->
+  <style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background-color: #f3f4f6;
+    }
+
+    .popup {
+      display: none;
+    }
+
+    .popup.show {
+      display: flex;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      outline: none;
+    }
+
+    .shadow-hover:hover {
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    .payment-option {
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .payment-option:hover {
+      background-color: #e5e7eb;
+    }
+
+    .payment-option.selected {
+      border: 2px solid #2563eb;
+      background: linear-gradient(45deg, #eff6ff, #dbeafe);
+      transform: scale(1.02);
+    }
+
+    .address-section {
+      background: linear-gradient(135deg, #60a5fa, #3b82f6);
+      border-radius: 12px;
+      padding: 1.5rem;
+      border: 2px solid transparent;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .address-section:hover {
+      border-color: #93c5fd;
+    }
+
+    .address-section h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .address-section .icon {
+      color: #dbeafe;
+      font-size: 1.5rem;
+    }
+
+    .address-section .address-field {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #ffffff;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin-bottom: 0.5rem;
+      transition: transform 0.2s ease;
+    }
+
+    .address-section .address-field:hover {
+      transform: translateX(5px);
+    }
+
+    .address-section .field-icon {
+      color: #dbeafe;
+      font-size: 1.1rem;
+    }
+
+    .address-section button {
+      margin-top: 1rem;
+      color: #dbeafe;
+      font-weight: 600;
+      font-size: 0.875rem;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 0.5rem 1rem;
+      border-radius: 0.375rem;
+      transition: all 0.2s ease;
+    }
+
+    .address-section button:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      transform: scale(1.05);
+    }
+
+    .payment-method-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .payment-method-item {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 0.375rem;
+      background-color: #f9fafb;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .payment-method-item:hover {
+      background-color: #e5e7eb;
+    }
+
+    .payment-method-item.selected {
+      border: 2px solid #2563eb;
+      background: linear-gradient(45deg, #eff6ff, #dbeafe);
+      transform: scale(1.02);
+    }
+
+    .payment-method-item .icon {
+      margin-right: 0.75rem;
+      font-size: 1.25rem;
+      color: #4b5563;
+    }
+
+    .payment-form {
+      display: none;
+      background-color: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 0.375rem;
+      padding: 1.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .payment-form.active {
+      display: block;
+    }
+
+    .payment-form h4 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .payment-form .discount {
+      background-color: #f87171;
+      color: #ffffff;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      font-size: 0.875rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .payment-form input,
+    .payment-form select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.375rem;
+      transition: border-color 0.2s;
+    }
+
+    .payment-form input:focus,
+    .payment-form select:focus {
+      border-color: #2563eb;
+    }
+
+    .payment-form .pay-now-btn {
+      background-color: #ef4444;
+      color: #ffffff;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.375rem;
+      font-weight: 600;
+      width: 100%;
+      transition: background-color 0.2s;
+    }
+
+    .payment-form .pay-now-btn:hover {
+      background-color: #dc2626;
+    }
+
+    .recommended-options {
+      display: none;
+    }
+
+    .recommended-options.active {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      padding: 0.5rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 0.375rem;
+      background-color: #f9fafb;
+    }
+
+    .other-banks-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .other-banks-list.hidden {
+      display: none;
+    }
+
+    .other-banks-list .bank-item {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.375rem;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .other-banks-list .bank-item:hover {
+      background-color: #e5e7eb;
+    }
+
+    .other-banks-list .bank-item.selected {
+      border: 2px solid #2563eb;
+      background: linear-gradient(45deg, #eff6ff, #dbeafe);
+      transform: scale(1.02);
+    }
+
+    #other-banks-toggle {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+      color: #2563eb;
+      font-size: 0.875rem;
+      margin-bottom: 0.5rem;
+    }
+
+    #other-banks-toggle:hover {
+      text-decoration: underline;
+    }
+
+    input:invalid:not(:placeholder-shown) {
+      border-color: #f87171;
+    }
+
+    .error-text {
+      color: #f87171;
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+      display: none;
+    }
+
+    input:invalid:not(:placeholder-shown) + .error-text {
+      display: block;
+    }
+  </style>
+
+  <!-- Toastify JS -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+</head>
+
+<body class="min-h-screen flex flex-col">
+  <nav class="bg-white shadow-md p-4 sticky top-0 z-50">
+    <div class="flex justify-between items-center">
+      <a href="index.html" class="flex justify-center gap-2 flex-shrink-0">
+        <img src="images/Asset 4.jpg" alt="GlobalShopify Logo" class="h-12 w-auto" />
+      </a>
+      <a href="cart.html" class="hover:text-orange-500 transition-colors flex items-center gap-1 relative">
+        <span class="material-symbols-outlined text-2xl" aria-hidden="true">shopping_cart</span>
+        <span class="sr-only">Cart</span>
+        <span id="cart-count"
+          class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full absolute -top-2 -right-3 hidden">0</span>
+      </a>
+    </div>
+    <div
+      class="flex overflow-x-auto whitespace-nowrap scrollbar-hide md:justify-center gap-6 py-3 px-4 text-sm font-bold"
+      id="categoryBar">
+      <div class="group relative inline-block">
+        <a href="lightings.html" class="category-link hover:text-orange-500">LIGHTINGS</a>
+      </div>
+      <div class="group relative inline-block">
+        <a href="accessory.html" class="category-link hover:text-orange-500">ACCESSORIES</a>
+      </div>
+      <div class="group relative inline-block">
+        <a href="utility.html" class="category-link hover:text-orange-500">UTILITY</a>
+      </div>
+      <div class="group relative inline-block">
+        <a href="wooden.html" class="category-link hover:text-orange-500">WOODEN</a>
+      </div>
+      <div class="group relative inline-block">
+        <a href="pottery.html" class="category-link hover:text-orange-500">POTTERY</a>
+      </div>
+      <a href="wall.html" class="category-link inline-block hover:text-orange-500">WALL DECOR</a>
+      <div class="group relative inline-block">
+        <a href="textile.html" class="category-link hover:text-orange-500">TEXTILE</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="w-full ml-6 mr-12 mx-auto mt-6 mb-4 p-6 bg-white rounded-xl shadow-lg flex-grow">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Payment Info -->
+      <div class="lg:col-span-2 space-y-6">
+        <!-- Delivery Address -->
+        <div class="address-section">
+          <div class="address-inner">
+            <h3>
+              <span class="icon material-symbols-outlined">location_on</span>
+              Delivered to:
+            </h3>
+            <div id="delivery-address" class="text-sm">
+              <div class="address-field" id="address-name">
+                <span class="field-icon material-symbols-outlined">person</span>
+                <span>No address selected</span>
+              </div>
+              <div class="address-field" id="address-street">
+                <span class="field-icon material-symbols-outlined">home</span>
+                <span></span>
+              </div>
+              <div class="address-field" id="address-city-state">
+                <span class="field-icon material-symbols-outlined">location_city</span>
+                <span></span>
+              </div>
+              <div class="address-field" id="address-pincode">
+                <span class="field-icon material-symbols-outlined">pin_drop</span>
+                <span></span>
+              </div>
+              <div class="address-field" id="address-phone">
+                <span class="field-icon material-symbols-outlined">phone</span>
+                <span></span>
+              </div>
+              <div class="address-field" id="address-email">
+                <span class="field-icon material-symbols-outlined">email</span>
+                <span></span>
+              </div>
+            </div>
+            <button onclick="window.location.href='checkout.html'" class="change-address-btn" aria-label="Change delivery address">Change Address</button>
+          </div>
+        </div>
+        <!-- Payment Options -->
+        <div class="flex flex-col lg:flex-row gap-6">
+          <div class="w-full lg:w-1/3">
+            <h3 class="text-2xl font-semibold text-gray-800 border-b pb-2 mb-4">Choose Payment Mode</h3>
+            <div class="payment-method-list">
+              <div class="payment-method-item payment-option" data-method="recommended">
+                <span class="icon material-symbols-outlined">star</span>
+                <span>Recommended</span>
+              </div>
+              <div class="payment-method-item payment-option" data-method="cash-on-delivery">
+                <span class="icon material-symbols-outlined">money</span>
+                <span>Cash On Delivery (Cash/UPI)</span>
+              </div>
+              <div class="payment-method-item payment-option" data-method="upi">
+                <span class="icon material-symbols-outlined">payment</span>
+                <span>UPI</span>
+              </div>
+              <div class="payment-method-item payment-option" data-method="credit-debit-card">
+                <span class="icon material-symbols-outlined">credit_card</span>
+                <span>Credit/Debit Card</span>
+              </div>
+              <div class="payment-method-item payment-option" data-method="wallets">
+                <span class="icon material-symbols-outlined">account_balance_wallet</span>
+                <span>Wallets</span>
+              </div>
+              <div class="payment-method-item payment-option" data-method="net-banking">
+                <span class="icon material-symbols-outlined">account_balance</span>
+                <span>Net Banking</span>
+              </div>
+              <div class="payment-method-item payment-option" data-method="gift-card">
+                <span class="icon material-symbols-outlined">card_giftcard</span>
+                <span>Gift Card</span>
+              </div>
+            </div>
+          </div>
+          <div class="w-full lg:w-2/3 mt-8">
+            <div id="payment-form" class="payment-form">
+              <h4>Credit/Debit Card</h4>
+              <p class="text-sm text-gray-600 mb-2">Ensure your card supports online transactions. <a href="#" class="text-blue-600 underline">Know More</a></p>
+              <input type="text" placeholder="Card Number" id="card-number" required class="w-full mb-2 p-2 border rounded focus:border-blue-500 focus:ring-1 focus:ring-blue-200">
+              <p class="error-text">Please enter a valid 16-digit card number.</p>
+              <input type="text" placeholder="Name on Card" id="card-name" required class="w-full mb-2 p-2 border rounded focus:border-blue-500 focus:ring-1 focus:ring-blue-200">
+              <p class="error-text">Please enter a valid cardholder name (letters and spaces only).</p>
+              <div class="input-group flex space-x-2 mb-2">
+                <div class="w-1/2">
+                  <input type="text" placeholder="Valid Thru (MM/YY)" id="card-expiry" required class="w-full p-2 border rounded focus:border-blue-500 focus:ring-1 focus:ring-blue-200">
+                  <p class="error-text">Please enter a valid expiry date (MM/YY).</p>
+                </div>
+                <div class="w-1/4">
+                  <input type="text" placeholder="CVV" id="card-cvv" required class="w-full p-2 border rounded focus:border-blue-500 focus:ring-1 focus:ring-blue-200">
+                  <p class="error-text">Please enter a valid 3 or 4-digit CVV.</p>
+                </div>
+              </div>
+              <label class="flex items-center text-sm text-gray-600 mb-4">
+                <input type="checkbox" id="save-card" class="hidden peer">
+                <span class="relative w-10 h-5 bg-gray-300 rounded-full peer-checked:bg-blue-600 transition-colors duration-200 ease-in-out before:content-[''] before:absolute before:w-4 before:h-4 before:bg-white before:rounded-full before:shadow-md before:transform peer-checked:before:translate-x-5 before:transition-transform before:duration-200 before:ease-in-out mr-2 cursor-pointer"></span>
+                Save this card for future transactions
+              </label>
+              <button class="pay-now-btn" aria-label="Pay with card">Pay Now</button>
+            </div>
+            <div id="upi-form" class="payment-form">
+              <h4>UPI Payment</h4>
+              <p class="text-sm text-gray-600 mb-2">Pay using your UPI ID.</p>
+              <input type="text" placeholder="Enter UPI ID (example@upi)" id="upi-id" required class="mb-4">
+              <p class="error-text">Please enter a valid UPI ID (e.g., example@upi).</p>
+              <label class="flex items-center text-sm text-gray-600 mb-4">
+                <input type="checkbox" id="save-upi" class="hidden peer">
+                <span class="relative w-10 h-5 bg-gray-300 rounded-full peer-checked:bg-blue-600 transition-colors duration-200 ease-in-out before:content-[''] before:absolute before:w-4 before:h-4 before:bg-white before:rounded-full before:shadow-md before:transform peer-checked:before:translate-x-5 before:transition-transform before:duration-200 before:ease-in-out mr-2 cursor-pointer"></span>
+                Save this UPI ID for faster payments
+              </label>
+              <button class="pay-now-btn" aria-label="Pay with UPI">Verify and Pay</button>
+            </div>
+            <div id="wallets-form" class="payment-form">
+              <h4>Wallet Payment</h4>
+              <p class="text-sm text-gray-600 mb-2">Select your wallet.</p>
+              <select class="mb-4" required>
+                <option value="" disabled selected>Select a wallet</option>
+                <option value="Paytm">Paytm</option>
+                <option value="PhonePe">PhonePe</option>
+                <option value="GooglePay">Google Pay</option>
+              </select>
+              <p class="error-text">Please select a wallet.</p>
+              <button class="pay-now-btn" aria-label="Pay with wallet">Pay Now</button>
+            </div>
+            <div id="net-banking-form" class="payment-form">
+              <h4>Net Banking</h4>
+              <p class="text-sm text-gray-600 mb-2">Select your bank.</p>
+              <div class="bank-selection">
+                <select id="top-banks" class="mb-4" required>
+                  <option value="" disabled selected>Select a bank</option>
+                  <option value="SBI">State Bank of India</option>
+                  <option value="HDFC">HDFC Bank</option>
+                  <option value="ICICI">ICICI Bank</option>
+                  <option value="Canara Bank">Canara Bank</option>
+                </select>
+                <p class="error-text">Please select a bank.</p>
+                <button id="other-banks-toggle" class="text-blue-600 hover:underline text-sm mb-2 flex items-center gap-1">
+                  <span class="material-symbols-outlined" id="toggle-icon">expand_more</span>
+                  Other Banks
+                </button>
+                <div class="other-banks-list hidden">
+                  <div class="bank-item" data-bank="Airtel Payments Bank">Airtel Payments Bank</div>
+                  <div class="bank-item" data-bank="Bank of Baroda Corporate">Bank of Baroda Corporate</div>
+                  <div class="bank-item" data-bank="Bank of Baroda Retail Accounts">Bank of Baroda Retail Accounts</div>
+                  <div class="bank-item" data-bank="Bank of India">Bank of India</div>
+                  <div class="bank-item" data-bank="Bank of Maharashtra">Bank of Maharashtra</div>
+                  <div class="bank-item" data-bank="Catholic Syrian Bank">Catholic Syrian Bank</div>
+                  <div class="bank-item" data-bank="Central Bank of India">Central Bank of India</div>
+                  <div class="bank-item" data-bank="City Union Bank">City Union Bank</div>
+                </div>
+              </div>
+              <button class="pay-now-btn" aria-label="Pay with net banking">Pay Now</button>
+            </div>
+            <div id="gift-card-form" class="payment-form">
+              <h4>Gift Card</h4>
+              <p class="text-sm text-gray-600 mb-2">Enter your gift card details.</p>
+              <input type="text" placeholder="Gift Card Number" id="gift-card-number" required class="mb-4">
+              <p class="error-text">Please enter a valid gift card number.</p>
+              <button class="pay-now-btn" aria-label="Apply gift card">Apply Gift Card</button>
+            </div>
+            <div id="saved-card-form" class="payment-form">
+              <h4 id="saved-card-title">Secure Payment</h4>
+              <p class="text-sm text-gray-600 mb-2">Enter CVV for your saved card.</p>
+              <input type="text" placeholder="CVV" id="saved-card-cvv" required class="w-24 mb-4">
+              <p class="error-text">Please enter a valid 3 or 4-digit CVV.</p>
+              <button class="pay-now-btn" aria-label="Pay with saved card">Pay Now</button>
+            </div>
+            <div class="recommended-options" id="recommended-options">
+              <div class="payment-method-item payment-option" data-method="cash-sub">
+                <input type="checkbox" id="cash-sub-checkbox" class="mr-2">
+                <span class="icon material-symbols-outlined">money</span>
+                <span>Cash On Delivery (Cash/UPI)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Summary -->
+      <div class="order-summary bg-gray-50 p-6 rounded-lg border shadow-md">
+        <h3 class="text-2xl font-semibold text-gray-800 border-b pb-2 mb-6">Order Summary</h3>
+        <div id="order-items" class="mt-6 divide-y divide-gray-200 space-y-4"></div>
+        <div class="mt-6 text-sm">
+          <table class="w-full">
+            <tbody>
+              <tr>
+                <td class="py-2 px-2 text-gray-700">Original Price:</td>
+                <td class="py-2 px-2 text-right" id="original-price">Rs 0.00</td>
+              </tr>
+              <tr>
+                <td class="py-2 px-2 text-gray-700">Delivery Charges:</td>
+                <td class="py-2 px-2 text-right" id="delivery-charges">Rs 50.00</td>
+              </tr>
+              <tr>
+                <td class="py-2 px-2 text-gray-700">GST (18%):</td>
+                <td class="py-2 px-2 text-right" id="gst">Rs 0.00</td>
+              </tr>
+              <tr id="discount-row" class="hidden">
+                <td class="py-2 px-2 text-green-600">Discount (Coupon/Gift Card):</td>
+                <td class="py-2 px-2 text-right text-green-600" id="discount-amount">Rs 0.00</td>
+              </tr>
+              <tr class="font-semibold border-t">
+                <td class="py-2 px-2 text-gray-800">Total:</td>
+                <td class="py-2 px-2 text-right" id="total-price">Rs 0.00</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mt-6 flex flex-col gap-3">
+          <button id="remove-gift-card-btn" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition shadow-hover hidden" aria-label="Remove applied gift card">Remove Gift Card</button>
+          <button id="confirm-payment-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow-hover disabled:opacity-50" disabled>
+            <span id="confirm-payment-text">Place Order</span>
+            <span id="confirm-payment-loading" class="hidden">Processing...</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order Popup -->
+    <div id="order-popup" class="popup fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+      <div class="popup-content bg-white p-6 rounded-lg shadow-lg text-center w-80">
+        <div class="text-green-500 text-4xl"><i class="fas fa-check-circle"></i></div>
+        <h2 class="text-xl font-semibold mt-2 text-gray-800">Order Placed Successfully!</h2>
+        <p class="text-gray-600 mt-2">Your Order ID: <span id="order-id" class="font-bold text-blue-600"></span></p>
+        <button onclick="closePopup()" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow-hover" aria-label="Close order confirmation popup">Close</button>
+      </div>
+    </div>
+  </main>
+
+  <div id="footer-container"></div>
+
+  <script>
+    // Configuration constants
+    const CONFIG = {
+      DELIVERY_CHARGES: 50,
+      GST_RATE: 0.18,
+      STATIC_GIFT_CARD: {
+        number: "GIFT1234567890",
+        balance: 1000.00
+      }
+    };
+
+    // Cached DOM elements
+    const DOM = {
+      orderItems: document.getElementById("order-items"),
+      originalPrice: document.getElementById("original-price"),
+      gst: document.getElementById("gst"),
+      deliveryCharges: document.getElementById("delivery-charges"),
+      totalPrice: document.getElementById("total-price"),
+      discountRow: document.getElementById("discount-row"),
+      discountAmount: document.getElementById("discount-amount"),
+      confirmPaymentBtn: document.getElementById("confirm-payment-btn"),
+      confirmPaymentText: document.getElementById("confirm-payment-text"),
+      confirmPaymentLoading: document.getElementById("confirm-payment-loading"),
+      orderPopup: document.getElementById("order-popup"),
+      orderId: document.getElementById("order-id"),
+      cardNumber: document.getElementById("card-number"),
+      cardName: document.getElementById("card-name"),
+      cardExpiry: document.getElementById("card-expiry"),
+      cardCvv: document.getElementById("card-cvv"),
+      saveCard: document.getElementById("save-card"),
+      upiId: document.getElementById("upi-id"),
+      saveUpi: document.getElementById("save-upi"),
+      walletSelect: document.querySelector('#wallets-form select'),
+      topBanks: document.getElementById("top-banks"),
+      giftCardNumber: document.getElementById("gift-card-number"),
+      savedCardCvv: document.getElementById("saved-card-cvv"),
+      savedCardTitle: document.getElementById("saved-card-title"),
+      recommendedOptions: document.getElementById("recommended-options"),
+      cashSubCheckbox: document.getElementById("cash-sub-checkbox"),
+      removeGiftCardBtn: document.getElementById("remove-gift-card-btn"),
+      savedCardForm: document.getElementById("saved-card-form")
+    };
+
+    let selectedPaymentMethod = null;
+    let savedCards = [];
+    let savedUpiIds = [];
+    let isPaymentComplete = false;
+    let selectedBank = null;
+    let giftCardAppliedAmount = 0;
+    let giftCardApplied = false;
+    let lastSelectedItem = null;
+
+    document.addEventListener("DOMContentLoaded", function () {
+      if (DOM.orderPopup) {
+        DOM.orderPopup.classList.add("hidden");
+        DOM.orderPopup.classList.remove("show");
+      }
+
+      loadCartAndSummary();
+      loadDeliveryAddress();
+      populateRecommendedOptions();
+      setupPaymentOptions();
+      setupInputNavigation();
+      setupNetBanking();
+
+      const recommendedItem = document.querySelector('.payment-method-item[data-method="recommended"]');
+      if (recommendedItem) recommendedItem.click();
+
+      DOM.confirmPaymentBtn.addEventListener("click", confirmPayment);
+      document.querySelector('#payment-form .pay-now-btn').addEventListener('click', handleCardPayment);
+      document.querySelector('#upi-form .pay-now-btn').addEventListener('click', handleUpiPayment);
+      document.querySelector('#wallets-form .pay-now-btn').addEventListener('click', handleWalletPayment);
+      document.querySelector('#net-banking-form .pay-now-btn').addEventListener('click', handleNetBankingPayment);
+      document.querySelector('#gift-card-form .pay-now-btn').addEventListener('click', handleGiftCardPayment);
+      document.querySelector('#saved-card-form .pay-now-btn').addEventListener('click', handleSavedCardPayment);
+      DOM.removeGiftCardBtn.addEventListener('click', removeGiftCard);
+
+      DOM.cashSubCheckbox.addEventListener("change", function () {
+        if (this.checked) {
+          selectedPaymentMethod = "cash-sub";
+          isPaymentComplete = true;
+          updateConfirmButtonState();
+        } else {
+          selectedPaymentMethod = null;
+          isPaymentComplete = false;
+          updateConfirmButtonState();
+        }
+      });
+
+      document.getElementById("other-banks-toggle").addEventListener("click", function () {
+        const otherBanksDiv = document.querySelector(".other-banks-list");
+        const toggleIcon = document.getElementById("toggle-icon");
+        otherBanksDiv.classList.toggle("hidden");
+        toggleIcon.textContent = otherBanksDiv.classList.contains("hidden") ? "expand_more" : "expand_less";
+      });
+
+      attachInputListeners();
+    });
+
+    function attachInputListeners() {
+      const inputs = [DOM.cardNumber, DOM.cardName, DOM.cardExpiry, DOM.cardCvv, DOM.upiId, DOM.giftCardNumber, DOM.savedCardCvv, DOM.walletSelect, DOM.topBanks];
+      inputs.forEach(input => {
+        if (input) {
+          input.addEventListener('input', validateField);
+          input.addEventListener('blur', validateField);
+          input.addEventListener('input', updateConfirmButtonState);
+        }
+      });
+    }
+
+    function validateField(event) {
+      const input = event.target;
+      const errorText = input.nextElementSibling;
+      if (!errorText || !errorText.classList.contains('error-text')) return;
+
+      if (input.id === "card-number") {
+        const value = input.value.replace(/\s/g, '');
+        input.setCustomValidity(!validateCardNumber(value) && value !== "" ? "Invalid card number" : "");
+      } else if (input.id === "card-name") {
+        input.setCustomValidity(!validateCardName(input.value) && input.value !== "" ? "Invalid cardholder name" : "");
+      } else if (input.id === "card-expiry") {
+        input.setCustomValidity(!validateCardExpiry(input.value) && input.value !== "" ? "Invalid expiry date" : "");
+      } else if (input.id === "card-cvv" || input.id === "saved-card-cvv") {
+        input.setCustomValidity(!validateCVV(input.value) && input.value !== "" ? "Invalid CVV" : "");
+      } else if (input.id === "upi-id") {
+        input.setCustomValidity(!validateUPI(input.value) && input.value !== "" ? "Invalid UPI ID" : "");
+      } else if (input.id === "gift-card-number") {
+        input.setCustomValidity(!input.value || input.value === "" ? "Gift card number is required" : "");
+      } else if (input.tagName === "SELECT") {
+        input.setCustomValidity(input.value === "" ? "Please select an option" : "");
+      }
+    }
+
+    function validateCardNumber(cardNumber) {
+      return /^\d{16}$/.test(cardNumber.replace(/\s/g, ''));
+    }
+
+    function validateCardName(name) {
+      return /^[a-zA-Z\s]*$/.test(name.trim());
+    }
+
+    function validateCardExpiry(expiry) {
+      if (!/^\d{2}\/\d{2}$/.test(expiry)) return false;
+      const [month, year] = expiry.split('/').map(Number);
+      const currentYear = new Date().getFullYear() % 100;
+      const currentMonth = new Date().getMonth() + 1;
+      return month >= 1 && month <= 12 && year >= currentYear && (year > currentYear || month >= currentMonth);
+    }
+
+    function validateCVV(cvv) {
+      return /^\d{3,4}$/.test(cvv);
+    }
+
+    function validateUPI(upiId) {
+      return /^[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}$/.test(upiId);
+    }
+
+    function isLocalStorageAvailable() {
+      try {
+        localStorage.setItem("test", "test");
+        localStorage.removeItem("test");
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function populateRecommendedOptions() {
+      DOM.recommendedOptions.innerHTML = '';
+      const cashSub = document.createElement('div');
+      cashSub.className = 'payment-method-item payment-option';
+      cashSub.dataset.method = 'cash-sub';
+      cashSub.innerHTML = `
+        <input type="checkbox" id="cash-sub-checkbox" class="mr-2">
+        <span class="icon material-symbols-outlined">money</span>
+        <span>Cash On Delivery (Cash/UPI)</span>
+      `;
+      DOM.recommendedOptions.appendChild(cashSub);
+
+      savedCards = JSON.parse(localStorage.getItem("savedCards")) || [];
+      savedCards.forEach((card, index) => {
+        const brandLogo = card.brand === 'Visa'
+          ? 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Visa_2021.svg/1239px-Visa_2021.svg.png'
+          : 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png';
+        const cardItem = document.createElement('div');
+        cardItem.className = 'payment-method-item payment-option';
+        cardItem.dataset.method = `card-sub-${index}`;
+        cardItem.innerHTML = `
+          <span class="icon material-symbols-outlined">credit_card</span>
+          <span>${card.bank} Credit Card ****${card.last4}</span>
+          <img src="${brandLogo}" alt="${card.bank} Credit Card" class="h-6 ml-auto">
+        `;
+        DOM.recommendedOptions.appendChild(cardItem);
+      });
+
+      savedUpiIds = JSON.parse(localStorage.getItem("savedUpiIds")) || [];
+      savedUpiIds.forEach((upi, index) => {
+        const upiItem = document.createElement('div');
+        upiItem.className = 'payment-method-item payment-option';
+        upiItem.dataset.method = `upi-sub-${index}`;
+        upiItem.innerHTML = `
+          <span class="icon material-symbols-outlined">payment</span>
+          <span>Saved UPI ID: ${upi}</span>
+        `;
+        DOM.recommendedOptions.appendChild(upiItem);
+      });
+    }
+
+    function updateCartCount() {
+      const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+      const cartCount = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+      const cartCountElement = document.getElementById("cart-count");
+      if (cartCountElement) {
+        cartCountElement.innerText = cartCount;
+        cartCountElement.classList.toggle("hidden", cartCount === 0);
+      }
+    }
+
+    function loadDeliveryAddress() {
+      if (!isLocalStorageAvailable()) {
+        Toastify({
+          text: "Local storage is unavailable. Please enable it to proceed.",
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#f87171",
+        }).showToast();
+        setTimeout(() => window.location.href = "checkout.html", 1000);
+        return;
+      }
+
+      const checkoutDetails = JSON.parse(localStorage.getItem("checkoutDetails")) || {};
+      const address = checkoutDetails.address || {};
+      if (!address.name) {
+        DOM.orderItems.innerHTML = `
+          <div class="address-field">
+            <span class="field-icon material-symbols-outlined">person</span>
+            <span>No address selected</span>
+          </div>
+          <div class="address-field">
+            <span class="field-icon material-symbols-outlined">info</span>
+            <span>Please select an address in the checkout page.</span>
+          </div>
+        `;
+        DOM.confirmPaymentBtn.disabled = true;
+        setTimeout(() => window.location.href = "checkout.html", 1000);
+        return;
+      }
+
+      document.getElementById("address-name").innerHTML = `
+        <span class="field-icon material-symbols-outlined">person</span>
+        <span>${address.name}</span>
+      `;
+      document.getElementById("address-street").innerHTML = `
+        <span class="field-icon material-symbols-outlined">home</span>
+        <span>${address.street || ''}</span>
+      `;
+      document.getElementById("address-city-state").innerHTML = `
+        <span class="field-icon material-symbols-outlined">location_city</span>
+        <span>${address.city || ''}, ${address.state || ''}</span>
+      `;
+      document.getElementById("address-pincode").innerHTML = `
+        <span class="field-icon material-symbols-outlined">pin_drop</span>
+        <span>${address.pincode || ''}</span>
+      `;
+      document.getElementById("address-phone").innerHTML = `
+        <span class="field-icon material-symbols-outlined">phone</span>
+        <span>${address.mobile || ''}</span>
+      `;
+      document.getElementById("address-email").innerHTML = `
+        <span class="field-icon material-symbols-outlined">email</span>
+        <span>${address.email || ''}</span>
+      `;
+    }
+
+    function loadCartAndSummary() {
+      if (!isLocalStorageAvailable()) {
+        Toastify({
+          text: "Local storage is unavailable. Please enable it to proceed.",
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#f87171",
+        }).showToast();
+        setTimeout(() => window.location.href = "checkout.html", 1000);
+        return;
+      }
+
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      if (!Array.isArray(cart)) {
+        DOM.orderItems.innerHTML = '<p class="text-gray-600">Invalid cart data.</p>';
+        DOM.confirmPaymentBtn.disabled = true;
+        return;
+      }
+
+      DOM.orderItems.innerHTML = "";
+      if (cart.length === 0) {
+        DOM.confirmPaymentBtn.disabled = true;
+        DOM.orderItems.innerHTML = '<p class="text-gray-600">Your cart is empty.</p>';
+        DOM.originalPrice.innerText = "Rs 0.00";
+        DOM.gst.innerText = "Rs 0.00";
+        DOM.deliveryCharges.innerText = `Rs ${CONFIG.DELIVERY_CHARGES.toFixed(2)}`;
+        DOM.totalPrice.innerText = "Rs 0.00";
+        DOM.discountRow.classList.add("hidden");
+        return;
+      }
+
+      let subtotal = 0;
+      cart.forEach(item => {
+        const price = item.price && typeof item.price === "string"
+          ? parseFloat(item.price.replace(/[^\d.]/g, ""))
+          : 0;
+        if (isNaN(price) || price <= 0) return;
+        const quantity = item.quantity || 1;
+        const total = price * quantity;
+        subtotal += total;
+        const itemDiv = document.createElement("div");
+        itemDiv.className = "flex items-center gap-4 py-2";
+        itemDiv.innerHTML = `
+          <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded border">
+          <div class="flex-1">
+            <h4 class="font-medium text-gray-800">${item.name}</h4>
+            <p class="text-sm text-gray-600">Qty: ${quantity}</p>
+            <p class="text-sm text-gray-800">Rs ${total.toFixed(2)}</p>
+          </div>
+        `;
+        DOM.orderItems.appendChild(itemDiv);
+      });
+
+      const checkoutDetails = JSON.parse(localStorage.getItem("checkoutDetails")) || {};
+      const couponDiscount = checkoutDetails.discountAmount || 0;
+      const totalDiscount = couponDiscount + giftCardAppliedAmount;
+      const gst = subtotal * CONFIG.GST_RATE;
+      const finalTotal = subtotal + gst + CONFIG.DELIVERY_CHARGES - totalDiscount;
+
+      DOM.originalPrice.innerText = `Rs ${subtotal.toFixed(2)}`;
+      DOM.gst.innerText = `Rs ${gst.toFixed(2)}`;
+      DOM.deliveryCharges.innerText = `Rs ${CONFIG.DELIVERY_CHARGES.toFixed(2)}`;
+      DOM.totalPrice.innerText = `Rs ${finalTotal.toFixed(2)}`;
+      if (totalDiscount > 0) {
+        DOM.discountRow.classList.remove("hidden");
+        DOM.discountAmount.innerText = `- Rs ${totalDiscount.toFixed(2)}`;
+        DOM.removeGiftCardBtn.classList.toggle("hidden", !giftCardApplied);
+      } else {
+        DOM.discountRow.classList.add("hidden");
+        DOM.removeGiftCardBtn.classList.add("hidden");
+      }
+      updateCartCount();
+      updateConfirmButtonState();
+    }
+
+    function hideAllForms() {
+      document.querySelectorAll('.payment-form').forEach(form => {
+        form.classList.remove('active');
+        if (form !== DOM.savedCardForm) {
+          form.style.display = 'none';
+        }
+      });
+      if (lastSelectedItem && DOM.savedCardForm.parentNode !== lastSelectedItem) {
+        DOM.savedCardForm.style.display = 'none';
+      }
+    }
+
+    function setupPaymentOptions() {
+      const paymentOptions = document.querySelectorAll(".payment-method-list .payment-method-item");
+      paymentOptions.forEach(option => {
+        option.addEventListener("click", () => {
+          paymentOptions.forEach(opt => opt.classList.remove("selected"));
+          option.classList.add("selected");
+          selectedPaymentMethod = option.dataset.method;
+          hideAllForms();
+          DOM.recommendedOptions.classList.remove("active");
+          isPaymentComplete = false;
+          selectedBank = null;
+          lastSelectedItem = null;
+          updateConfirmButtonState();
+
+          if (selectedPaymentMethod === "recommended") {
+            DOM.recommendedOptions.classList.add("active");
+            DOM.cashSubCheckbox.checked = false;
+          } else if (selectedPaymentMethod === "cash-on-delivery") {
+            DOM.recommendedOptions.classList.add("active");
+            DOM.cashSubCheckbox.checked = true;
+            selectedPaymentMethod = "cash-sub";
+            isPaymentComplete = true;
+          } else if (selectedPaymentMethod === "credit-debit-card") {
+            document.getElementById("payment-form").classList.add("active");
+            document.getElementById("payment-form").style.display = 'block';
+          } else if (selectedPaymentMethod === "upi") {
+            document.getElementById("upi-form").classList.add("active");
+            document.getElementById("upi-form").style.display = 'block';
+          } else if (selectedPaymentMethod === "wallets") {
+            document.getElementById("wallets-form").classList.add("active");
+            document.getElementById("wallets-form").style.display = 'block';
+          } else if (selectedPaymentMethod === "net-banking") {
+            document.getElementById("net-banking-form").classList.add("active");
+            document.getElementById("net-banking-form").style.display = 'block';
+          } else if (selectedPaymentMethod === "gift-card") {
+            document.getElementById("gift-card-form").classList.add("active");
+            document.getElementById("gift-card-form").style.display = 'block';
+          }
+          updateConfirmButtonState();
+        });
+      });
+
+      DOM.recommendedOptions.addEventListener("click", (e) => {
+        const item = e.target.closest(".payment-method-item");
+        if (!item) return;
+
+        DOM.recommendedOptions.querySelectorAll(".payment-method-item").forEach(opt => opt.classList.remove("selected"));
+        item.classList.add("selected");
+        selectedPaymentMethod = item.dataset.method;
+        hideAllForms();
+        isPaymentComplete = false;
+        lastSelectedItem = item;
+
+        if (item.dataset.method.startsWith("card-sub-")) {
+          const index = parseInt(item.dataset.method.split("-")[2]);
+          const card = savedCards[index];
+          DOM.savedCardTitle.innerText = `Enter CVV for ${card.bank} Credit Card ****${card.last4}`;
+          DOM.savedCardForm.classList.add("active");
+          DOM.savedCardForm.style.display = 'block';
+          // Insert saved-card-form after the selected card item
+          item.insertAdjacentElement('afterend', DOM.savedCardForm);
+        } else if (item.dataset.method === "cash-sub") {
+          DOM.cashSubCheckbox.checked = true;
+          isPaymentComplete = true;
+        } else if (item.dataset.method.startsWith("upi-sub-")) {
+          const index = parseInt(item.dataset.method.split("-")[2]);
+          const upi = savedUpiIds[index];
+          DOM.savedCardTitle.innerText = `Using Saved UPI ID: ${upi}`;
+          isPaymentComplete = true;
+          DOM.savedCardForm.classList.remove("active");
+          DOM.savedCardForm.style.display = 'none';
+          Toastify({
+            text: `UPI ID ${upi} selected successfully.`,
+            duration: 4000,
+            gravity: "top",
+            position: "right",
+            backgroundColor: "#34d399",
+          }).showToast();
+        }
+        updateConfirmButtonState();
+      });
+    }
+
+    function setupInputNavigation() {
+      DOM.cardNumber.addEventListener("input", function (e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 16) value = value.slice(0, 16);
+        e.target.value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
+        if (value.length === 16 && validateCardNumber(value)) {
+          DOM.cardName.focus();
+        }
+      });
+
+      DOM.cardName.addEventListener("input", function (e) {
+        let value = e.target.value.replace(/[^a-zA-Z\s]/g, '');
+        e.target.value = value;
+        // No auto-navigation to expiry field
+      });
+
+      DOM.cardExpiry.addEventListener("input", function (e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 4) value = value.slice(0, 4);
+        if (value.length > 2) {
+          e.target.value = value.slice(0, 2) + '/' + value.slice(2);
+        } else {
+          e.target.value = value;
+        }
+        if (value.length === 4 && validateCardExpiry(e.target.value)) {
+          DOM.cardCvv.focus();
+        }
+      });
+
+      DOM.cardCvv.addEventListener("input", function (e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 4) value = value.slice(0, 4);
+        e.target.value = value;
+        if (value.length >= 3 && validateCVV(value)) {
+          DOM.saveCard.focus();
+        }
+      });
+
+      DOM.savedCardCvv.addEventListener("input", function (e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 4) value = value.slice(0, 4);
+        e.target.value = value;
+      });
+    }
+
+    function setupNetBanking() {
+      const bankItems = document.querySelectorAll(".other-banks-list .bank-item");
+      DOM.topBanks.addEventListener("change", function () {
+        selectedBank = this.value;
+        bankItems.forEach(item => item.classList.remove("selected"));
+        updateConfirmButtonState();
+      });
+
+      bankItems.forEach(item => {
+        item.addEventListener("click", function () {
+          bankItems.forEach(i => i.classList.remove("selected"));
+          this.classList.add("selected");
+          selectedBank = this.dataset.bank;
+          DOM.topBanks.value = "";
+          updateConfirmButtonState();
+        });
+      });
+    }
+
+    function handleCardPayment() {
+      const cardNumber = DOM.cardNumber.value;
+      const cardName = DOM.cardName.value;
+      const cardExpiry = DOM.cardExpiry.value;
+      const cardCvv = DOM.cardCvv.value;
+
+      if (!validateCardNumber(cardNumber)) {
+        Toastify({
+          text: "Please enter a valid 16-digit card number.",
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#f87171",
+        }).showToast();
+        return;
+      }
+
+      if (!validateCardName(cardName)) {
+        Toastify({
+          text: "Please enter a valid cardholder name (letters and spaces only).",
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#f87171",
+        }).showToast();
+        return;
+      }
+
+      if (!validateCardExpiry(cardExpiry)) {
+        Toastify({
+          text: "Please enter a valid expiry date (MM/YY) that is not in the past.",
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#f87171",
+        }).showToast();
+        return;
+      }
+
+      if (!validateCVV(cardCvv)) {
+        Toastify({
+          text: "Please enter a valid 3 or 4-digit CVV.",
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#f87171",
+        }).showToast();
+        return;
+      }
+
+      if (DOM.saveCard.checked) {
+        const bank = "Unknown Bank";
+        const brand = cardNumber.replace(/\s/g, '').startsWith('4') ? 'Visa' : 'Mastercard';
+        const last4 = cardNumber.replace(/\s/g, '').slice(-4);
+        savedCards = JSON.parse(localStorage.getItem("savedCards")) || [];
+        if (!savedCards.some(card => card.last4 === last4)) {
+          savedCards.push({ bank, last4, brand });
+          localStorage.setItem("savedCards", JSON.stringify(savedCards));
+          populateRecommendedOptions();
+        }
+      }
+
+      isPaymentComplete = true;
+      updateConfirmButtonState();
+      Toastify({
+        text: "Card details validated successfully.",
+        duration: 4000,
+        gravity: "top",
+        position: "right",
+        backgroundColor: "#34d399",
+      }).showToast();
+    }
+
+    function handleUpiPayment() {
+      const upiId = DOM.upiId.value;
+      if (!validateUPI(upiId)) {
+        Toastify({
+          text: "Please enter a valid UPI ID (e.g., example@upi).",
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#f87171",
+        }).showToast();
+        return;
+      }
+
+      if (DOM.saveUpi.checked) {
+        savedUpiIds = JSON.parse(localStorage.getItem("savedUpiIds")) || [];
+        if (!savedUpiIds.includes(upiId)) {
+          savedUpiIds.push(upiId);
+          localStorage.setItem("savedUpiIds", JSON.stringify(savedUpiIds));
+          populateRecommendedOptions();
+        }
+      }
+
+      isPaymentComplete = true;
+      updateConfirmButtonState();
+      Toastify({
+        text: "UPI ID validated successfully.",
+        duration: 4000,
+        gravity: "top",
+        position: "right",
+        backgroundColor: "#34d399",
+      }).showToast();
+    }
+
+    function handleWalletPayment() {
+      if (DOM.walletSelect.value) {
+        isPaymentComplete = true;
+        updateConfirmButtonState();
+        Toastify({
+          text: "Wallet selected successfully.",
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#34d399",
+        }).showToast();
+      } else {
+        Toastify({
+          text: "Please select a wallet.",
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#f87171",
+        }).showToast();
+      }
+    }
+
+    function handleNetBankingPayment() {
+      if (selectedBank) {
+        isPaymentComplete = true;
+        updateConfirmButtonState();
+        Toastify({
+          text: "Bank selected successfully.",
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#34d399",
+        }).showToast();
+      } else {
+        Toastify({
+          text: "Please select a bank.",
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#f87171",
+        }).showToast();
+      }
+    }
+
+    function handleGiftCardPayment() {
+      const giftCardNumber = DOM.giftCardNumber.value;
+      const totalPrice = parseFloat(DOM.totalPrice.innerText.replace(/[^\d.]/g, ""));
+      const checkoutDetails = JSON.parse(localStorage.getItem("checkoutDetails")) || {};
+
+      if (giftCardNumber !== CONFIG.STATIC_GIFT_CARD.number) {
+        Toastify({
+          text: "Invalid gift card number. Please use GIFT1234567890 for testing.",
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#f87171",
+        }).showToast();
+        return;
+      }
+
+      if (giftCardApplied) {
+        Toastify({
+          text: "Gift card already applied.",
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#f87171",
+        }).showToast();
+        return;
+      }
+
+      const appliedAmount = Math.min(CONFIG.STATIC_GIFT_CARD.balance, totalPrice);
+      giftCardAppliedAmount = appliedAmount;
+      giftCardApplied = true;
+      CONFIG.STATIC_GIFT_CARD.balance -= appliedAmount;
+
+      checkoutDetails.giftCardDiscount = giftCardAppliedAmount;
+      localStorage.setItem("checkoutDetails", JSON.stringify(checkoutDetails));
+
+      loadCartAndSummary();
+
+      if (CONFIG.STATIC_GIFT_CARD.balance >= totalPrice) {
+        isPaymentComplete = true;
+        updateConfirmButtonState();
+        Toastify({
+          text: `Gift card applied successfully. Full amount covered. Remaining balance: Rs ${CONFIG.STATIC_GIFT_CARD.balance.toFixed(2)}`,
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#34d399",
+        }).showToast();
+      } else {
+        isPaymentComplete = false;
+        updateConfirmButtonState();
+        Toastify({
+          text: `Gift card applied: Rs ${appliedAmount.toFixed(2)}. Remaining amount: Rs ${(totalPrice - appliedAmount).toFixed(2)}. Please select another payment method.`,
+          duration: 6000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#f59e0b",
+        }).showToast();
+        const recommendedItem = document.querySelector('.payment-method-item[data-method="recommended"]');
+        if (recommendedItem) recommendedItem.click();
+      }
+
+      DOM.giftCardNumber.value = "";
+    }
+
+    function removeGiftCard() {
+      const checkoutDetails = JSON.parse(localStorage.getItem("checkoutDetails")) || {};
+      CONFIG.STATIC_GIFT_CARD.balance += giftCardAppliedAmount;
+      giftCardAppliedAmount = 0;
+      giftCardApplied = false;
+      checkoutDetails.giftCardDiscount = 0;
+      localStorage.setItem("checkoutDetails", JSON.stringify(checkoutDetails));
+      loadCartAndSummary();
+      Toastify({
+        text: "Gift card removed successfully.",
+        duration: 4000,
+        gravity: "top",
+        position: "right",
+        backgroundColor: "#34d399",
+      }).showToast();
+    }
+
+    function handleSavedCardPayment() {
+      if (validateCVV(DOM.savedCardCvv.value)) {
+        isPaymentComplete = true;
+        updateConfirmButtonState();
+        Toastify({
+          text: "CVV validated successfully.",
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#34d399",
+        }).showToast();
+      } else {
+        Toastify({
+          text: "Please enter a valid 3 or 4-digit CVV.",
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#f87171",
+        }).showToast();
+      }
+    }
+
+    function updateConfirmButtonState() {
+      const totalPrice = parseFloat(DOM.totalPrice.innerText.replace(/[^\d.]/g, ""));
+      const isValidPaymentMethod = selectedPaymentMethod && selectedPaymentMethod !== "gift-card" && selectedPaymentMethod !== "recommended";
+      const isRemainingPaymentComplete = totalPrice <= 0 || (isPaymentComplete && isValidPaymentMethod);
+      DOM.confirmPaymentBtn.disabled = !isRemainingPaymentComplete;
+    }
+
+    function confirmPayment() {
+      if (!selectedPaymentMethod || selectedPaymentMethod === "recommended") {
+        Toastify({
+          text: "Please select a payment method.",
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#f87171",
+        }).showToast();
+        return;
+      }
+
+      const totalPrice = parseFloat(DOM.totalPrice.innerText.replace(/[^\d.]/g, ""));
+      if (giftCardAppliedAmount > 0 && totalPrice > 0 && (!isPaymentComplete || selectedPaymentMethod === "gift-card")) {
+        Toastify({
+          text: "Please select and validate a payment method for the remaining amount.",
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#f87171",
+        }).showToast();
+        return;
+      }
+
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      if (!Array.isArray(cart) || cart.length === 0) {
+        Toastify({
+          text: "Your cart is empty. Please add items to place an order.",
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#f87171",
+        }).showToast();
+        DOM.confirmPaymentText.classList.remove("hidden");
+        DOM.confirmPaymentLoading.classList.add("hidden");
+        DOM.confirmPaymentBtn.disabled = true;
+        return;
+      }
+
+      const checkoutDetails = JSON.parse(localStorage.getItem("checkoutDetails")) || {};
+      if (!checkoutDetails.address || !checkoutDetails.address.name) {
+        Toastify({
+          text: "No address selected. Please complete the checkout form.",
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#f87171",
+        }).showToast();
+        DOM.confirmPaymentText.classList.remove("hidden");
+        DOM.confirmPaymentLoading.classList.add("hidden");
+        DOM.confirmPaymentBtn.disabled = true;
+        setTimeout(() => window.location.href = "checkout.html", 1000);
+        return;
+      }
+
+      DOM.confirmPaymentText.classList.add("hidden");
+      DOM.confirmPaymentLoading.classList.remove("hidden");
+      DOM.confirmPaymentBtn.disabled = true;
+
+      const orderId = "ORD" + Math.floor(100000 + Math.random() * 900000);
+      const orderDate = new Date().toISOString();
+
+      const orderDetails = {
+        orderId,
+        orderDate,
+        status: "Order Placed",
+        totalAmount: DOM.totalPrice.innerText,
+        items: cart.map(item => ({
+          productName: item.name,
+          quantity: item.quantity || 1,
+          price: item.price,
+          image: item.image,
+          description: item.name
+        })),
+        address: checkoutDetails.address,
+        paymentMethod: selectedPaymentMethod,
+        paymentDetails: selectedBank ? { bank: selectedBank } : {},
+        couponDiscount: checkoutDetails.discountAmount || 0,
+        giftCardDiscount: giftCardAppliedAmount
+      };
+
+      try {
+        let trackingOrders = JSON.parse(localStorage.getItem("trackingOrder")) || [];
+        if (!Array.isArray(trackingOrders)) trackingOrders = [];
+        trackingOrders.push(orderDetails);
+        localStorage.setItem("trackingOrder", JSON.stringify(trackingOrders));
+
+        localStorage.removeItem("cart");
+        localStorage.removeItem("checkoutDetails");
+        giftCardAppliedAmount = 0;
+        giftCardApplied = false;
+
+        DOM.orderId.innerText = orderId;
+        DOM.orderPopup.classList.remove("hidden");
+        DOM.orderPopup.classList.add("show");
+
+        setTimeout(() => window.location.href = "order.html", 2000);
+      } catch (e) {
+        Toastify({
+          text: "Error saving order. Please try again.",
+          duration: 4000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#f87171",
+        }).showToast();
+        DOM.confirmPaymentText.classList.remove("hidden");
+        DOM.confirmPaymentLoading.classList.add("hidden");
+        DOM.confirmPaymentBtn.disabled = false;
+      }
+    }
+
+    function closePopup() {
+      if (DOM.orderPopup) {
+        DOM.orderPopup.classList.add("hidden");
+        DOM.orderPopup.classList.remove("show");
+      }
+    }
+  </script>
+  <script src="navbar.js"></script>
+  <script src="footer.js"></script>
+</body>
+</html>

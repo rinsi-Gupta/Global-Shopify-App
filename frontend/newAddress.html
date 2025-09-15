@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>New Address</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .sidebar-link {
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .sidebar-link:hover {
+            background-color: #e5eaf0;
+            color: #2791CF;
+        }
+
+        .active-link {
+            background-color: #e5eaf0;
+            color: #2791CF;
+            font-weight: 600;
+        }
+
+        input[type="text"],
+        input[type="tel"],
+        select {
+            border-width: 1px !important;
+            border-color: #e1e1e6 !important;
+            border-radius: 0.5rem !important;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="tel"]:focus,
+        select:focus {
+            border-color: #3b82f6 !important;
+            outline: none;
+            box-shadow: 0 0 0 3px rgb(59 130 246 / 0.4);
+        }
+
+        aside {
+            position: sticky;
+            top: 0;
+            height: calc(100vh - 64px);
+            overflow-y: auto;
+        }
+
+        @media (max-width: 768px) {
+            aside {
+                position: static;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col" data-current="addresses">
+    <!-- Navbar -->
+    <div class="sticky top-0 z-50" id="navbar-container"></div>
+
+    <!-- Main Layout -->
+    <main class="flex-grow flex flex-col md:flex-row">
+        <!-- Sidebar -->
+        <aside class="w-full md:w-72 bg-white shadow-lg border-r">
+            <div class="p-6 border-b">
+                <h2 class="text-2xl font-bold text-gray-800">My Account</h2>
+            </div>
+            <nav class="px-6 py-6 space-y-4 text-sm">
+                <a href="overview.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded"
+                    data-link="overview">
+                    <i class="fas fa-chart-line"></i> Overview
+                </a>
+                <div>
+                    <p class="text-xs text-gray-500 uppercase mb-2">Orders</p>
+                    <a href="orders&returns.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded"
+                        data-link="orders">
+                        <i class="fas fa-box"></i> Orders & Returns
+                    </a>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500 uppercase mt-4 mb-2">Credits</p>
+                    <a href="coupons.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded"
+                        data-link="coupons">
+                        <i class="fas fa-ticket-alt"></i> Coupons
+                    </a>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500 uppercase mt-4 mb-2">Account</p>
+                    <a href="user.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded"
+                        data-link="profile">
+                        <i class="fas fa-user-circle"></i> Profile
+                    </a>
+                    <a href="address.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded active-link"
+                        data-link="addresses">
+                        <i class="fas fa-address-book"></i> Addresses
+                    </a>
+                    <a href="delete.html"
+                        class="flex items-center gap-2 sidebar-link px-3 py-2 rounded text-red-500 hover:bg-red-100"
+                        data-link="delete">
+                        <i class="fas fa-trash-alt"></i> Delete Account
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Address Form -->
+        <section id="main-content" class="flex-grow bg-gray-50 w-full">
+            <div class="max-w-4xl mx-auto p-6">
+                <div class="bg-white rounded-lg shadow-lg p-6 border">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-6 border-b pb-4">Add New Address</h2>
+
+                    <form id="address-form" class="space-y-5" novalidate>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700">Name</label>
+                                <input type="text" name="name" required
+                                    class="mt-1 block w-full shadow-sm p-3 focus:ring-blue-500 focus:border-blue-500" />
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700">Mobile Number</label>
+                                <input type="tel" name="mobile" required
+                                    class="mt-1 block w-full shadow-sm p-3 focus:ring-blue-500 focus:border-blue-500" />
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-sm font-semibold text-gray-700">Street Address</label>
+                                <input type="text" name="street" required
+                                    class="mt-1 block w-full shadow-sm p-3 focus:ring-blue-500 focus:border-blue-500" />
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700">City</label>
+                                <input type="text" name="city" required
+                                    class="mt-1 block w-full shadow-sm p-3 focus:ring-blue-500 focus:border-blue-500" />
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700">State</label>
+                                <input type="text" name="state" required
+                                    class="mt-1 block w-full shadow-sm p-3 focus:ring-blue-500 focus:border-blue-500" />
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700">Pincode</label>
+                                <input type="text" name="pincode" required
+                                    class="mt-1 block w-full shadow-sm p-3 focus:ring-blue-500 focus:border-blue-500" />
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700">Address Type</label>
+                                <select name="type" required
+                                    class="mt-1 block w-full shadow-sm p-3 focus:ring-blue-500 focus:border-blue-500">
+                                    <option value="">Select Address Type</option>
+                                    <option value="Home">Home</option>
+                                    <option value="Work">Work</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-2 mt-2">
+                            <input type="checkbox" name="isDefault" id="isDefault"
+                                class="h-4 w-4 text-blue-600 border-gray-300 rounded" />
+                            <label for="isDefault" class="text-sm text-gray-700">Set as default address</label>
+                        </div>
+
+                        <div class="mt-6 flex justify-end gap-4 border-t pt-4">
+                            <a href="address.html"
+                                class="px-6 py-2 bg-red-600 text-white text-sm font-semibold rounded-lg hover:bg-red-700 shadow-md transition">Cancel</a>
+                            <button type="submit"
+                                class="px-6 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 shadow-md transition">Save
+                                Address</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t mt-auto">
+        <div id="footer-container"></div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="navbar.js"></script>
+    <script src="footer.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script>
+        // Highlight current sidebar link
+        const current = document.body.getAttribute("data-current");
+        document.querySelectorAll(".sidebar-link").forEach(link => {
+            link.classList.toggle("active-link", link.getAttribute("data-link") === current);
+        });
+
+        const form = document.getElementById("address-form");
+
+        function showToast(message, color = "#22c55e") {
+            Toastify({
+                text: message,
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: color,
+                stopOnFocus: true
+            }).showToast();
+        }
+
+        form.addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const token = localStorage.getItem("authToken");
+            if (!token || token === "undefined") {
+                showToast("Please log in to add an address", "#EF4444");
+                setTimeout(() => window.location.href = "signin.html", 2000);
+                return;
+            }
+
+            // Validate required fields
+            const fields = [
+                { name: "name", label: "Name" },
+                { name: "mobile", label: "Mobile Number" },
+                { name: "street", label: "Street Address" },
+                { name: "city", label: "City" },
+                { name: "state", label: "State" },
+                { name: "pincode", label: "Pincode" },
+                { name: "type", label: "Address Type" }
+            ];
+
+            for (const field of fields) {
+                const value = form[field.name].value.trim();
+                if (!value) {
+                    showToast(`${field.label} is required`, "#EF4444");
+                    return;
+                }
+            }
+
+            // Validate Pincode (6 digits)
+            if (!/^\d{6}$/.test(form.pincode.value.trim())) {
+                showToast("Pincode must be 6 digits", "#EF4444");
+                return;
+            }
+
+            // Validate Mobile Number (10 digits)
+            if (!/^\d{10}$/.test(form.mobile.value.trim())) {
+                showToast("Mobile number must be 10 digits", "#EF4444");
+                return;
+            }
+
+            // Validate Address Type
+            if (!["Home", "Work", "Other"].includes(form.type.value)) {
+                showToast("Please select a valid address type", "#EF4444");
+                return;
+            }
+
+            // Prepare new address
+            const newAddress = {
+                name: form.name.value.trim(),
+                mobile: form.mobile.value.trim(),
+                street: form.street.value.trim(),
+                city: form.city.value.trim(),
+                state: form.state.value.trim(),
+                pincode: form.pincode.value.trim(),
+                type: form.type.value,
+                isDefault: form.isDefault.checked
+            };
+
+            try {
+                const response = await fetch("http://localhost:5000/api/users/addresses", {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(newAddress)
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    showToast("Address added successfully", "#22c55e");
+                    setTimeout(() => window.location.href = "address.html", 2000);
+                } else {
+                    showToast(data.message || "Failed to add address", "#EF4444");
+                }
+            } catch (error) {
+                console.error("Error adding address:", error.message);
+                showToast("Failed to add address", "#EF4444");
+            }
+        });
+    </script>
+</body>
+
+</html>

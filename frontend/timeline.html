@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GlobalShopify Handicraft - Become a Vendor</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+    rel="stylesheet">
+  <link href="./src/styles/output.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      background-color: #f0f4f8;
+      color: #333;
+      font-family: 'Open Sans', sans-serif;
+      line-height: 1.6;
+    }
+
+    .main-container {
+      width: 1400px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+      text-align: left;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding: 2rem;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #427cbe;
+      margin-bottom: 1rem;
+      margin-top: -10rem;
+    }
+
+    .welcome-text {
+      font-size: 1.1rem;
+      color: #666;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+    }
+
+    .content-area {
+      background-color: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+    }
+
+    .category-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #1e3a8a;
+      margin-bottom: 1.5rem;
+      border-bottom: 2px solid #1e3a8a;
+      padding-bottom: 0.5rem;
+    }
+
+    .roadmap-part {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .roadmap-content {
+      flex: 1;
+      min-width: 0;
+      margin-top: 2;
+    }
+
+    .roadmap-image {
+      max-width: 40%;
+      height: auto;
+      border-radius: 10px;
+    }
+
+    .steps-container {
+      margin-bottom: 2rem;
+    }
+
+    .flowchart-step {
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      width: 180px;
+      background-color: #f9f9f9;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .flowchart-step:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .step-icon {
+      font-size: 2rem;
+      color: #69c7ef;
+      margin-bottom: 1rem;
+    }
+
+    .arrow-right {
+      position: absolute;
+      right: -28px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.5rem;
+      color: #666;
+      display: none;
+    }
+
+    .arrow-down {
+      position: absolute;
+      bottom: -28px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.5rem;
+      color: #666;
+    }
+
+    @media (min-width: 769px) {
+      .arrow-right {
+        display: block;
+      }
+
+      .arrow-down {
+        display: none;
+      }
+
+      .flowchart-step:last-child .arrow-right {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .flowchart-step {
+        width: 100%;
+        margin-bottom: 2rem;
+      }
+
+      .arrow-right {
+        display: none;
+      }
+
+      .arrow-down {
+        display: block;
+      }
+
+      .flowchart-step:last-child .arrow-down {
+        display: none;
+      }
+
+      .roadmap-part {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .roadmap-image {
+        max-width: 100%;
+        margin-top: 1.5rem;
+      }
+    }
+
+    .benefits-part {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .benefits-image {
+      max-width: 40%;
+      height: auto;
+      border-radius: 10px;
+    }
+
+    .benefits-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .benefits-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #1e3a8a;
+      margin-bottom: 1.5rem;
+    }
+
+    .benefits-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .benefits-list li {
+      position: relative;
+      padding-left: 1.5rem;
+      margin-bottom: 1rem;
+      color: #666;
+    }
+
+    .benefits-list li:before {
+      content: "✔";
+      color: #10b981;
+      position: absolute;
+      left: 0;
+    }
+
+    .cta-button {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      background-color: #1e3a8a;
+      color: #fff;
+      font-weight: 600;
+      border-radius: 9999px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+      margin-top: 2rem;
+    }
+
+    .cta-button:hover {
+      background-color: #163a6a;
+      color: #fff;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    @media (max-width: 768px) {
+      .header-title {
+        font-size: 2rem;
+      }
+
+      .welcome-text {
+        font-size: 1rem;
+      }
+
+      .roadmap-part,
+      .benefits-part {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .roadmap-image,
+      .benefits-image {
+        max-width: 100%;
+        margin-top: 1.5rem;
+      }
+
+      .content-area {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Fullscreen Navbar -->
+  <div id="navbar-container" class="sticky top-0 z-50"></div>
+
+  <!-- Main Container -->
+  <main class="main-container">
+    <div class="w-full">
+      <!-- Roadmap -->
+      <div class="roadmap-part">
+        <div class="roadmap-content">
+          <h2 class="header-title">Your Roadmap to Become a Vendor</h2>
+          <p class="text-left">Explore the easy steps to join our marketplace and grow your business. Unlock new
+            opportunities by showcasing your unique handicrafts to a global audience. Our streamlined process ensures
+            quick setup, so you can start selling with ease. Join our vibrant community of artisans and turn your
+            passion into profit! Benefit from our intuitive dashboard to manage your products effortlessly. Gain
+            insights
+            from detailed analytics to track your sales performance. Access exclusive vendor events to network with
+            other
+            artisans. Enjoy low commission rates to maximize your profits. Receive priority customer support to resolve
+            issues quickly.</p>
+        </div>
+        <video class="roadmap-image" autoplay muted loop>
+          <source src="https://www.zohowebstatic.com/sites/zweb/images/commerce/zoho-store-banner-illus.mp4"
+            type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+
+      <!-- Steps -->
+      <div class="category-title">Steps to Get Started</div>
+      <div class="steps-container">
+        <div class="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-8 relative">
+          <!-- Step 1: Register -->
+          <div class="flowchart-step">
+            <div class="step-icon">
+              <i class="fas fa-user-plus"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">1. Register</h3>
+            <p class="text-sm text-gray-600">Sign up easily by creating your vendor account.</p>
+            <div class="arrow-right"><i class="fas fa-arrow-right"></i></div>
+            <div class="arrow-down"><i class="fas fa-arrow-down"></i></div>
+          </div>
+          <!-- Step 2: Submit Documents -->
+          <div class="flowchart-step">
+            <div class="step-icon">
+              <i class="fas fa-file-upload"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">2. Submit Documents</h3>
+            <p class="text-sm text-gray-600">Upload your documents for a quick verification.</p>
+            <div class="arrow-right"><i class="fas fa-arrow-right"></i></div>
+            <div class="arrow-down"><i class="fas fa-arrow-down"></i></div>
+          </div>
+          <!-- Step 3: Approval -->
+          <div class="flowchart-step">
+            <div class="step-icon">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">3. Approval</h3>
+            <p class="text-sm text-gray-600">Our team will review and approve your application.</p>
+            <div class="arrow-right"><i class="fas fa-arrow-right"></i></div>
+            <div class="arrow-down"><i class="fas fa-arrow-down"></i></div>
+          </div>
+          <!-- Step 4: List Products -->
+          <div class="flowchart-step">
+            <div class="step-icon">
+              <i class="fas fa-box-open"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">4. List Products</h3>
+            <p class="text-sm text-gray-600">Showcase your handicrafts on our marketplace.</p>
+            <div class="arrow-right"><i class="fas fa-arrow-right"></i></div>
+            <div class="arrow-down"><i class="fas fa-arrow-down"></i></div>
+          </div>
+          <!-- Step 5: Start Selling -->
+          <div class="flowchart-step">
+            <div class="step-icon">
+              <i class="fas fa-store"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">5. Start Selling</h3>
+            <p class="text-sm text-gray-600">Begin reaching customers across the globe!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Benefits -->
+      <div class="category-title">Why Join Us?</div>
+      <div class="benefits-part">
+        <img src="https://t4.ftcdn.net/jpg/03/39/60/67/360_F_339606710_pFQOII8MwyEVqXK5vb4XsIaJr13cipWO.jpg"
+          alt="Benefits Illustration" class="benefits-image">
+        <div class="benefits-content">
+          <h2 class="benefits-title">Benefits of Becoming a Vendor</h2>
+          <ul class="benefits-list">
+            <li>Enjoy top-notch content management tools.</li>
+            <li>Connect with a global customer base.</li>
+            <li>Receive dedicated marketing support.</li>
+            <li>Access to secure payment systems for smooth and safe transactions.</li>
+            <li>Get vendor support and training to optimize your store.</li>
+            <li>Flexible product management to easily update and customize listings.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="text-center mt-10">
+        <a href="venregist.html" class="cta-button">Start Your Journey Today</a>
+      </div>
+
+      <div class="footer"></div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <div id="footer-container"></div>
+
+  <script src="navbar.js"></script>
+  <script src="footer.js"></script>
+
+  <script>
+    // Cart Count
+    function updateCartCount() {
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      let cartCountElement = document.getElementById("cart-count");
+      if (cartCountElement) {
+        cartCountElement.textContent = cart.length > 0 ? cart.length : 0;
+        cartCountElement.classList.toggle("hidden", cart.length === 0);
+      }
+    }
+
+    // Wishlist Count
+    function updateWishlistCount() {
+      let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+      let wishlistCountElement = document.getElementById("wishlist-count");
+      if (wishlistCountElement) {
+        wishlistCountElement.textContent = wishlist.length > 0 ? wishlist.length : 0;
+        wishlistCountElement.classList.toggle("hidden", wishlist.length === 0);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      updateCartCount();
+      updateWishlistCount();
+    });
+  </script>
+</body>
+
+</html>

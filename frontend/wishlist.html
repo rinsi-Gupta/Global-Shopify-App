@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wishlist - GlobalShopify</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <!-- Toastify CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(to bottom, #f3f4f6, #ffffff);
+        }
+
+        .product-card {
+            transition: all 0.3s ease;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn {
+            transition: all 0.2s ease;
+            border-radius: 8px;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .image-container {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .image-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .product-card:hover .image-overlay {
+            opacity: 1;
+        }
+
+        .wishlist-empty {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen">
+    <!-- Navbar -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="p-4 flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-2 flex-shrink-0">
+                <img src="images/Asset 4.jpg" alt="GlobalShopify Logo" class="h-12 w-auto" />
+            </a>
+            <a href="index.html" class="text-blue-600 font-medium hover:text-blue-800 transition">Back to Shop</a>
+        </div>
+        <!-- Category Section -->
+        <div class="flex overflow-x-auto whitespace-nowrap scrollbar-hide md:justify-center gap-6 py-3 px-4 text-sm font-semibold" id="categoryBar">
+            <!-- LIGHTINGS -->
+            <div class="group relative inline-block">
+                <a href="lightings.html" class="category-link hover:text-orange-500">LIGHTINGS</a>
+            </div>
+            <!-- ACCESSORIES -->
+            <div class="group relative inline-block">
+                <a href="accessory.html" class="category-link hover:text-orange-500">ACCESSORIES</a>
+            </div>
+            <!-- UTILITY -->
+            <div class="group relative inline-block">
+                <a href="utility.html" class="category-link hover:text-orange-500">UTILITY</a>
+            </div>
+            <!-- WOODEN -->
+            <div class="group relative inline-block">
+                <a href="wooden.html" class="category-link hover:text-orange-500">WOODEN</a>
+            </div>
+            <!-- POTTERY -->
+            <div class="group relative inline-block">
+                <a href="pottery.html" class="category-link hover:text-orange-500">POTTERY</a>
+            </div>
+            <!-- WALL DECOR -->
+            <a href="wall.html" class="category-link inline-block hover:text-orange-500">WALL DECOR</a>
+            <!-- TEXTILE -->
+            <div class="group relative inline-block">
+                <a href="textile.html" class="category-link hover:text-orange-500">TEXTILE</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Wishlist Section -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-blue-50">
+        <h1 class="text-3xl font-bold text-gray-800 mb-10 text-center">Your Wishlist</h1>
+        <div id="wishlist-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 bg-blue-50">
+            <!-- Wishlist items will be dynamically injected here -->
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <!-- Script -->
+    <script>
+        function loadWishlist() {
+            const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            const wishlistContainer = document.getElementById('wishlist-container');
+            wishlistContainer.innerHTML = '';
+
+            if (wishlist.length === 0) {
+                wishlistContainer.innerHTML = `
+                    <div class="wishlist-empty col-span-full">
+                        <i class="fas fa-heart-broken text-4xl text-gray-400 mb-4"></i>
+                        <p class="text-gray-600 text-lg">Your wishlist is empty.</p>
+                        <a href="index.html" class="text-blue-600 hover:text-blue-800 font-medium mt-4 inline-block">Start Shopping</a>
+                    </div>
+                `;
+                return;
+            }
+
+            wishlist.forEach((item, index) => {
+                const productDiv = document.createElement('div');
+                productDiv.className = 'product-card flex flex-col';
+                productDiv.innerHTML = `
+                    <div class="image-container">
+                        <img src="${item.image}" alt="${item.name}" class="w-full h-[20rem] object-cover">
+                        <div class="image-overlay"></div>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow justify-between">
+                        <div class="mb-3">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="text-xl font-semibold text-gray-800 truncate">${item.name}</h3>
+                                <span class="text-blue-600 font-semibold">${item.price}</span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-4 line-clamp-2">${item.description || 'Exquisite handcrafted piece'}</p>
+                        </div>
+                        <div class="flex gap-3 mt-auto">
+                            <button onclick="addToCart(${index})" class="btn bg-blue-600 text-white px-4 py-2 flex-1 flex items-center justify-center gap-2">
+                                <i class="fas fa-cart-plus"></i> Add to Cart
+                            </button>
+                            <button onclick="removeFromWishlist(${index})" class="btn bg-red-100 text-red-600 px-4 py-2 flex items-center justify-center">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                wishlistContainer.appendChild(productDiv);
+            });
+        }
+
+        window.onload = loadWishlist;
+    </script>
+
+    <!-- Toastify JS -->
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="./function.js"></script>
+
+    <!-- Footer Script -->
+    <script src="footer.js"></script>
+</body>
+
+</html>

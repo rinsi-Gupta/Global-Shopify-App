@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders & Returns</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f3f4f6;
+        }
+
+        .sidebar-link {
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .sidebar-link:hover {
+            background-color: #e5eaf0;
+            color: #3791CF;
+        }
+
+        .active-link {
+            background-color: #e5eaf0;
+            color: #3791CF;
+            font-weight: 600;
+        }
+
+        .popup-confirm {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px rgba(239, 234, 234, 0.2);
+            z-index: 1000;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .details-popup {
+            max-width: 600px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .step-active {
+            background-color: #10b981;
+            color: white;
+        }
+
+        .progress-bar {
+            transition: width 0.5s ease-in-out;
+        }
+
+        .order-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .order-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .collapsible-header {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .collapsible-content {
+            display: none;
+        }
+
+        .collapsible-content.show {
+            display: block;
+        }
+
+        aside {
+            position: sticky;
+            top: 0;
+            height: calc(100vh - 64px);
+            overflow-y: auto;
+        }
+
+        @media (max-width: 768px) {
+            aside {
+                position: static;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col" data-current="orders">
+    <!-- Navbar -->
+    <div class="sticky top-0 z-50" id="navbar-container"></div>
+    <!-- Main Content -->
+    <main class="flex-grow flex flex-col md:flex-row">
+        <!-- Sidebar -->
+        <aside class="w-full md:w-72 bg-white shadow-lg border-r">
+            <div class="p-6 border-b">
+                <h2 class="text-2xl font-bold text-gray-800">My Account</h2>
+            </div>
+            <nav class="px-6 py-6 space-y-4 text-sm">
+                <a href="overview.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded"
+                    data-link="overview">
+                    <i class="fas fa-chart-line"></i> Overview
+                </a>
+                <div>
+                    <p class="text-xs text-gray-500 uppercase mb-2">Orders</p>
+                    <a href="order.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded"
+                        data-link="orders">
+                        <i class="fas fa-box"></i> Orders & Returns
+                    </a>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500 uppercase mt-4 mb-2">Credits</p>
+                    <a href="coupons.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded"
+                        data-link="coupons">
+                        <i class="fas fa-ticket-alt"></i> Coupons
+                    </a>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500 uppercase mt-4 mb-2">Account</p>
+                    <a href="user.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded"
+                        data-link="profile">
+                        <i class="fas fa-user-circle"></i> Profile
+                    </a>
+                    <a href="address.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded"
+                        data-link="addresses">
+                        <i class="fas fa-address-book"></i> Addresses
+                    </a>
+                    <a href="delete.html"
+                        class="flex items-center gap-2 sidebar-link px-3 py-2 rounded text-red-500 hover:bg-red-100"
+                        data-link="delete">
+                        <i class="fas fa-trash-alt"></i> Delete Account
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Order Content -->
+        <div class="w-full max-w-7xl mx-auto py-4 px-2 md:px-6">
+            <!-- Header -->
+            <div class="flex flex-col md:flex-row md:justify-between md:items-center mb-4 gap-3 relative">
+                <div>
+                    <h1 class="text-2xl font-semibold">All Orders</h1>
+                </div>
+                <div class="relative">
+                    <div class="flex items-center gap-2">
+                        <input id="searchInput" type="text" placeholder="Search in orders"
+                            class="border px-4 py-2 rounded-md w-64" aria-label="Search orders">
+                        <button onclick="toggleFilter()" class="border px-4 py-2 rounded-md font-medium">FILTER</button>
+                    </div>
+                    <!-- Filter Panel -->
+                    <div id="filterPanel"
+                        class="absolute right-0 z-10 mt-2 w-[350px] bg-white p-4 rounded shadow hidden">
+                        <div class="grid grid-cols-1 gap-4 text-sm">
+                            <div>
+                                <h2 class="font-semibold mb-2">Status</h2>
+                                <div class="space-y-1">
+                                    <label><input type="radio" name="status" value="all" checked
+                                            onchange="applyFilters()"> All</label><br>
+                                    <label><input type="radio" name="status" value="Order Placed"
+                                            onchange="applyFilters()"> Order Placed</label><br>
+                                    <label><input type="radio" name="status" value="Processing"
+                                            onchange="applyFilters()"> Processing</label><br>
+                                    <label><input type="radio" name="status" value="Shipped" onchange="applyFilters()">
+                                        Shipped</label><br>
+                                    <label><input type="radio" name="status" value="Delivered"
+                                            onchange="applyFilters()"> Delivered</label><br>
+                                    <label><input type="radio" name="status" value="Canceled" onchange="applyFilters()">
+                                        Cancelled</label><br>
+                                    <label><input type="radio" name="status" value="Returned" onchange="applyFilters()">
+                                        Returned</label>
+                                </div>
+                            </div>
+                            <div>
+                                <h2 class="font-semibold mb-2">Time</h2>
+                                <div class="space-y-1">
+                                    <label><input type="radio" name="time" value="anytime" checked> Anytime</label><br>
+                                    <label><input type="radio" name="time" value="30"> Last 30 days</label><br>
+                                    <label><input type="radio" name="time" value="180"> Last 6 months</label><br>
+                                    <label><input type="radio" name="time" value="365"> Last year</label>
+                                </div>
+                            </div>
+                            <div class="flex justify-end gap-3 pt-2">
+                                <button onclick="clearFilters()" class="px-3 py-1 border rounded">Clear</button>
+                                <button onclick="applyFilters()"
+                                    class="px-3 py-1 bg-orange-500 text-white rounded">Apply</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order List -->
+            <div id="loading" class="text-center py-8 hidden">
+                <span class="material-symbols-outlined animate-spin">refresh</span>
+                <p class="text-gray-600 mt-2">Loading orders...</p>
+            </div>
+            <div id="orderList" class="space-y-6"></div>
+        </div>
+    </main>
+
+    <!-- Popup Confirmation -->
+    <div id="popup" class="popup-confirm hidden" role="dialog" aria-labelledby="popup-title" aria-modal="true">
+        <h3 id="popup-title" class="text-lg font-semibold text-gray-800 mb-4"></h3>
+        <div id="reason-section" class="mb-4">
+            <label class="block mb-2 text-sm font-medium text-gray-700">Select Reason:</label>
+            <div class="space-y-1">
+                <label><input type="radio" name="reason" value="Changed my mind"> Changed my mind</label><br>
+                <label><input type="radio" name="reason" value="Ordered by mistake"> Ordered by mistake</label><br>
+                <label><input type="radio" name="reason" value="Found a better price elsewhere"> Found a better price elsewhere</label><br>
+                <label><input type="radio" name="reason" value="Other"> Other</label>
+            </div>
+        </div>
+        <div id="return-section" class="hidden">
+            <div class="mb-4">
+                <label class="block mb-2 text-sm font-medium text-gray-700">Select Return Reason:</label>
+                <div class="space-y-1">
+                    <label><input type="radio" name="return-reason" value="Defective product"> Defective product</label><br>
+                    <label><input type="radio" name="return-reason" value="Wrong item received"> Wrong item received</label><br>
+                    <label><input type="radio" name="return-reason" value="Changed my mind"> Changed my mind</label><br>
+                    <label><input type="radio" name="return-reason" value="Other"> Other</label>
+                </div>
+            </div>
+            <div class="mb-4">
+                <label class="block mb-2 text-sm font-medium text-gray-700">Refund Method:</label>
+                <div class="space-y-1">
+                    <label><input type="radio" name="refund-method" value="Wallet" onchange="toggleBankDetails()"> Wallet</label><br>
+                    <label><input type="radio" name="refund-method" value="Bank" onchange="toggleBankDetails()"> Bank Account</label>
+                </div>
+            </div>
+            <div id="bank-details" class="hidden mb-4">
+                <label class="block mb-2 text-sm font-medium text-gray-700">Bank Account Details:</label>
+                <input type="text" id="account-number" placeholder="Account Number" class="border border-gray-300 px-3 py-2 w-full rounded-md mb-2">
+                <input type="text" id="ifsc-code" placeholder="IFSC Code" class="border border-gray-300 px-3 py-2 w-full rounded-md mb-2">
+                <input type="text" id="account-holder" placeholder="Account Holder Name" class="border border-gray-300 px-3 py-2 w-full rounded-md">
+            </div>
+        </div>
+        <div class="mt-4 flex justify-end space-x-3">
+            <button onclick="submitAction()"
+                class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
+                aria-label="Confirm action">Confirm</button>
+            <button onclick="closePopup()"
+                class="bg-gray-400 text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition"
+                aria-label="Cancel action">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Order Details Popup -->
+    <div id="details-popup" class="popup-confirm details-popup hidden" role="dialog" aria-labelledby="details-title" aria-modal="true">
+        <h3 id="details-title" class="text-lg font-semibold text-gray-800 mb-4">Order Details :</h3>
+        <div id="details-content" class="space-y-4"></div>
+        <div class="mt-4 flex justify-end">
+            <button onclick="closeDetailsPopup()"
+                class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-500 transition">Close</button>
+        </div>
+    </div>
+
+    <div id="overlay" class="overlay hidden" onclick="closeAllPopups()"></div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t mt-auto">
+        <div id="footer-container" class="p-4 text-center text-gray-600">
+        </div>
+    </footer>
+
+    <script>
+        const statusStages = ["Order Placed", "Processing", "Shipped", "Delivered"];
+        const jwtRegex = /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+$/;
+
+        // Set active sidebar link
+        document.addEventListener("DOMContentLoaded", function () {
+            const current = document.body.getAttribute("data-current");
+            const links = document.querySelectorAll(".sidebar-link");
+            links.forEach(link => {
+                if (link.getAttribute("data-link") === current) {
+                    link.classList.add("active-link");
+                } else {
+                    link.classList.remove("active-link");
+                }
+            });
+
+            updateCartCount();
+            loadOrders();
+        });
+
+        function updateCartCount() {
+            const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
+            const cartCount = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+            const cartCountElement = document.getElementById("cart-count");
+            if (cartCountElement) {
+                cartCountElement.textContent = cartCount;
+                cartCountElement.classList.toggle("hidden", cartCount === 0);
+            }
+        }
+
+        async function loadOrders() {
+            const orderList = document.getElementById("orderList");
+            const loading = document.getElementById("loading");
+            loading.classList.remove("hidden");
+
+            const token = localStorage.getItem("authToken");
+            if (!token || !jwtRegex.test(token)) {
+                orderList.innerHTML = `
+                    <div class="text-center py-8">
+                        <p class="text-red-500 font-medium">Please log in to view your orders.</p>
+                        <p class="text-gray-600 mt-2">Redirecting to login page...</p>
+                    </div>`;
+                localStorage.removeItem("authToken");
+                setTimeout(() => {
+                    window.location.href = "login.html";
+                }, 2000);
+                loading.classList.add("hidden");
+                return;
+            }
+
+            try {
+                const response = await fetch("http://localhost:5000/api/orders/orders", {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                const result = await response.json();
+                if (result.success) {
+                    applyFilters(result.data);
+                } else {
+                    if (result.message.includes("token")) {
+                        orderList.innerHTML = `
+                            <div class="text-center py-8">
+                                <p class="text-red-500 font-medium">Session expired or invalid token. Please log in again.</p>
+                                <p class="text-gray-600 mt-2">Redirecting to login page...</p>
+                            </div>`;
+                        localStorage.removeItem("authToken");
+                        setTimeout(() => {
+                            window.location.href = "login.html";
+                        }, 2000);
+                    } else {
+                        throw new Error(result.message);
+                    }
+                }
+            } catch (error) {
+                console.error("Error fetching orders:", error);
+                orderList.innerHTML = `
+                    <div class="text-center py-8">
+                        <p class="text-red-500 font-medium">Failed to load orders: ${error.message}</p>
+                        <p class="text-gray-600 mt-2">Please try again later.</p>
+                    </div>`;
+            } finally {
+                loading.classList.add("hidden");
+            }
+        }
+
+        function createOrderElement(order) {
+            const statusIndex = statusStages.indexOf(order.status);
+            const orderDiv = document.createElement("div");
+            orderDiv.className = "cursor-pointer bg-white rounded-md shadow p-4 hover:ring hover:ring-gray-200 transition order-card";
+
+            const statusDiv = document.createElement("div");
+            statusDiv.className = "flex items-center gap-3";
+            const img = document.createElement("img");
+            img.src = order.items[0]?.image || "https://via.placeholder.com/150";
+            img.alt = "product";
+            img.className = "w-12 h-12 rounded";
+            const statusInfo = document.createElement("div");
+            statusInfo.className = "flex-grow flex flex-col gap-1";
+            const formattedDate = new Date(order.orderDate).toLocaleDateString('en-US', {
+                weekday: 'short',
+                day: 'numeric',
+                month: 'short'
+            });
+            statusInfo.innerHTML = `
+                <div class="flex items-center gap-1">
+                    <div class="text-sm text-green-600 font-semibold capitalize" id="status-${order.orderId}">
+                        ${order.status}
+                        ${order.status === "Delivered" ? '<span class="text-gray-500 mx-1">|</span><img src="https://www.bing.com/th/id/OIP.tpkXKe8EXqYJYT_zqCZb9AHaHa?w=185&h=211&c=8&rs=1&qlt=70&o=7&cb=thws4&dpr=1.3&pid=3.1&rm=3" alt="delivery" class="inline-block w-14 h-14">' : ''}
+                    </div>
+                </div>
+                <div class="text-xs text-gray-500">On ${formattedDate}</div>
+            `;
+            statusDiv.append(img, statusInfo);
+
+            const detailsDiv = document.createElement("div");
+            detailsDiv.className = "bg-gray-100 mt-3 p-3 rounded flex items-center justify-between cursor-pointer";
+            detailsDiv.onclick = function(event) { openDetailsPopup(order.orderId); event.stopPropagation(); };
+            const itemInfo = document.createElement("div");
+            itemInfo.innerHTML = `
+                <div class="font-semibold text-sm">${order.items[0]?.productName || "Unknown Product"}</div>
+                <div class="text-xs text-gray-600">${order.items[0]?.description || "No description"}</div>
+                <div class="text-xs text-gray-500 mt-1">Quantity: ${order.items[0]?.quantity || 1}</div>
+                ${order.items.length > 1 ? `<div class="text-xs text-gray-500">+ ${order.items.length - 1} more items</div>` : ""}
+                ${order.orderStatus?.status ? `<div class="text-xs mt-2 text-red-500">Reason: ${order.orderStatus.reason || "None"}</div>` : ""}
+            `;
+            const arrow = document.createElement("div");
+            arrow.className = "text-gray-400 text-xl";
+            arrow.textContent = "→";
+            detailsDiv.append(itemInfo, arrow);
+
+            const trackingSection = document.createElement("div");
+            trackingSection.id = `tracking-section-${order.orderId}`;
+            trackingSection.className = "hidden my-6";
+            trackingSection.innerHTML = `
+                <div class="flex-1 h-3 bg-gray-200 rounded-full relative overflow-hidden">
+                    <div id="progress-bar-${order.orderId}" class="progress-bar h-3 bg-green-500 rounded-full" style="width: ${(statusIndex + 1) / statusStages.length * 100}%"></div>
+                </div>
+                <div class="flex justify-between text-xs font-medium text-gray-600 mt-2">
+                    ${statusStages.map((stage, i) => `
+                        <span class="${statusIndex >= i ? "step-active" : "bg-gray-100"} px-3 py-1 rounded">${stage}</span>
+                    `).join('')}
+                </div>
+            `;
+
+            const total = document.createElement("p");
+            total.className = "mt-4 text-gray-800";
+            total.innerHTML = `<strong>Total Amount:</strong> ${order.totalAmount}`;
+
+            const actionButtons = document.createElement("div");
+            actionButtons.id = `action-button-${order.orderId}`;
+            actionButtons.className = "mt-4 flex space-x-3";
+            actionButtons.innerHTML = `
+                <button onclick="toggleTracking('${order.orderId}'); event.stopPropagation();" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition" aria-label="Toggle tracking">Track</button>
+                ${!order.orderStatus?.status ? (
+                    statusIndex < 3
+                        ? `<button onclick="openPopup('Cancel Order', '${order.orderId}'); event.stopPropagation();" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition" aria-label="Cancel order">Cancel Order</button>`
+                        : `<button onclick="openPopup('Return Order', '${order.orderId}'); event.stopPropagation();" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition" aria-label="Return order">Return Order</button>`
+                ) : ""}
+            `;
+
+            orderDiv.append(statusDiv, detailsDiv, trackingSection, total, actionButtons);
+            return orderDiv;
+        }
+
+        function toggleTracking(orderId) {
+            const trackingSection = document.getElementById(`tracking-section-${orderId}`);
+            const isHidden = trackingSection.classList.contains("hidden");
+            trackingSection.classList.toggle("hidden", !isHidden);
+            const button = document.querySelector(`#action-button-${orderId} button[onclick="toggleTracking('${orderId}'); event.stopPropagation();"]`);
+            button.textContent = isHidden ? "Hide Tracking" : "Track";
+            if (isHidden) {
+                fetch(`http://localhost:5000/api/orders/filter?orderId=${orderId}`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+                    },
+                })
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.success && result.data.length > 0) {
+                            const order = result.data[0];
+                            const statusIndex = statusStages.indexOf(order.status);
+                            updateTrackingSection(orderId, statusIndex);
+                        }
+                    })
+                    .catch(error => console.error("Error fetching order for tracking:", error));
+            }
+        }
+
+        function updateTrackingSection(orderId, statusIndex) {
+            const trackingSection = document.getElementById(`tracking-section-${orderId}`);
+            trackingSection.innerHTML = `
+                <div class="flex-1 h-3 bg-gray-200 rounded-full relative overflow-hidden">
+                    <div id="progress-bar-${orderId}" class="progress-bar h-3 bg-green-500 rounded-full" style="width: ${(statusIndex + 1) / statusStages.length * 100}%"></div>
+                </div>
+                <div class="flex justify-between text-xs font-medium text-gray-600 mt-2">
+                    ${statusStages.map((stage, i) => `
+                        <span class="${statusIndex >= i ? "step-active" : "bg-gray-100"} px-3 py-1 rounded">${stage}</span>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function openPopup(actionType, orderId) {
+            document.getElementById("popup-title").textContent = `Confirm ${actionType}?`;
+            const returnSection = document.getElementById("return-section");
+            const reasonSection = document.getElementById("reason-section");
+            reasonSection.classList.toggle("hidden", actionType !== "Cancel Order");
+            returnSection.classList.toggle("hidden", actionType !== "Return Order");
+            if (actionType === "Return Order") {
+                document.querySelectorAll('input[name="return-reason"]').forEach(input => input.checked = false);
+                document.querySelectorAll('input[name="refund-method"]').forEach(input => input.checked = false);
+                document.getElementById("bank-details").classList.add("hidden");
+                document.getElementById("account-number").value = "";
+                document.getElementById("ifsc-code").value = "";
+                document.getElementById("account-holder").value = "";
+            } else if (actionType === "Cancel Order") {
+                document.querySelectorAll('input[name="reason"]').forEach(input => input.checked = false);
+            }
+            const popup = document.getElementById("popup");
+            popup.classList.remove("hidden");
+            document.getElementById("overlay").classList.remove("hidden");
+            localStorage.setItem("popupAction", JSON.stringify({ actionType, orderId }));
+            popup.querySelector("button[onclick='submitAction()']").focus();
+            trapFocus(popup);
+        }
+
+        function toggleBankDetails() {
+            const bankRadio = document.querySelector('input[name="refund-method"][value="Bank"]');
+            document.getElementById("bank-details").classList.toggle("hidden", !bankRadio.checked);
+        }
+
+        function closePopup() {
+            document.getElementById("popup").classList.add("hidden");
+            document.getElementById("overlay").classList.add("hidden");
+        }
+
+        async function openDetailsPopup(orderId) {
+            const content = document.getElementById("details-content");
+            try {
+                const response = await fetch(`http://localhost:5000/api/orders/filter?orderId=${orderId}`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+                    },
+                });
+                const result = await response.json();
+                if (!result.success || result.data.length === 0) {
+                    throw new Error(result.message || "Order not found");
+                }
+                const order = result.data[0];
+
+                const address = order.address
+                    ? `
+                        ${order.address.name || 'No name provided'},<br>
+                        ${order.address.street || 'No street provided'},<br>
+                        ${order.address.city || 'No city provided'}, ${order.address.state || 'No state provided'}, ${order.address.pincode || ''}<br>
+                        ${order.address.mobile ? `Phone: ${order.address.mobile}` : 'No phone provided'}<br>
+                        ${order.address.type ? `Type: ${order.address.type}` : ''}
+                    `
+                    : "No address provided";
+
+                let subtotal = 0;
+                order.items.forEach(item => {
+                    const price = parseFloat(item.price.replace(/[^\d.]/g, ""));
+                    if (!isNaN(price)) {
+                        subtotal += price * (item.quantity || 1);
+                    }
+                });
+                const gst = subtotal * 0.18;
+                const delivery = 50;
+                const total = parseFloat(order.totalAmount.replace(/[^\d.]/g, ""));
+                const couponDiscount = subtotal + gst + delivery - total;
+
+                content.innerHTML = `
+                    <p><strong>Order ID:</strong> ${order.orderId}</p>
+                    <p><strong>Order Date:</strong> ${new Date(order.orderDate).toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short' })}</p>
+                    <p><strong>Status:</strong> ${order.status}</p>
+                    <p><strong>Items:</strong></p>
+                    <ul class="space-y-2">
+                        ${order.items.map(item => `
+                            <li class="flex items-center">
+                                <a href="http://localhost:5173/buynow.html?name=${encodeURIComponent(item.productName)}&image=${encodeURIComponent(item.image)}&description=${encodeURIComponent(item.description || 'No description')}&price=${encodeURIComponent(item.price)}">
+                                    <img src="${item.image}" alt="${item.productName}" class="w-16 h-16 rounded mr-4 object-cover cursor-pointer">
+                                </a>
+                                <div>
+                                    <span class="font-medium">${item.productName}</span>
+                                    <p class="text-sm text-gray-600">Quantity: ${item.quantity} | Price: ${item.price}</p>
+                                </div>
+                            </li>
+                        `).join('')}
+                    </ul>
+                    <div class="collapsible-header" onclick="toggleSummary()">
+                        <p><strong>Order Summary :</strong></p>
+                        <i class="fas fa-chevron-down" id="summary-arrow"></i>
+                    </div>
+                    <div class="collapsible-content" id="summary-content">
+                        <table class="w-full text-sm">
+                            <tbody>
+                                <tr>
+                                    <td class="py-1 px-1 text-gray-700">Original Price:</td>
+                                    <td class="py-1 px-1 text-right">Rs ${subtotal.toFixed(2)}</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-1 px-1 text-gray-700">Delivery Charges:</td>
+                                    <td class="py-1 px-1 text-right">Rs ${delivery.toFixed(2)}</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-1 px-1 text-gray-700">GST (18%):</td>
+                                    <td class="py-1 px-1 text-right">Rs ${gst.toFixed(2)}</td>
+                                </tr>
+                                ${couponDiscount > 0 ? `
+                                <tr>
+                                    <td class="py-1 px-1 text-green-600">Coupon Discount:</td>
+                                    <td class="py-1 px-1 text-right text-green-600">- Rs ${couponDiscount.toFixed(2)}</td>
+                                </tr>
+                                ` : ''}
+                                <tr class="font-semibold border-t">
+                                    <td class="py-1 px-1 text-gray-800">Total:</td>
+                                    <td class="py-1 px-1 text-right">Rs ${total.toFixed(2)}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p><strong>Delivery Address:</strong></p>
+                    <p>${address}</p>
+                `;
+                document.getElementById("details-popup").classList.remove("hidden");
+                document.getElementById("overlay").classList.remove("hidden");
+                trapFocus(document.getElementById("details-popup"));
+            } catch (error) {
+                Toastify({
+                    text: error.message,
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "#ef4444",
+                }).showToast();
+            }
+        }
+
+        function toggleSummary() {
+            const summaryContent = document.getElementById("summary-content");
+            const summaryArrow = document.getElementById("summary-arrow");
+            summaryContent.classList.toggle("show");
+            summaryArrow.classList.toggle("fa-chevron-down");
+            summaryArrow.classList.toggle("fa-chevron-up");
+        }
+
+        function closeDetailsPopup() {
+            document.getElementById("details-popup").classList.add("hidden");
+            document.getElementById("overlay").classList.add("hidden");
+        }
+
+        function closeAllPopups() {
+            closePopup();
+            closeDetailsPopup();
+        }
+
+        function trapFocus(popup) {
+            const focusableElements = popup.querySelectorAll("button, input, a");
+            const firstElement = focusableElements[0];
+            const lastElement = focusableElements[focusableElements.length - 1];
+            popup.addEventListener("keydown", (e) => {
+                if (e.key === "Tab") {
+                    if (e.shiftKey && document.activeElement === firstElement) {
+                        e.preventDefault();
+                        lastElement.focus();
+                    } else if (!e.shiftKey && document.activeElement === lastElement) {
+                        e.preventDefault();
+                        firstElement.focus();
+                    }
+                }
+            });
+        }
+
+        async function submitAction() {
+            const { actionType, orderId } = JSON.parse(localStorage.getItem("popupAction"));
+            try {
+                if (actionType === "Cancel Order") {
+                    const reason = document.querySelector('input[name="reason"]:checked')?.value;
+                    if (!reason) {
+                        Toastify({
+                            text: "Please select a cancellation reason.",
+                            duration: 3000,
+                            gravity: "top",
+                            position: "right",
+                            backgroundColor: "#ef4444",
+                        }).showToast();
+                        return;
+                    }
+                    const response = await fetch("http://localhost:5000/api/orders/cancel", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+                        },
+                        body: JSON.stringify({ orderId, reason }),
+                    });
+                    const result = await response.json();
+                    if (!result.success) throw new Error(result.message);
+                } else if (actionType === "Return Order") {
+                    const reason = document.querySelector('input[name="return-reason"]:checked')?.value;
+                    const refundMethod = document.querySelector('input[name="refund-method"]:checked')?.value;
+                    if (!reason || !refundMethod) {
+                        Toastify({
+                            text: `Please select a ${!reason ? "return reason" : "refund method"}.`,
+                            duration: 3000,
+                            gravity: "top",
+                            position: "right",
+                            backgroundColor: "#ef4444",
+                        }).showToast();
+                        return;
+                    }
+                    let bankDetails = null;
+                    if (refundMethod === "Bank") {
+                        const accountNumber = document.getElementById("account-number").value.trim();
+                        const ifscCode = document.getElementById("ifsc-code").value.trim();
+                        const accountHolder = document.getElementById("account-holder").value.trim();
+                        if (!accountNumber || !ifscCode || !accountHolder) {
+                            Toastify({
+                                text: "Please fill all bank details.",
+                                duration: 3000,
+                                gravity: "top",
+                                position: "right",
+                                backgroundColor: "#ef4444",
+                            }).showToast();
+                            return;
+                        }
+                        bankDetails = { accountNumber, ifscCode, accountHolder };
+                    }
+                    const response = await fetch("http://localhost:5000/api/orders/return", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+                        },
+                        body: JSON.stringify({ orderId, reason, refundMethod, bankDetails }),
+                    });
+                    const result = await response.json();
+                    if (!result.success) throw new Error(result.message);
+                }
+                Toastify({
+                    text: `${actionType} confirmed successfully!`,
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "#34d399",
+                }).showToast();
+                applyFilters();
+                closePopup();
+            } catch (error) {
+                Toastify({
+                    text: error.message,
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "#ef4444",
+                }).showToast();
+            }
+        }
+
+        async function applyFilters(orderDataOverride = null) {
+            const status = document.querySelector('input[name="status"]:checked').value;
+            const time = document.querySelector('input[name="time"]:checked').value;
+            const search = document.getElementById("searchInput").value.toLowerCase();
+            const orderList = document.getElementById("orderList");
+
+            if (orderDataOverride) {
+                const filtered = filterOrdersClientSide(orderDataOverride, status, time, search);
+                renderOrders(filtered);
+                return;
+            }
+
+            try {
+                const query = new URLSearchParams({ status, time, search }).toString();
+                const response = await fetch(`http://localhost:5000/api/orders/filter?${query}`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+                    },
+                });
+                const result = await response.json();
+                if (result.success) {
+                    renderOrders(result.data);
+                } else {
+                    throw new Error(result.message);
+                }
+            } catch (error) {
+                orderList.innerHTML = `
+                    <div class="text-center py-8">
+                        <p class="text-red-500 font-medium">No orders found.</p>
+                        <p class="text-gray-600 mt-2">Try adjusting your filters or place a new order!</p>
+                    </div>`;
+            }
+            document.getElementById('filterPanel').classList.add('hidden');
+        }
+
+        function filterOrdersClientSide(orders, status, time, search) {
+            let filtered = [...orders];
+            if (status !== "all") {
+                filtered = filtered.filter(order => order.orderStatus?.status === status || order.status === status);
+            }
+            if (time !== "anytime") {
+                const cutoff = new Date();
+                cutoff.setDate(cutoff.getDate() - parseInt(time));
+                filtered = filtered.filter(order => new Date(order.orderDate) >= cutoff);
+            }
+            if (search) {
+                filtered = filtered.filter(order =>
+                    order.items.some(item =>
+                        item.productName.toLowerCase().includes(search) ||
+                        item.description?.toLowerCase().includes(search)
+                    ) || order.orderId.toLowerCase().includes(search)
+                );
+            }
+            return filtered;
+        }
+
+        function renderOrders(orders) {
+            const orderList = document.getElementById("orderList");
+            orderList.innerHTML = "";
+            if (orders.length === 0) {
+                orderList.innerHTML = `
+                    <div class="text-center py-8">
+                        <p class="text-red-500 font-medium">No orders found.</p>
+                        <p class="text-gray-600 mt-2">Try adjusting your filters or place a new order!</p>
+                    </div>`;
+                return;
+            }
+            orders.forEach(order => {
+                orderList.appendChild(createOrderElement(order));
+            });
+        }
+
+        function toggleFilter() {
+            document.getElementById('filterPanel').classList.toggle('hidden');
+        }
+
+        function clearFilters() {
+            document.querySelector('input[name="status"][value="all"]').checked = true;
+            document.querySelector('input[name="time"][value="anytime"]').checked = true;
+            document.getElementById("searchInput").value = "";
+            applyFilters();
+        }
+
+        document.getElementById("searchInput").addEventListener("input", applyFilters);
+    </script>
+
+    <script src="navbar.js"></script>
+    <script src="footer.js"></script>
+</body>
+
+</html>

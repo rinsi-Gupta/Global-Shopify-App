@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wishlist - GlobalShopify</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Moon+Dance&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <!-- Toastify CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: "Montserrat", sans-serif;
+        
+        }
+        .product-card {
+            transition: all 0.3s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+        .btn {
+            transition: all 0.2s ease;
+        }
+        .btn:hover {
+            transform: scale(1.03);
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Navigation Bar -->
+    <nav class="bg-white shadow-md py-4 px-6">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-semibold text-gray-800">GlobalShopify</a>
+            <a href="index.html" class="text-blue-600 hover:text-blue-800 font-medium">Continue Shopping</a>
+        </div>
+    </nav>
+    
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-semibold text-gray-800 mb-8 text-center">Your Wishlist</h1>
+        <div id="wishlist-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Wishlist items will be dynamically added here -->
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <script>
+        function loadWishlist() {
+            const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            const wishlistContainer = document.getElementById('wishlist-container');
+            wishlistContainer.innerHTML = '';
+
+            wishlist.forEach((item, index) => {
+                const productDiv = document.createElement('div');
+                productDiv.className = 'product-card bg-white rounded-lg shadow-md overflow-hidden';
+                productDiv.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}" class="w-full h-56 object-cover">
+                    <div class="p-4">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="text-lg font-semibold text-gray-800 truncate">${item.name}</h3>
+                            <span class="text-blue-600 font-medium">${item.price}</span>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-2">${item.description || 'Handcrafted with care'}</p>
+                        <div class="flex gap-2">
+                            <button onclick="addToCart(${index})" class="btn flex-1 bg-blue-600 text-white px-3 py-2 rounded-md hover:bg-blue-700 text-sm">
+                                Add to Cart
+                            </button>
+                            <button onclick="removeFromWishlist(${index})" class="btn bg-gray-200 text-gray-700 px-3 py-2 rounded-md hover:bg-gray-300">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                wishlistContainer.appendChild(productDiv);
+            });
+        }
+
+        window.onload = loadWishlist;
+    </script>
+
+    <!-- Toastify JS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="./function.js"></script>
+    <script src="footer.js"></script>
+</body>
+</html>

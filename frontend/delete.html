@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Delete Account - User Profile</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+    }
+
+    .sidebar-link {
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .sidebar-link:hover {
+      background-color: #e5eaf0;
+      color: #2791CF;
+    }
+
+    .active-link {
+      background-color: #e5eaf0;
+      color: #2791CF;
+      font-weight: 600;
+    }
+
+    aside::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    aside::-webkit-scrollbar-thumb {
+      background-color: #e5eaf0;
+      border-radius: 10px;
+    }
+
+    aside {
+      position: sticky;
+      top: 0;
+      height: calc(100vh - 64px);
+    }
+
+    @media (max-width: 768px) {
+      aside {
+        position: static;
+        height: auto;
+      }
+    }
+
+    .toastify {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      max-width: 90%;
+      width: 400px;
+      z-index: 1000;
+    }
+
+    .backdrop {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      z-index: 999;
+    }
+
+    .backdrop.active {
+      display: block;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col" data-current="delete">
+  <div class="sticky top-0 z-50" id="navbar-container"></div>
+
+  <main class="flex-grow flex flex-col md:flex-row">
+    <aside class="w-full md:w-72 bg-white shadow-lg border-r overflow-y-auto">
+      <div class="p-6 border-b">
+        <h2 class="text-2xl font-bold text-gray-800">My Account</h2>
+      </div>
+      <nav class="px-6 py-6 space-y-4 text-sm">
+        <a href="overview.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded" data-link="overview">
+          <i class="fas fa-chart-line"></i> Overview
+        </a>
+        <div>
+          <p class="text-xs text-gray-500 uppercase mb-2">Orders</p>
+          <a href="order.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded" data-link="orders">
+            <i class="fas fa-box"></i> Orders & Returns
+          </a>
+        </div>
+        <div>
+          <p class="text-xs text-gray-500 uppercase mt-4 mb-2">Credits</p>
+          <a href="coupons.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded" data-link="coupons">
+            <i class="fas fa-ticket-alt"></i> Coupons
+          </a>
+        </div>
+        <div>
+          <p class="text-xs text-gray-500 uppercase mt-4 mb-2">Account</p>
+          <a href="user.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded" data-link="profile">
+            <i class="fas fa-user-circle"></i> Profile
+          </a>
+          <a href="address.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded" data-link="addresses">
+            <i class="fas fa-address-book"></i> Addresses
+          </a>
+          <a href="delete.html"
+            class="flex items-center gap-2 sidebar-link px-3 py-2 rounded text-red-600 hover:bg-red-100"
+            data-link="delete">
+            <i class="fas fa-trash-alt"></i> Delete Account
+          </a>
+        </div>
+      </nav>
+    </aside>
+
+    <section id="main-content" class="flex-grow bg-gray-50 p-8 w-full max-w-7xl mx-auto">
+      <h1 class="text-2xl font-semibold items-center text-gray-900 mb-6 border-b pb-2">Delete Account</h1>
+
+      <div class="flex flex-col md:flex-row items-center gap-8 mb-8">
+        <div class="flex-shrink-0 max-w-xs md:max-w-sm">
+          <img
+            src="https://png.pngtree.com/png-vector/20221015/ourmid/pngtree-a-sad-man-with-a-broken-heart-feeling-unhappy-emotion-vector-png-image_39719704.jpg"
+            alt="Sad person holding heart" class="w-full h-auto" />
+        </div>
+
+        <div class="text-gray-800 flex-1">
+          <p class="text-lg font-medium mb-3">Is this goodbye? Are you sure you want to reconsider?</p>
+
+          <ul class="list-disc list-inside space-y-3 text-gray-700 text-sm leading-relaxed">
+            <li><strong>You will lose all order history, saved details, credits, and coupons.</strong><br />
+              Account-related benefits will be forfeited and cannot be recovered. You may create a new account after
+              deletion. By deleting your account, you acknowledge you have read our
+              <a href="privacy.html" class="text-blue-500 underline hover:text-blue-600">Privacy Policy</a>.
+            </li>
+            <li><strong>Pending orders, exchanges, returns, or refunds won't be accessible.</strong><br />
+              We try to complete open transactions within 30 days, but cannot guarantee traceability after deletion.
+            </li>
+            <li><strong>New User coupons may not be extended if a new account uses the same mobile number or
+                email.</strong></li>
+            <li><strong>Deletion may be delayed or refused due to pending grievances related to orders, shipments,
+                cancellations, or other services.</strong></li>
+            <li><strong>Some data may be retained for security, fraud prevention, abuse, or legal compliance.</strong>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="mb-6 flex items-center gap-3">
+        <input id="agree" type="checkbox" class="w-5 h-5 cursor-pointer accent-blue-500" />
+        <label for="agree" class="text-gray-700 text-sm select-none cursor-pointer">I agree to all the <a
+            href="terms.html" class="underline text-blue-500 hover:text-blue-600">terms and conditions</a>*</label>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-4">
+        <button id="deleteBtn" disabled
+          class="w-full sm:w-auto px-6 py-3 rounded border-2 border-red-400 text-red-400 font-semibold cursor-not-allowed transition-colors duration-200 hover:bg-red-600">
+          DELETE ANYWAY
+        </button>
+        <button id="keepBtn"
+          class="w-full sm:w-auto px-6 py-3 rounded bg-red-600 text-gray-200 font-semibold hover:bg-red-700 transition-colors duration-200">
+          KEEP ACCOUNT
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <div id="backdrop" class="backdrop"></div>
+
+  <footer class="bg-white border-t mt-auto">
+    <div id="footer-container"></div>
+  </footer>
+
+  <script src="navbar.js"></script>
+  <script src="footer.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <script>
+    // Check if user is signed in on page load
+    const token = localStorage.getItem('authToken');
+    console.log('Token on load:', token); // Debug token
+    console.log('Stored user data:', localStorage.getItem('loginUser')); // Debug user data
+    if (!token) {
+      Toastify({
+        text: "You must be signed in to access this page.",
+        duration: 3000,
+        gravity: "top",
+        position: "right",
+        backgroundColor: "#dc2626",
+        stopOnFocus: true
+      }).showToast();
+      setTimeout(() => window.location.href = 'userlogin.html', 1000);
+    }
+
+    const current = document.body.getAttribute("data-current");
+    const links = document.querySelectorAll(".sidebar-link");
+    links.forEach(link => {
+      if (link.getAttribute("data-link") === current) {
+        link.classList.add("active-link");
+      } else {
+        link.classList.remove("active-link");
+      }
+    });
+
+    const agreeCheckbox = document.getElementById('agree');
+    const deleteBtn = document.getElementById('deleteBtn');
+    const keepBtn = document.getElementById('keepBtn');
+    const backdrop = document.getElementById('backdrop');
+
+    agreeCheckbox.addEventListener('change', () => {
+      if (agreeCheckbox.checked) {
+        deleteBtn.disabled = false;
+        deleteBtn.classList.remove('text-red-300', 'border-red-300', 'cursor-not-allowed');
+        deleteBtn.classList.add('text-white', 'bg-red-600', 'border-red-600', 'hover:bg-red-700', 'cursor-pointer');
+      } else {
+        deleteBtn.disabled = true;
+        deleteBtn.classList.add('text-red-300', 'border-red-300', 'cursor-not-allowed');
+        deleteBtn.classList.remove('text-white', 'bg-red-600', 'border-red-600', 'hover:bg-red-700', 'cursor-pointer');
+      }
+    });
+
+    keepBtn.addEventListener('click', () => {
+      Toastify({
+        text: "Glad you decided to keep your account!",
+        duration: 3000,
+        gravity: "top",
+        position: "right",
+        backgroundColor: "#16a34a",
+        stopOnFocus: true
+      }).showToast();
+    });
+
+    deleteBtn.addEventListener('click', () => {
+      backdrop.classList.add('active');
+      let confirmationToast = Toastify({
+        text: `
+          <div style="display:flex;flex-direction:column;gap:8px;color:white;">
+            <span>Are you sure you want to delete your account? This action cannot be undone.</span>
+            <div style="display:flex;gap:8px;justify-content:flex-end;">
+              <button id="confirmDelete" style="background:#ef4444;color:white;padding:4px 10px;border:none;border-radius:4px;cursor:pointer;">Yes</button>
+              <button id="cancelDelete" style="background:#6b7280;color:white;padding:4px 10px;border:none;border-radius:4px;cursor:pointer;">No</button>
+            </div>
+          </div>
+        `,
+        duration: -1,
+        gravity: "center",
+        position: "center",
+        backgroundColor: "#b91c1c",
+        escapeMarkup: false,
+        stopOnFocus: true,
+        onClose: () => {
+          backdrop.classList.remove('active');
+        }
+      });
+
+      confirmationToast.showToast();
+
+      setTimeout(() => {
+        const confirmBtn = document.getElementById('confirmDelete');
+        const cancelBtn = document.getElementById('cancelDelete');
+
+        if (confirmBtn) {
+          confirmBtn.addEventListener('click', async () => {
+            confirmationToast.hideToast();
+            backdrop.classList.remove('active');
+            try {
+              const token = localStorage.getItem('authToken');
+              console.log('Attempting delete with token:', token); // Debug token
+              if (!token) {
+                throw new Error('No authentication token found. Please sign in again.');
+              }
+              const response = await fetch('http://localhost:5000/api/users/delete-account', {
+                method: 'DELETE',
+                headers: {
+                  'Authorization': `Bearer ${token}`,
+                  'Content-Type': 'application/json'
+                }
+              });
+              const data = await response.json();
+              let toastMessage = data.message || "Failed to delete account";
+              if (response.status === 401) {
+                toastMessage = "Session expired. Please sign in again.";
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('loginUser');
+                setTimeout(() => window.location.href = 'userlogin.html', 1000);
+              } else if (response.status === 404) {
+                toastMessage = "Account not found.";
+              } else if (response.status === 400) {
+                toastMessage = data.message || "Cannot delete account due to pending issues.";
+              } else if (response.ok) {
+                toastMessage = "Account deleted successfully. Please sign up to create a new account.";
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('loginUser');
+                setTimeout(() => window.location.href = 'usersignup.html', 1000);
+              }
+              Toastify({
+                text: toastMessage,
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: response.ok ? "#16a34a" : "#dc2626",
+                stopOnFocus: true
+              }).showToast();
+            } catch (error) {
+              console.error('Delete error:', error.message); // Debug error
+              Toastify({
+                text: error.message || "Error connecting to server. Please try again.",
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "#dc2626",
+                stopOnFocus: true
+              }).showToast();
+            }
+          });
+        }
+
+        if (cancelBtn) {
+          cancelBtn.addEventListener('click', () => {
+            confirmationToast.hideToast();
+            backdrop.classList.remove('active');
+            Toastify({
+              text: "Account deletion canceled.",
+              duration: 3000,
+              gravity: "top",
+              position: "right",
+              backgroundColor: "#16a34a",
+              stopOnFocus: true
+            }).showToast();
+          });
+        }
+      }, 100);
+    });
+  </script>
+</body>
+</html>

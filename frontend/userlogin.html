@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login Page</title>
+
+  <!-- Icons & Tailwind -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<style>
+      /* Hide the inbuilt password toggle button (WebKit browsers) */
+      input[type="password"]::-webkit-password-toggle {
+        display: none;
+      }
+
+      /* Ensure no other unwanted appearances in Firefox or other browsers */
+      input[type="password"] {
+        -moz-appearance: textfield;
+        -webkit-appearance: none;
+      }
+    </style>
+
+<body class="bg-gray-50 font-sans">
+  <div class="min-h-screen flex items-center justify-center px-4">
+    <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
+
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <a href="index.html" class="flex justify-center gap-2 flex-shrink-0">
+          <img src="images/Asset 4.jpg" alt="GlobalShopify Logo" class="h-14 w-auto" />
+        </a>
+        <p class="text-gray-600 font-extrabold text-xl mt-2">Welcome Back!</p>
+        <p class="text-gray-600 font-bold text-sm">Sign in to continue your journey</p>
+      </div>
+
+      <!-- Login Form -->
+      <form id="login-form" class="space-y-6">
+        <!-- Email -->
+        <div>
+          <label class="block text-sm font-medium mb-2">Email Address</label>
+          <div class="relative">
+            <span class="material-icons-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-600">email</span>
+            <input id="login-email" type="email" placeholder="Enter your email"
+              class="w-full pl-10 pr-4 py-2 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+              required autocomplete="username" />
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div>
+          <label class="block text-sm font-medium mb-2">Password</label>
+          <div class="relative">
+            <span class="material-icons-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-600">lock</span>
+            <input id="login-password" placeholder="Enter your password"
+              class="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+              required autocomplete="current-password" />
+            <span id="togglePassword" aria-label="Toggle password visibility"
+              class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer select-none text-gray-600">
+              visibility
+            </span>
+          </div>
+        </div>
+
+        <!-- Remember Me and Forgot Password -->
+        <div class="flex items-center justify-between text-sm">
+          <a href="forgot-password.html" class="text-blue-500 hover:text-blue-600">Forgot Password?</a>
+        </div>
+
+        <!-- Submit -->
+        <button id="submitBtn" type="submit"
+          class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-colors duration-300 disabled:opacity-60 disabled:cursor-not-allowed">
+          Sign In
+        </button>
+      </form>
+
+      <!-- Social Login -->
+      <div class="mt-6 text-center">
+        <p class="text-gray-600 mb-4 flex items-center justify-center">
+          <span class="w-1/6 h-px bg-gray-300"></span>
+          <span class="px-4">Or continue with</span>
+          <span class="w-1/6 h-px bg-gray-300"></span>
+        </p>
+        <div class="flex justify-center gap-4">
+          <button
+            class="bg-red-600 text-white rounded-full p-3 hover:bg-red-700 flex items-center justify-center w-10 h-10">
+            <i class="fab fa-google"></i>
+          </button>
+          <button
+            class="bg-blue-600 text-white rounded-full p-3 hover:bg-blue-700 flex items-center justify-center w-10 h-10">
+            <i class="fab fa-facebook-f"></i>
+          </button>
+          <button
+            class="bg-black text-white rounded-full p-3 hover:bg-gray-800 flex items-center justify-center w-10 h-10">
+            <i class="fab fa-apple"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Redirect -->
+      <div class="mt-6 text-center">
+        <p class="text-gray-600">
+          Don't have an account?
+          <a href="usersignup.html" class="text-blue-500 hover:text-blue-600 transition-colors ml-1">
+            Sign up
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const togglePasswordBtn = document.getElementById("togglePassword");
+    const passwordInput = document.getElementById("login-password");
+    const emailInput = document.getElementById("login-email");
+    const form = document.getElementById("login-form");
+    const submitBtn = document.getElementById("submitBtn");
+
+    // Toggle password visibility
+    togglePasswordBtn.addEventListener("click", function () {
+      const isPassword = passwordInput.type === "password";
+      passwordInput.type = isPassword ? "text" : "password";
+      this.textContent = isPassword ? "visibility" : "visibility_off";
+    });
+
+    // Helper: show toast notification
+    function showToast(msg, type = "error") {
+      Toastify({
+        text: msg,
+        duration: 3000,
+        gravity: "top",
+        position: "right",
+        backgroundColor: type === "success" ? "#10B981" : "#EF4444",
+        className: "rounded-lg",
+        stopOnFocus: true,
+      }).showToast();
+    }
+
+    // Email validation regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // JWT validation regex (basic check for format: header.payload.signature)
+    const jwtRegex = /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+$/;
+
+    // Login form submission
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      const email = emailInput.value.trim();
+      const password = passwordInput.value.trim();
+
+      // Client-side validation
+      if (!email) {
+        showToast("Email is required.");
+        return;
+      }
+      if (!emailRegex.test(email)) {
+        showToast("Please enter a valid email address.");
+        return;
+      }
+      if (!password) {
+        showToast("Password is required.");
+        return;
+      }
+      if (password.length < 6) {
+        showToast("Password must be at least 6 characters long.");
+        return;
+      }
+
+      try {
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Signing in...";
+
+        const res = await fetch("http://localhost:5000/api/users/signin", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+        console.log("Login response:", data); // Debug
+
+        if (!res.ok) {
+          showToast(data.message || "Login failed. Please check your credentials.");
+          throw new Error(data.message || "Login failed");
+        }
+
+        // Validate response structure
+        if (!data.data?.token || !jwtRegex.test(data.data.token)) {
+          showToast("Invalid token received from server.");
+          throw new Error("Invalid or missing token in response");
+        }
+        if (!data.data?.user || (!data.data.user.firstName && !data.data.user.Firstname)) {
+          showToast("Invalid user data received from server.");
+          throw new Error("Invalid or missing user data in response");
+        }
+
+        // Store token and user data
+        localStorage.setItem("authToken", data.data.token);
+        localStorage.setItem("loginUser", JSON.stringify({
+          id: data.data.user.id,
+          firstName: data.data.user.firstName || data.data.user.Firstname || "User",
+          lastName: data.data.user.lastName || "",
+          email: data.data.user.email || email
+        }));
+        console.log("localStorage after login:", {
+          authToken: localStorage.getItem("authToken"),
+          loginUser: localStorage.getItem("loginUser")
+        }); // Debug
+
+        showToast("Login successful!", "success");
+
+        // Delay for toast visibility
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 1000);
+
+      } catch (err) {
+        console.error("Error during login:", err.message);
+        showToast(
+          err.message === "Login failed"
+            ? "Invalid email or password."
+            : err.message || "Error: Unable to connect to server. Make sure it's running."
+        );
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Sign In";
+      }
+    });
+  </script>
+</body>
+
+</html>

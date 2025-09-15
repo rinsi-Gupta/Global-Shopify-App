@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Multi-Category Page</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    rel="stylesheet">
+  <!-- Toastify CSS -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <link href="./src/styles/output.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'PT Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    .favorite-icon {
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .favorite-icon:hover {
+      transform: scale(1.1);
+    }
+
+    #sidebar {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 90%;
+      max-width: 300px;
+      height: 100%;
+      background-color: white;
+      box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+      transition: right 0.3s ease;
+      z-index: 1000;
+    }
+
+    .sidebar-content {
+      padding: 20px;
+    }
+
+    .close-btn {
+      cursor: pointer;
+      font-size: 24px;
+      color: gray;
+    }
+
+    @media (max-width: 768px) {
+      #sidebar {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-gray-100">
+  <!-- Navbar -->
+  <div class="sticky top-0 left-0 z-[99]" id="navbar-container"></div>
+
+  <div class="w-full max-w-full mx-auto px-4 sm:px-6 md:px-8 py-8">
+    <h1 class="text-3xl sm:text-4xl font-bold text-center mb-6 sm:mb-8">Original Finds for any Budget</h1>
+
+    <!-- Categories -->
+    <section class="mb-12 sm:mb-16">
+      <p class="text-lg sm:text-xl font-semibold text-center mb-6 sm:mb-8">Upgrade your home and style with affordable
+        finds on GlobalShopify</p>
+      <div class="max-w-[1600px] mx-auto px-2 sm:px-8">
+        <div class="flex flex-wrap justify-center gap-6 sm:gap-7" id="product-categories"></div>
+      </div>
+    </section>
+
+    <!-- Vendors -->
+    <section class="mb-12 sm:mb-16">
+      <h2 class="text-2xl sm:text-3xl font-bold text-center mb-6 sm:mb-8">Discover Small Shops</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 px-2 sm:px-6" id="vendor-section"></div>
+    </section>
+
+    <!-- Products -->
+    <section class="mb-12 sm:mb-16">
+      <h2 class="text-2xl sm:text-3xl font-bold text-center mb-6 sm:mb-8">More Crafts To Love</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 px-2 sm:px-6" id="product-display">
+      </div>
+    </section>
+  </div>
+
+  <!-- Footer -->
+  <div id="footer-container"></div>
+
+  <script>
+    const categories = [
+      { name: "Jewellery", image: "images/hero2.avif", link: "jewellery.html" },
+      { name: "Portrait", image: "images/hero4.avif", link: "portrait.html" },
+      { name: "Bags", image: "images/hero3.webp", link: "bags.html" },
+      { name: "Wedding", image: "images/wed1.jpg", link: "wed.html" },
+      { name: "Birthday", image: "images/birth3.webp", link: "birth.html" },
+      { name: "Plants", image: "images/plant3.webp", link: "plant.html" },
+      { name: "Shelves", image: "images/shelve4.webp", link: "shelve.html" },
+      { name: "Frames", image: "images/frame1.jpg", link: "frame.html" },
+      { name: "Toy Box", image: "images/toy3.jpg", link: "toy.html" },
+      { name: "Vases", image: "images/vase4.avif", link: "vase.html" },
+      { name: "Walls", image: "images/wall1.jpg", link: "wal.html" },
+      { name: "Wine Recks", image: "images/wine2.webp", link: "wine.html" },
+    ];
+
+    const vendors = [
+      {
+        name: "Craftsy",
+        description: "A beautiful set of handmade crafts from Craftsy.",
+        images: ["images/bask-1.webp", "images/stand-1.jpg", "images/stand-4.webp", "images/box-3.webp"],
+        rating: 4.1,
+        link: "vendor1.html"
+      },
+      {
+        name: "Artistry",
+        description: "A beautiful set of handmade crafts from Artistry.",
+        images: ["images/deco1.jpg", "images/deco2.webp", "images/deco4.jpg", "images/deco5.webp"],
+        rating: 4.2,
+        link: "vendor2.html"
+      },
+      {
+        name: "Loomsy",
+        description: "Unique handmade items from local Loomsy.",
+        images: ["images/festive2.jpg", "images/diya-1.webp", "images/lamp-1.webp", "images/festive4.jpg"],
+        rating: 4.5,
+        link: "vendor3.html"
+      },
+      {
+        name: "Craftsy",
+        description: "Unique handmade items from local Craftsy.",
+        images: ["images/plant2.jpg", "images/plant4.webp", "images/plant1.webp", "images/plant3.webp"],
+        rating: 5.0,
+        link: "vendor4.html"
+      },
+      {
+        name: "Artique",
+        description: "Unique handmade items from local Artique.",
+        images: ["images/frame2.jpg", "images/him2.webp", "images/frame3.jpg", "images/frame1.jpg"],
+        rating: 4.5,
+        link: "vendor5.html"
+      },
+      {
+        name: "Wovella",
+        description: "Unique handmade items from local Wovella.",
+        images: ["images/wall6.webp", "images/wall5.jpg", "images/wall2.webp", "images/wall1.jpg"],
+        rating: 5.0,
+        link: "vendor6.html"
+      }
+    ];
+
+    const products = [
+      {
+        name: "Criss-cross Basket",
+        description: "A woven container featuring an interlaced pattern of materials, creating a sturdy and decorative structure.",
+        price: "Rs 2,123",
+        image: "images/bask-1.webp",
+        link: "buy-now.html"
+      },
+      {
+        name: "Wooden Cutlery Holder",
+        description: "The Wooden Cutlery Holder is a handcrafted organizer with a natural wood finish, perfect for neatly storing and displaying utensils.",
+        price: "Rs 3,813",
+        image: "images/stand-1.jpg",
+        link: "buy-now.html"
+      },
+      {
+        name: "Matki Candles",
+        description: "Traditional, handcrafted earthenware candles for a rustic ambiance.",
+        price: "Rs 2,450",
+        image: "images/festive2.jpg",
+        link: "buy-now.html"
+      },
+      {
+        name: "Candelabrum",
+        description: "An elegant, multi-armed candle holder for sophistication.",
+        price: "Rs 1,740",
+        image: "images/candle-5.jpg",
+        link: "buy-now.html"
+      },
+      {
+        name: "Trinket Trove",
+        description: "Woven cane lighting accents with rustic charm.",
+        price: "Rs 2,457",
+        image: "images/deco4.jpg",
+        link: "buy-now.html"
+      },
+      {
+        name: "Velvet Vault",
+        description: "Vintage lighting fixtures with a timeless charm.",
+        price: "Rs 8,457",
+        image: "images/deco5.webp",
+        link: "buy-now.html"
+      },
+      {
+        name: "Bird Pot",
+        description: "A sleek finish adding elegance to any space.",
+        price: "Rs 1,694",
+        image: "images/plant3.webp",
+        link: "buy-now.html"
+      },
+      {
+        name: "Cow Pot",
+        description: "A classic source of light with soothing glow.",
+        price: "Rs 1,813",
+        image: "images/plant4.webp",
+        link: "buy-now.html"
+      },
+      {
+        name: "Heritage Walnut Frame",
+        description: "A sturdy, open-wire storage solution with charm.",
+        price: "Rs 1,670",
+        image: "images/frame2.jpg",
+        link: "buy-now.html"
+      },
+      {
+        name: "Natural Pine Frame",
+        description: "Handcrafted organizer with wood finish.",
+        price: "Rs 3,813",
+        image: "images/frame3.jpg",
+        link: "buy-now.html"
+      },
+      {
+        name: "Blooming Beauty",
+        description: "Woven container with decorative structure.",
+        price: "Rs 2,123",
+        image: "images/wall1.jpg",
+        link: "buy-now.html"
+      },
+      {
+        name: "Petal Paradise",
+        description: "Wireframe storage with gold finish.",
+        price: "Rs 2,457",
+        image: "images/wall2.webp",
+        link: "buy-now.html"
+      }
+    ];
+
+    function renderCategories() {
+      const container = document.getElementById("product-categories");
+      categories.forEach(cat => {
+        container.innerHTML += `
+          <a href="${cat.link}" class="flex flex-col items-center w-32 sm:w-48">
+            <div class="rounded-full overflow-hidden border-4 border-gray-300 hover:border-gray-500 transition w-full h-32 sm:h-48">
+              <img src="${cat.image}" alt="${cat.name}" class="w-full h-full object-cover" />
+            </div>
+            <span class="mt-2 text-gray-700 font-semibold text-center">${cat.name}</span>
+          </a>
+        `;
+      });
+    }
+
+    function renderVendors() {
+      const container = document.getElementById("vendor-section");
+      vendors.forEach(v => {
+        const images = v.images.map(img => `<a href="${v.link}"><img src="${img}" class="w-full h-24 object-cover rounded-lg"></a>`).join('');
+        container.innerHTML += `
+          <div class="bg-white p-4 rounded-lg shadow-lg w-full">
+            <div class="grid grid-cols-2 gap-2">${images}</div>
+            <div class="mt-4 flex items-center justify-between">
+              <h3 class="text-lg font-bold">${v.name}</h3>
+              <span class="material-symbols-outlined text-2xl favorite-icon" onclick="addToWishlist(this)">favorite</span>
+            </div>
+            <p class="text-black mt-2">${v.description}</p>
+            <div class="flex items-center mt-2">
+              <span class="text-yellow-500">${'★'.repeat(Math.floor(v.rating))}${'☆'.repeat(5 - Math.floor(v.rating))}</span>
+              <span class="ml-2 text-black">(${v.rating})</span>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function renderProducts() {
+      const container = document.getElementById("product-display");
+      container.innerHTML = "";
+      products.forEach(product => {
+        container.innerHTML += `
+  <div class="bg-white p-4 rounded-lg shadow-lg w-full flex flex-col justify-between h-full">
+    <a href="${product.link}">
+      <img src="${product.image}" class="w-full h-60 object-cover" alt="${product.name}">
+    </a>
+    <div class="p-2">
+      <h3 class="text-lg font-bold">${product.name}</h3>
+      <p class="text-gray-600 text-sm mt-1">${product.description}</p>
+      <div class="flex justify-between items-center mt-2">
+        <p class="text-base font-bold">${product.price}</p>
+        <div class="flex items-center gap-3">
+          
+          <!-- Add to Cart -->
+          <a href="#" 
+             class="relative cursor-pointer group flex add-to-cart" 
+             onclick="addToCart(event, '${product.name}', '${product.image}', '${product.price}')">
+              <span class="material-symbols-outlined cart-icon text-2xl transform transition-transform duration-300 group-hover:scale-110 group-hover:-translate-y-1" 
+                    style="font-variation-settings: 'FILL' 0; color: black;">
+                  shopping_cart
+              </span>
+          </a>
+
+          <!-- Wishlist -->
+          <a href="#wish" 
+             class="relative cursor-pointer group flex" 
+             onclick="addToWishlist(event, '${product.name}', '${product.image}', '${product.description}', '${product.price}')">
+              <span class="material-symbols-rounded favorite-icon text-2xl transform transition-transform duration-300 group-hover:scale-110 group-hover:-translate-y-1" 
+                    style="font-variation-settings: 'FILL' 0; color: black;">
+                  favorite
+              </span>  
+          </a>
+
+        </div>
+      </div>
+    </div>
+  </div>
+`;
+
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      renderCategories();
+      renderVendors();
+      renderProducts();
+      updateCartCount();
+      updateWishlistCount();
+    });
+
+    function filterProducts() {
+      const val = document.getElementById("search-input").value.toLowerCase();
+      const filtered = products.filter(product => product.name.toLowerCase().includes(val));
+      renderProducts(filtered);
+    }
+  </script>
+
+  <!-- Toastify JS -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <script src="./function.js"></script>
+
+  <script src="navbar.js"></script>
+  <script src="footer.js"></script>
+</body>
+
+</html>

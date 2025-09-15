@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shopping Cart</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Google Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+    <!-- Toastify CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+
+    <!-- Custom CSS -->
+    <link href="./src/styles/output.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="bg-gradient-to-b from-gray-100 to-gray-200 font-[Open Sans]">
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="p-4 flex justify-between items-center">
+            <a href="index.html" class="flex items-center gap-2 flex-shrink-0">
+                <img src="images/Asset 4.jpg" alt="GlobalShopify Logo" class="h-12 w-auto" />
+            </a>
+            <a href="index.html" class="text-blue-600 font-medium hover:text-blue-800 transition">Continue Shopping</a>
+        </div>
+
+        <!-- Category Section -->
+        <div class="flex overflow-x-auto whitespace-nowrap scrollbar-hide md:justify-center gap-6 py-3 px-4 text-sm font-semibold"
+            id="categoryBar">
+            <div class="group relative inline-block">
+                <a href="lightings.html" class="category-link hover:text-orange-500">LIGHTINGS</a>
+            </div>
+            <div class="group relative inline-block">
+                <a href="accessory.html" class="category-link hover:text-orange-500">ACCESSORIES</a>
+            </div>
+            <div class="group relative inline-block">
+                <a href="utility.html" class="category-link hover:text-orange-500">UTILITY</a>
+            </div>
+            <div class="group relative inline-block">
+                <a href="wooden.html" class="category-link hover:text-orange-500">WOODEN</a>
+            </div>
+            <div class="group relative inline-block">
+                <a href="pottery.html" class="category-link hover:text-orange-500">POTTERY</a>
+            </div>
+            <a href="wall.html" class="category-link inline-block hover:text-orange-500">WALL DECOR</a>
+            <div class="group relative inline-block">
+                <a href="textile.html" class="category-link hover:text-orange-500">TEXTILE</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Cart Layout -->
+    <div class="w-full mx-auto mt-10 px-4 md:px-8 flex flex-col md:flex-row gap-8">
+
+        <!-- Cart Items Section -->
+        <div class="w-full md:w-2/3">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Your Shopping Cart</h2>
+            <div id="cart-items" class="space-y-6 bg-blue-50"></div>
+        </div>
+
+        <!-- Order Summary Section -->
+        <div
+            class="w-full md:w-1/3 sticky top-24 self-start bg-gradient-to-br from-blue-50 to-gray-100 p-6 rounded-2xl shadow-xl">
+            <!-- Gift Message Section -->
+            <div id="gift-message-section"
+                class="mb-6 bg-gradient-to-r from-blue-100 to-blue-200 p-5 rounded-xl shadow-sm transform transition-all hover:scale-[1.02] duration-300">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <i class="fas fa-gift text-blue-600 text-2xl"></i>
+                        <h3 class="text-xl font-bold text-gray-800">Personalized Gift Message</h3>
+                    </div>
+                    <button onclick="openGiftMessagePopup()"
+                        class="text-blue-600 hover:text-blue-800 transition duration-200">
+                        <i class="fas fa-pencil-alt text-lg"></i>
+                    </button>
+                </div>
+                <div id="gift-message-display" class="text-gray-700 mt-4 text-sm leading-relaxed"></div>
+            </div>
+
+            <h2 class="text-2xl font-bold text-gray-800 border-b pb-4">Order Summary</h2>
+            <div id="order-summary" class="mt-6 space-y-4"></div>
+        </div>
+    </div>
+
+    <!-- Wishlist Add Section -->
+    <div class="wishlist-add-section">
+        <div class="max-w-8xl ml-7 md:ml-38 mr-6 pb-2 pr-0 md:pr-2 mt-4">
+            <div class="bg-blue-50 border rounded-xl shadow-md p-4 flex justify-between items-center cursor-pointer hover:bg-gray-50 transition duration-200"
+                onclick="goToWishlist()">
+                <span class="flex items-center gap-2 text-gray-700 font-semibold">
+                    <i class="fas fa-heart text-red-500"></i> Add More From Wishlist
+                </span>
+                <span class="text-gray-500">
+                    <i class="fas fa-chevron-right"></i>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recommended Products Section with Dynamic Categories -->
+    <div class="w-full ml-6 mx-auto mt-10 px-4 md:px-1" id="recommended-products">
+        <div class="mb-4">
+            <span class="text-gray-600 font-semibold text-xl">You May Also Like:</span>
+        </div>
+        <div class="flex overflow-x-auto whitespace-nowrap scrollbar-hide gap-4 pb-8" id="category-buttons"></div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6" id="product-grid"></div>
+    </div>
+
+    <!-- Gift Message Popup -->
+    <div id="gift-message-popup"
+        class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center hidden z-50">
+        <div
+            class="bg-gradient-to-br from-white to-violet-50 p-8 rounded-2xl shadow-2xl w-full max-w-md transform transition-all scale-95 animate-popup">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6">Create a Special Gift Message</h3>
+            <div class="space-y-5">
+                <div>
+                    <label for="sender-name" class="block text-sm font-semibold text-gray-700">From</label>
+                    <input id="sender-name" type="text"
+                        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white shadow-sm"
+                        placeholder="Your name" maxlength="50" />
+                </div>
+                <div>
+                    <label for="recipient-name" class="block text-sm font-semibold text-gray-700">To</label>
+                    <input id="recipient-name" type="text"
+                        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white shadow-sm"
+                        placeholder="Recipient's name" maxlength="50" />
+                </div>
+                <div>
+                    <label for="gift-message-input" class="block text-sm font-semibold text-gray-700">Message</label>
+                    <textarea id="gift-message-input"
+                        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white shadow-sm"
+                        rows="4" placeholder="Write a heartfelt message (max 200 characters)..."
+                        maxlength="200"></textarea>
+                </div>
+            </div>
+            <div class="flex justify-end gap-4 mt-6">
+                <button onclick="closeGiftMessagePopup()"
+                    class="px-5 py-2 text-gray-600 hover:text-gray-800 rounded-lg border border-gray-300 hover:bg-gray-100 transition duration-200">Cancel</button>
+                <button onclick="saveGiftMessage()"
+                    class="px-5 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition duration-200">Save
+                    Message</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Checkout Button -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white shadow-lg p-4 md:hidden z-20">
+        <button onclick="checkout()"
+            class="bg-gradient-to-r from-blue-600 to-blue-700 text-white w-full py-3 text-lg rounded-lg hover:from-blue-700 hover:to-blue-800 transition duration-200">
+            Proceed to Checkout
+        </button>
+    </div>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="./function.js"></script>
+    <script src="footer.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            loadCartFromStorage();
+            updateCartUI();
+            updateOrderSummary();
+            loadGiftMessage();
+            loadRecommendedProducts();
+        });
+
+        // Cart and Order Summary Functions
+        function loadCartFromStorage() {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            localStorage.setItem("cart", JSON.stringify(cart));
+        }
+
+        function updateCartUI() {
+            const cartItemsContainer = document.getElementById("cart-items");
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            cartItemsContainer.innerHTML = "";
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = "<p class='text-gray-600 text-center py-6 text-lg'>Your cart is empty.</p>";
+                updateOrderSummary();
+                return;
+            }
+
+            cart.forEach((item, index) => {
+                if (!item.quantity) item.quantity = 1;
+
+                const cartItem = document.createElement("div");
+                cartItem.classList.add(
+                    "bg-blue-50", "rounded-xl", "shadow-md", "p-5", "flex", "flex-col", "md:flex-row",
+                    "items-center", "justify-between", "gap-4", "transition", "hover:shadow-xl", "hover:-translate-y-1", "duration-300"
+                );
+
+                cartItem.innerHTML = `
+                    <div class="flex items-center gap-4 w-full">
+                        <img src="${item.image}" alt="${item.name}" class="w-28 h-28 object-cover rounded-lg shadow-sm" />
+                        <div class="flex flex-col justify-between w-full">
+                            <h3 class="text-lg font-bold text-gray-800 truncate">${item.name}</h3>
+                            <p class="text-gray-600 font-semibold">${item.price}</p>
+                            <div class="flex items-center space-x-2 mt-3">
+                                <button class="bg-gray-200 px-4 py-1.5 rounded-full text-lg hover:bg-gray-300 transition duration-200" onclick="updateQuantity(${index}, -1)">-</button>
+                                <span class="px-4 text-lg font-semibold">${item.quantity}</span>
+                                <button class="bg-gray-200 px-4 py-1.5 rounded-full text-lg hover:bg-gray-300 transition duration-200" onclick="updateQuantity(${index}, 1)">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md:ml-auto">
+                        <button class="text-red-600 hover:text-red-800 transition duration-200 flex items-center space-x-1" onclick="removeFromCart(${index})">
+                            <i class="fas fa-trash"></i>
+                            <span class="text-sm font-semibold">Remove</span>
+                        </button>
+                    </div>
+                `;
+                cartItemsContainer.appendChild(cartItem);
+            });
+
+            updateOrderSummary();
+        }
+
+        function updateOrderSummary() {
+            const orderSummaryContainer = document.getElementById("order-summary");
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            orderSummaryContainer.innerHTML = "";
+
+            if (cart.length === 0) {
+                orderSummaryContainer.innerHTML = "<p class='text-gray-600 text-center py-6 text-lg'>Your order summary is empty.</p>";
+                return;
+            }
+
+            let totalOrderAmount = 0;
+            let originalPrice = 0;
+            let deliveryCharges = 50;
+            let gstRate = 0.18;
+            let taxes = 0;
+
+            cart.forEach(item => {
+                let itemPrice = parseFloat(item.price.replace("Rs ", "").replace(",", ""));
+                let itemQuantity = item.quantity || 1;
+                let itemTotal = itemPrice * itemQuantity;
+                totalOrderAmount += itemTotal;
+                originalPrice += itemTotal;
+
+                const orderItem = document.createElement("div");
+                orderItem.classList.add("flex", "justify-between", "items-center");
+
+                orderItem.innerHTML = `
+                    <span class="text-gray-700 font-medium">${item.name} (x${itemQuantity})</span>
+                    <span class="text-gray-800 font-semibold">Rs ${itemTotal.toLocaleString()}</span>
+                `;
+                orderSummaryContainer.appendChild(orderItem);
+            });
+
+            taxes = originalPrice * gstRate;
+
+            const summaryDetails = [
+                { label: "Original Price:", value: originalPrice },
+                { label: "Delivery Charges:", value: deliveryCharges },
+                { label: "GST (18%):", value: taxes }
+            ];
+
+            summaryDetails.forEach(({ label, value }) => {
+                const row = document.createElement("div");
+                row.classList.add("flex", "justify-between", "text-gray-700", "py-1");
+                row.innerHTML = `<span class="font-medium">${label}</span><span class="font-semibold">Rs ${value.toLocaleString()}</span>`;
+                orderSummaryContainer.appendChild(row);
+            });
+
+            const totalOrderElement = document.createElement("div");
+            totalOrderElement.classList.add("flex", "justify-between", "font-bold", "text-xl", "mt-4", "text-gray-900", "border-t", "pt-4");
+            totalOrderElement.innerHTML = `
+                <span>Total Amount:</span>
+                <span>Rs ${(totalOrderAmount + deliveryCharges + taxes).toLocaleString()}</span>
+            `;
+            orderSummaryContainer.appendChild(totalOrderElement);
+
+            const checkoutButton = document.createElement("button");
+            checkoutButton.classList.add(
+                "bg-gradient-to-r", "from-blue-600", "to-blue-700", "text-white", "px-6", "py-3", "text-lg", "rounded-lg",
+                "shadow-md", "hover:from-blue-700", "hover:to-blue-800", "transition", "duration-200", "mt-6", "w-full", "hidden", "md:block"
+            );
+            checkoutButton.innerText = "Proceed to Checkout";
+            checkoutButton.onclick = checkout;
+            orderSummaryContainer.appendChild(checkoutButton);
+        }
+
+        function updateQuantity(index, change) {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            if (cart[index]) {
+                cart[index].quantity = Math.max(1, (cart[index].quantity || 1) + change);
+                localStorage.setItem("cart", JSON.stringify(cart));
+                updateCartUI();
+            }
+        }
+
+        function removeFromCart(index) {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            cart.splice(index, 1);
+            localStorage.setItem("cart", JSON.stringify(cart));
+
+            if (cart.length === 0) {
+                localStorage.removeItem("giftMessage");
+                loadGiftMessage();
+                Toastify({
+                    text: "Cart and gift message cleared!",
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "#4CAF50",
+                }).showToast();
+            }
+
+            updateCartUI();
+        }
+
+        function checkout() {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            if (cart.length === 0) {
+                Toastify({
+                    text: "Your cart is empty! Add items before proceeding.",
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "#f44336",
+                }).showToast();
+                return;
+            }
+
+            // Navigate to checkout.html without clearing cart
+            window.location.href = "checkout.html";
+        }
+
+        function openGiftMessagePopup() {
+            const popup = document.getElementById("gift-message-popup");
+            popup.classList.remove("hidden");
+            const giftMessage = JSON.parse(localStorage.getItem("giftMessage")) || {};
+            document.getElementById("sender-name").value = giftMessage.senderName || "";
+            document.getElementById("recipient-name").value = giftMessage.recipientName || "";
+            document.getElementById("gift-message-input").value = giftMessage.message || "";
+        }
+
+        function closeGiftMessagePopup() {
+            const popup = document.getElementById("gift-message-popup");
+            popup.classList.add("hidden");
+        }
+
+        function saveGiftMessage() {
+            const senderName = document.getElementById("sender-name").value.trim();
+            const recipientName = document.getElementById("recipient-name").value.trim();
+            const message = document.getElementById("gift-message-input").value.trim();
+
+            if (senderName.length > 50 || recipientName.length > 50) {
+                Toastify({
+                    text: "Sender or Recipient name exceeds 50 characters!",
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "#f44336",
+                }).showToast();
+                return;
+            }
+
+            if (message.length > 200) {
+                Toastify({
+                    text: "Message exceeds 200 characters!",
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "#f44336",
+                }).showToast();
+                return;
+            }
+
+            const giftMessage = {
+                senderName,
+                recipientName,
+                message
+            };
+
+            localStorage.setItem("giftMessage", JSON.stringify(giftMessage));
+            closeGiftMessagePopup();
+            loadGiftMessage();
+            Toastify({
+                text: "Gift message saved!",
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "#4CAF50",
+            }).showToast();
+        }
+
+        function loadGiftMessage() {
+            const messageDisplay = document.getElementById("gift-message-display");
+            const giftMessage = JSON.parse(localStorage.getItem("giftMessage")) || {};
+
+            if (giftMessage.senderName || giftMessage.recipientName || giftMessage.message) {
+                messageDisplay.innerHTML = `
+                    <p class="font-semibold text-blue-700"><i class="fas fa-user mr-2"></i>From: ${giftMessage.senderName || "Not specified"}</p>
+                    <p class="font-semibold text-blue-700"><i class="fas fa-user mr-2"></i>To: ${giftMessage.recipientName || "Not specified"}</p>
+                    <p class="italic text-gray-600">${giftMessage.message ? `"${giftMessage.message}"` : "No message added yet."}</p>
+                `;
+                messageDisplay.classList.remove("hidden");
+            } else {
+                messageDisplay.innerHTML = "<p class='text-gray-600 italic'>No gift message added yet.</p>";
+                messageDisplay.classList.remove("hidden");
+            }
+        }
+
+        function goToWishlist() {
+            window.location.href = "wishlist.html";
+        }
+
+        // Recommended Products Functions
+        function loadRecommendedProducts() {
+            const dummyData = {
+                categories: ["All", "Frames", "Jewellery", "Portait", "Pendant", "Bags", "lightnings", "Personal", "Shelve"],
+                products: [
+                    { name: "Frame", price: "₹599", originalPrice: "₹1799", discount: "80% off", category: "Frames", image: "images/frame1.jpg" },
+                    { name: "Jewellery", price: "₹371", originalPrice: "₹2194", discount: "85% off", category: "Jewellery", image: "images/her4.webp" },
+                    { name: "Portrait", price: "₹193", originalPrice: "₹199", discount: "3% off", category: "Pottery", image: "images/hero4.avif" },
+                    { name: "Pendant", price: "₹399", category: "Pendant", image: "images/jewe4.webp" },
+                    { name: "Bags", price: "₹386", originalPrice: "₹934", discount: "40% off", category: "Bags", image: "images/bag1.webp" }
+                ]
+            };
+
+            // Create category buttons
+            const categoryContainer = document.getElementById("category-buttons");
+            dummyData.categories.forEach(category => {
+                const button = document.createElement("button");
+                button.textContent = category;
+                button.classList.add("px-5", "py-2", "rounded-full", "transition", "duration-200", "shadow-sm", "font-semibold");
+                if (category === "All") {
+                    button.classList.add("bg-gradient-to-r", "from-red-500", "to-red-600", "text-white", "hover:from-red-600", "hover:to-red-700");
+                } else {
+                    button.classList.add("bg-gray-200", "text-gray-800", "hover:bg-gray-300");
+                }
+                button.addEventListener("click", () => filterProducts(category));
+                categoryContainer.appendChild(button);
+            });
+
+            // Load all products initially
+            displayProducts(dummyData.products);
+        }
+
+        function displayProducts(products) {
+            const productGrid = document.getElementById("product-grid");
+            productGrid.innerHTML = "";
+
+            products.forEach(product => {
+                const productCard = document.createElement("div");
+                productCard.classList.add("bg-blue-50", "rounded-xl", "shadow-md", "overflow-hidden", "transition", "transform", "duration-300", "hover:shadow-xl", "hover:-translate-y-2");
+
+                productCard.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover">
+                    <div class="p-5">
+                        <h3 class="text-lg font-bold text-gray-800 truncate">${product.name}</h3>
+                        <p class="text-gray-600 font-semibold">${product.price} ${product.originalPrice ? `<span class="line-through text-gray-400 text-sm">${product.originalPrice} (${product.discount})</span>` : ""}</p>
+                        <button onclick="addToCart(event, '${product.name}', '${product.image}', '${product.price}')" class="mt-3 w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-2 rounded-lg hover:from-blue-700 hover:to-blue-800 transition duration-200 font-semibold">Add to Cart</button>
+                    </div>
+                `;
+                productGrid.appendChild(productCard);
+            });
+        }
+
+        function filterProducts(category) {
+            const dummyData = {
+                products: [
+                    { name: "Frame", price: "₹599", originalPrice: "₹1799", discount: "80% off", category: "Frames", image: "path_to_image1.jpg" },
+                    { name: "Jewellery", price: "₹371", originalPrice: "₹2194", discount: "85% off", category: "Jewellery", image: "path_to_image2.jpg" },
+                    { name: "Pottery", price: "₹193", originalPrice: "₹199", discount: "3% off", category: "Pottery", image: "path_to_image3.jpg" },
+                    { name: "Pendant", price: "₹399", category: "Pendant", image: "path_to_image4.jpg" },
+                    { name: "Bags", price: "₹386", originalPrice: "₹934", discount: "40% off", category: "Bags", image: "path_to_image5.jpg" }
+                ]
+            };
+
+            let filteredProducts = category === "All" ? dummyData.products : dummyData.products.filter(p => p.category === category);
+            displayProducts(filteredProducts);
+        }
+    </script>
+
+    <!-- Custom CSS for Popup Animation -->
+    <style>
+        @keyframes popup {
+            0% {
+                transform: scale(0.95);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .animate-popup {
+            animation: popup 0.4s ease-out;
+        }
+
+        /* Custom Scrollbar Hide */
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</body>
+
+</html>

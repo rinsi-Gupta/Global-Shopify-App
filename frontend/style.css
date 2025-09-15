@@ -1,0 +1,314 @@
+/* General Styles */
+body {
+    font-family: 'PT Sans', sans-serif;
+    overflow-x: hidden;
+    background-color: #f5f5f5;
+}
+h1, h2, h3 {
+    font-family: 'Inter', sans-serif;
+    color: #1F2937; /* gray-800 */
+}
+a {
+    transition: color 0.2s ease-in-out;
+}
+a:hover {
+    color: #1F2937;
+}
+.hidden {
+    display: none;
+}
+
+/* Sidebar (More Button Panel) */
+#sidebar {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 90%;
+    max-width: 300px;
+    height: 100%;
+    background-color: white;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+    transition: right 0.3s ease;
+    z-index: 1000;
+}
+.sidebar-content {
+    padding: 20px;
+}
+.close-btn {
+    cursor: pointer;
+    font-size: 24px;
+    color: gray;
+}
+@media (max-width: 768px) {
+    #sidebar {
+        width: 100%;
+    }
+}
+
+/* Carousel */
+.carousel-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+.carousel-images {
+    display: flex;
+    transition: transform 1s ease;
+    width: 100%;
+    height: 100%;
+}
+.carousel-images img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    z-index: 10;
+}
+.carousel-arrow-left {
+    left: 10px;
+}
+.carousel-arrow-right {
+    right: 10px;
+}
+.carousel-indicators {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 5px;
+}
+.carousel-indicators button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.5);
+    border: none;
+    cursor: pointer;
+}
+.carousel-indicators button.active {
+    background-color: white;
+}
+.swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Accordion (Cancellation Section) */
+.section-card {
+    border: 1px solid #E5E7EB;
+    background-color: #fff;
+}
+.accordion-header {
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+}
+.accordion-header:hover {
+    background-color: #F9FAFB;
+}
+.accordion-content {
+    display: none;
+    padding: 0 1rem 1rem;
+}
+.accordion-content.active {
+    display: block;
+}
+.arrow {
+    font-size: 1rem;
+    color: #6B7280;
+    transition: transform 0.2s ease-in-out;
+}
+.accordion-header.active .arrow {
+    transform: rotate(180deg);
+}
+.subheading {
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.5rem;
+}
+
+/* Checkout Modal */
+.checkout-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.popup {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+.popup-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+/* Comment Modal */
+#comment-modal {
+    transition: opacity 0.3s ease;
+}
+#comment-modal.show {
+    opacity: 1;
+}
+#comment-modal.hidden {
+    opacity: 0;
+}
+.star {
+    font-size: 24px;
+    color: gray;
+    cursor: pointer;
+}
+.star.selected,
+.star:hover {
+    color: gold;
+}
+
+/* Order Page */
+.step-active {
+    background-color: #4CAF50;
+    color: white;
+}
+.popup-confirm,
+.overlay {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    z-index: 1000;
+}
+.overlay {
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 999;
+}
+
+/* Payment Policy Accordion */
+.payment-container {
+    background-color: #fff;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+.payment-container h2 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    color: #1F2937;
+}
+.payment-accordion-header {
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    background-color: #fff;
+    border-bottom: 1px solid #E5E7EB;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem;
+}
+.payment-accordion-header:hover {
+    background-color: #F9FAFB;
+}
+.payment-accordion-header::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background: linear-gradient(to bottom, #d4a373, #b8860b);
+}
+.payment-accordion-content {
+    display: none;
+    background-color: #fff;
+    border-top: 1px solid #E5E7EB;
+    padding: 1.25rem;
+    transition: all 0.3s ease-out;
+}
+.payment-accordion-content.active {
+    display: block;
+}
+.payment-arrow {
+    font-size: 1rem;
+    color: #6B7280;
+    transition: transform 0.2s ease-in-out;
+}
+.payment-accordion-header.active .payment-arrow {
+    transform: rotate(180deg);
+}
+.payment-subheading {
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.5rem;
+}
+.payment-container a {
+    color: #d4a373;
+    transition: color 0.2s ease-in-out;
+}
+.payment-container a:hover {
+    color: #b8860b;
+}
+
+/* Card Alignment Fixes */
+.card-left {
+    margin-right: auto;
+    margin-left: 1.5rem;
+}
+.card-right {
+    margin-left: auto;
+    margin-right: 1.5rem;
+}
+@media (max-width: 768px) {
+    .card-left,
+    .card-right {
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
+/* Ensure same height on all slides */
+.swiper-slide {
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  height: 100%; /* Important */
+}
+
+/* Set a fixed or min height for card content */
+.swiper-slide > div {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Mobile-specific slide width */
+@media (max-width: 420px) {
+  .swiper-slide {
+    width: 45% !important;
+  }
+}
+

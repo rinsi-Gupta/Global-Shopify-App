@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HandiCrafts Artisan Products - Multiple Vendors</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Montserrat&display=swap" rel="stylesheet">
+    <!-- Toastify CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'PT Sans', sans-serif;
+        }
+
+        .selected {
+            outline: 3px solid #3b82f6;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <div id="navbar-container"></div>
+
+    <!-- Page Content -->
+    <div id="webcrumbs" class="flex flex-col md:flex-row gap-5 pt-5 pb-4 px-4">
+        <!-- Sidebar (Filters) -->
+        <aside
+            class="w-full md:w-[250px] h-auto md:h-[calc(100vh-2rem)] md:sticky top-5 overflow-y-auto bg-white p-5 rounded-lg shadow-md">
+
+            <h2 class="text-xl font-bold mb-6">Filters</h2>
+
+            <!-- Color Filters -->
+            <div class="mb-6">
+                <button id="toggleColors" class="flex items-center justify-between w-full font-semibold mb-4 text-left">
+                    <span>Colors</span>
+                    <span id="arrow"
+                        class="material-symbols-outlined transition-transform duration-300">expand_more</span>
+                </button>
+
+                <div id="colorOptions" class="grid grid-cols-4 gap-3 hidden">
+                    <button class="w-8 h-8 rounded-full bg-red-500 color-filter" data-color="red"></button>
+                    <button class="w-8 h-8 rounded-full bg-blue-500 color-filter" data-color="blue"></button>
+                    <button class="w-8 h-8 rounded-full bg-green-500 color-filter" data-color="green"></button>
+                    <button class="w-8 h-8 rounded-full bg-yellow-500 color-filter" data-color="yellow"></button>
+                    <button class="w-8 h-8 rounded-full bg-purple-500 color-filter" data-color="purple"></button>
+                    <button class="w-8 h-8 rounded-full bg-pink-500 color-filter" data-color="pink"></button>
+                    <button class="w-8 h-8 rounded-full bg-black color-filter" data-color="black"></button>
+                    <button class="w-8 h-8 rounded-full bg-white border color-filter" data-color="white"></button>
+                    <button class="w-8 h-8 rounded-full bg-orange-500 color-filter" data-color="orange"></button>
+                    <button class="w-8 h-8 rounded-full bg-teal-500 color-filter" data-color="teal"></button>
+                    <button class="w-8 h-8 rounded-full bg-gray-500 color-filter" data-color="gray"></button>
+                    <button class="w-8 h-8 rounded-full bg-yellow-900 color-filter" data-color="dark-brown"></button>
+                    <button class="w-8 h-8 rounded-full bg-yellow-700 color-filter" data-color="golden"></button>
+                    <button class="w-8 h-8 rounded-full bg-orange-200 color-filter" data-color="skin"></button>
+                </div>
+            </div>
+
+            <!-- Price Range -->
+            <div class="mb-8">
+                <h3 class="font-semibold mb-4">Price Range</h3>
+                <input type="range" id="price-range" class="w-full h-2 bg-blue-100 rounded-lg cursor-pointer" min="100"
+                    max="10000" step="10" />
+                <div class="flex justify-between mt-2 text-sm text-gray-600">
+                    <span>Rs 100</span>
+                    <span>Rs 10000</span>
+                </div>
+                <p class="mt-2 text-lg font-semibold" id="price-display">Selected Price: Rs 10000</p>
+            </div>
+
+            <!-- Sort -->
+            <div class="mb-8">
+                <h3 class="font-semibold mb-4">Sort By</h3>
+                <select id="sort-options" class="w-full border rounded p-2">
+                    <option value="default">Default</option>
+                    <option value="low-to-high">Price: Low to High</option>
+                    <option value="high-to-low">Price: High to Low</option>
+                </select>
+            </div>
+
+            <!-- Apply Button -->
+            <button
+                class="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transform hover:scale-105 transition-all duration-300"
+                id="apply-filters">
+                Apply Filters
+            </button>
+        </aside>
+
+        <!-- Product Section -->
+        <div class="flex-1">
+            <!-- Selected Filters Display -->
+            <div id="selected-filters" class="mb-4 flex flex-wrap gap-2"></div>
+
+            <div id="no-products-alert" class="hidden text-center my-8">
+                <img src="images/not.gif" alt="No Products Found" class="w-32 h-32 mb-4 mx-auto">
+                <span class="text-lg font-semibold text-red-500">No products found!</span>
+            </div>
+
+            <main id="product-list" class="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                <!-- Product Cards will be injected here -->
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <!-- Product Logic JS -->
+    <script>
+        const toggleBtn = document.getElementById('toggleColors');
+        const colorOptions = document.getElementById('colorOptions');
+        const arrow = document.getElementById('arrow');
+
+        toggleBtn.addEventListener('click', () => {
+            colorOptions.classList.toggle('hidden');
+            arrow.classList.toggle('rotate-180');
+        });
+        const products = [
+            {
+                name: "Blooming Beauty",
+                image: "images/wall1.jpg",
+                description: "It is a woven container featuring an interlaced pattern of materials, creating a sturdy and decorative structure.",
+                price: "Rs 2,123",
+                color: "golden"
+            },
+            {
+                name: "Petal Paradise",
+                image: "images/wall2.webp",
+                description: "It is a stylish and durable storage solution featuring an elegant geometric wireframe design with a luxurious gold finish.",
+                price: "Rs 2,457",
+                color: "teal"
+            },
+            {
+                name: "Heritage Hues",
+                image: "images/wall3.jpg",
+                description: "Heritage Hues a timeless wall decor inspired by regional art forms, showcasing vibrant colors, ethnic patterns, and cultural motifs.",
+                price: "Rs 1,670",
+                color: "green"
+            },
+            {
+                name: "Fusion Style",
+                image: "images/wall4.webp",
+                description: "A creative blend of contemporary and traditional elements, combining metallic art, wooden carvings, and abstract prints for a unique aesthetic.",
+                price: "Rs 3,813",
+                color: "black"
+            },
+            {
+                name: "Rustic Charm",
+                image: "images/wall5.jpg",
+                description: "Rustic Charm unique crafted from reclaimed wood, woven materials, and metal, adding a warm, rustic touch to any space.",
+                price: "Rs 9,740",
+                color: "blue"
+            },
+            {
+                name: "Brushed Roots",
+                image: "images/wall6.webp",
+                description: "A blend of hand-painted wooden plaques, vintage-style wall signs, and folk art pieces that celebrate the beauty of traditional craftsmanship.",
+                price: "Rs 1,450",
+                color: "dark-brown"
+            }
+            // Add more products as needed
+        ];
+
+        // Selected Filters Setup
+        const selectedFiltersContainer = document.getElementById("selected-filters");
+        const selectedFilters = {
+            colors: new Set(),
+            price: null,
+            sort: "default"
+        };
+
+        // Function to update selected filters UI
+        function updateSelectedFilters() {
+            selectedFiltersContainer.innerHTML = "";
+
+            // Display selected colors
+            selectedFilters.colors.forEach(color => {
+                addFilterTag(color, "color");
+            });
+
+            // Display selected price range
+            if (selectedFilters.price) {
+                addFilterTag(`Up to Rs ${selectedFilters.price}`, "price");
+            }
+
+            // Display selected sort option
+            if (selectedFilters.sort !== "default") {
+                addFilterTag(selectedFilters.sort.replace("-", " "), "sort");
+            }
+        }
+
+        // Function to add a filter tag
+        function addFilterTag(label, type) {
+            const filterTag = document.createElement("div");
+            filterTag.className = "bg-gray-200 px-3 py-1 rounded-full flex items-center space-x-2";
+            filterTag.innerHTML = `
+        <span>${label}</span>
+        <button class="text-red-500" onclick="removeFilter('${label}', '${type}')">✖</button>
+    `;
+            selectedFiltersContainer.appendChild(filterTag);
+        }
+
+        // Function to remove a selected filter
+        function removeFilter(value, type) {
+            if (type === "color") {
+                selectedFilters.colors.delete(value);
+            } else if (type === "price") {
+                selectedFilters.price = null;
+            } else if (type === "sort") {
+                selectedFilters.sort = "default";
+            }
+            applyFilters();
+        }
+
+        // Color Filter Selection
+        document.querySelectorAll(".color-filter").forEach(button => {
+            button.addEventListener("click", function () {
+                const color = this.dataset.color;
+                if (selectedFilters.colors.has(color)) {
+                    selectedFilters.colors.delete(color);
+                    this.classList.remove("selected");
+                } else {
+                    selectedFilters.colors.add(color);
+                    this.classList.add("selected");
+                }
+                updateSelectedFilters();
+            });
+        });
+
+        // Price Range Filter
+        document.getElementById("price-range").addEventListener("input", function () {
+            selectedFilters.price = this.value;
+            document.getElementById("price-display").textContent = `Selected Price: Rs ${this.value}`;
+            updateSelectedFilters();
+        });
+
+        // Sort Filter
+        document.getElementById("sort-options").addEventListener("change", function () {
+            selectedFilters.sort = this.value;
+            updateSelectedFilters();
+        });
+
+        // Apply Filters Button
+        document.getElementById("apply-filters").addEventListener("click", function () {
+            applyFilters();
+        });
+
+        // Function to apply filters
+        function applyFilters() {
+            let filteredProducts = products.filter(product => {
+                // Color filter
+                if (selectedFilters.colors.size > 0 && !selectedFilters.colors.has(product.color)) {
+                    return false;
+                }
+                // Price filter
+                if (selectedFilters.price) {
+                    const priceValue = parseInt(product.price.replace("Rs ", "").replace(",", ""));
+                    if (priceValue > selectedFilters.price) return false;
+                }
+                return true;
+            });
+
+            // Sorting logic
+            if (selectedFilters.sort === "low-to-high") {
+                filteredProducts.sort((a, b) => parseInt(a.price.replace("Rs ", "").replace(",", "")) - parseInt(b.price.replace("Rs ", "").replace(",", "")));
+            } else if (selectedFilters.sort === "high-to-low") {
+                filteredProducts.sort((a, b) => parseInt(b.price.replace("Rs ", "").replace(",", "")) - parseInt(a.price.replace("Rs ", "").replace(",", "")));
+            }
+
+            renderProducts(filteredProducts);
+            updateSelectedFilters();
+        }
+
+        // Function to render filtered products
+        function renderProducts(filteredProducts) {
+            const productList = document.getElementById("product-list");
+            const noProductsAlert = document.getElementById("no-products-alert");
+            productList.innerHTML = '';
+
+            if (filteredProducts.length === 0) {
+                noProductsAlert.classList.remove("hidden");
+            } else {
+                noProductsAlert.classList.add("hidden");
+                filteredProducts.forEach(product => {
+                    const productCard = document.createElement("div");
+                    productCard.className = "bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300";
+                    productCard.innerHTML = `
+                <a href="buynow.html?name=${encodeURIComponent(product.name)}&image=${encodeURIComponent(product.image)}&description=${encodeURIComponent(product.description)}&price=${encodeURIComponent(product.price)}">
+                        <img src="${product.image}" alt="${product.name}" class="w-full h-[20rem] object-cover"> <!-- Set a fixed height here -->
+                    </a>
+                    <div class="p-4">
+                        <h3 class="text-xl font-semibold text-gray-800">${product.name}</h3>
+                        <p class="text-gray-600 mt-2">${product.description}</p>
+                        <div class="flex items-center space-x-4 mt-5">
+                            <p class="text-lg font-bold relative left-[2rem]">${product.price}</p>
+                            <a href="#" 
+   class="relative cursor-pointer group flex left-[9rem] add-to-cart" 
+   onclick="addToCart(event, '${product.name}', '${product.image}', '${product.price}')">
+    <span class="material-symbols-rounded cart-icon text-2xl transform transition-transform duration-300 group-hover:scale-110 group-hover:-translate-y-1" 
+          style="font-variation-settings: 'FILL' 0; color: black;">
+        shopping_cart
+    </span>
+</a>
+
+<a href="#wish" 
+   class="relative cursor-pointer group flex left-[9rem]" 
+   onclick="addToWishlist(event, '${product.name}', '${product.image}', '${product.description}', '${product.price}')"> 
+    <span class="material-symbols-rounded favorite-icon text-2xl transform transition-transform duration-300 group-hover:scale-110 group-hover:-translate-y-1" 
+          style="font-variation-settings: 'FILL' 0; color: black;">
+        favorite
+    </span>  
+</a>
+                        </div>
+                    </div>
+                `;
+                    productList.appendChild(productCard);
+                });
+            }
+        }
+
+        function filterProducts() {
+            const searchInput = document.getElementById('search-input').value.toLowerCase();
+            const filteredProducts = products.filter(product => product.name.toLowerCase().includes(searchInput));
+            renderProducts(filteredProducts);
+        }
+
+        function filterProductsByColor(color) {
+            const filteredProducts = products.filter(product => product.color === color);
+            renderProducts(filteredProducts);
+        }
+
+        function filterProductsByPrice(maxPrice) {
+            const filteredProducts = products.filter(product => {
+                const priceValue = parseInt(product.price.replace("Rs ", "").replace(",", ""));
+                return priceValue <= maxPrice;
+            });
+            renderProducts(filteredProducts);
+        }
+
+        function sortProducts(order) {
+            const sortedProducts = [...products]; // Create a copy of the products array
+            if (order === 'low-to-high') {
+                sortedProducts.sort((a, b) => {
+                    const priceA = parseInt(a.price.replace("Rs ", "").replace(",", ""));
+                    const priceB = parseInt(b.price.replace("Rs ", "").replace(",", ""));
+                    return priceA - priceB; // Sort in ascending order
+                });
+            } else if (order === 'high-to-low') {
+                sortedProducts.sort((a, b) => {
+                    const priceA = parseInt(a.price.replace("Rs ", "").replace(",", ""));
+                    const priceB = parseInt(b.price.replace("Rs ", "").replace(",", ""));
+                    return priceB - priceA; // Sort in descending order
+                });
+            }
+            renderProducts(sortedProducts); // Render the sorted products
+        }
+
+        // ✅ Update Icon Colors (Persistent)
+        function updateIconState() {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+
+            document.querySelectorAll(".add-to-cart").forEach(cartBtn => {
+                let productName = cartBtn.getAttribute("data-name");
+                let icon = cartBtn.querySelector(".cart-icon");
+                if (cart.some(item => item.name === productName)) {
+                    icon.classList.add("text-red-500");
+                } else {
+                    icon.classList.remove("text-red-500");
+                }
+            });
+
+            document.querySelectorAll(".add-to-wishlist").forEach(wishlistBtn => {
+                let productName = wishlistBtn.getAttribute("data-name");
+                let icon = wishlistBtn.querySelector(".favorite-icon");
+                if (wishlist.some(item => item.name === productName)) {
+                    icon.classList.add("text-red-500");
+                } else {
+                    icon.classList.remove("text-red-500");
+                }
+            });
+        }
+
+        // ✅ Page Load: Ensure Icons are Correct
+        document.addEventListener("DOMContentLoaded", () => {
+            updateCartCount();
+            updateWishlistCount();
+            updateIconState();
+            renderProducts(products); // Show all products by default
+
+
+            // Color filter event listeners
+            const colorFilters = document.querySelectorAll('.color-filter');
+            colorFilters.forEach(filter => {
+                filter.addEventListener('click', () => {
+                    const selectedColor = filter.getAttribute('data-color');
+                    filterProductsByColor(selectedColor);
+                });
+            });
+
+            // Price range event listener
+            const priceRangeInput = document.getElementById('price-range');
+            priceRangeInput.addEventListener('input', () => {
+                const selectedPrice = priceRangeInput.value;
+                document.getElementById('price-display').textContent = `Selected Price: Rs ${selectedPrice}`;
+                filterProductsByPrice(selectedPrice);
+            });
+
+            // Sort options event listener
+            const sortOptions = document.getElementById('sort-options');
+            sortOptions.addEventListener('change', () => {
+                const selectedSort = sortOptions.value;
+                sortProducts(selectedSort);
+            });
+
+            // Apply filters button
+            const applyFiltersButton = document.getElementById('apply-filters');
+            applyFiltersButton.addEventListener('click', () => {
+                const selectedPrice = priceRangeInput.value;
+                const selectedSort = sortOptions.value;
+                filterProductsByPrice(selectedPrice);
+                sortProducts(selectedSort);
+            });
+        });
+    </script>
+
+
+    <!-- Toastify JS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="./function.js"></script>
+
+
+    <!-- External JS -->
+    <script src="navbar.js"></script>
+    <script src="footer.js"></script>
+
+</body>
+
+</html>

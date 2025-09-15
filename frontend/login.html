@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login</title>
+
+  <!-- Fonts and Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Toastify CSS -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+  <!-- Toastify JS -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+</head>
+
+<body class="bg-gray-100">
+  <div class="max-w-md mx-auto mt-20 p-8 bg-white rounded-lg shadow-lg">
+    <h2 class="text-2xl font-bold text-gray-800 text-center mb-6">Login</h2>
+    <form id="login-form" class="space-y-4">
+      <div>
+        <label for="email" class="block text-gray-700">Email Address</label>
+        <input type="email" id="email" placeholder="Email Address" class="w-full p-3 border rounded-lg" required>
+      </div>
+      <div>
+        <label for="password" class="block text-gray-700">Password</label>
+        <input type="password" id="password" placeholder="Password" class="w-full p-3 border rounded-lg" required>
+      </div>
+      <div class="flex items-center justify-between">
+        <div class="flex items-center">
+          <input type="checkbox" id="remember" class="mr-2">
+          <label for="remember" class="text-gray-600">Remember Me</label>
+        </div>
+        <a href="#" class="text-blue-600 hover:underline">Forgot Password?</a>
+      </div>
+      <button type="submit" id="login-btn" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition disabled:opacity-50">
+        <span id="login-text">Login</span>
+        <span id="login-loading" class="hidden">Logging in...</span>
+      </button>
+    </form>
+    <p class="text-center mt-4 text-gray-600">Don't have an account? <a href="signup.html" class="text-blue-600 hover:underline">Sign Up</a></p>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const loginForm = document.getElementById("login-form");
+      const loginBtn = document.getElementById("login-btn");
+      const loginText = document.getElementById("login-text");
+      const loginLoading = document.getElementById("login-loading");
+
+      loginForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+
+        if (!email || !password) {
+          Toastify({
+            text: "Please fill in all fields.",
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            backgroundColor: "#f87171",
+          }).showToast();
+          return;
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          Toastify({
+            text: "Please enter a valid email address.",
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            backgroundColor: "#f87171",
+          }).showToast();
+          return;
+        }
+
+        // Simulate login process
+        loginBtn.disabled = true;
+        loginText.classList.add("hidden");
+        loginLoading.classList.remove("hidden");
+
+        setTimeout(() => {
+          // For demo: Assume successful login if password is not empty
+          localStorage.setItem("loggedInUser", JSON.stringify({ email: email }));
+
+          Toastify({
+            text: "Login successful!",
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            backgroundColor: "#34d399",
+          }).showToast();
+
+          // Redirect to home or checkout page
+          window.location.href = "index.html"; // Change to your desired redirect page
+
+          loginText.classList.remove("hidden");
+          loginLoading.classList.add("hidden");
+          loginBtn.disabled = false;
+        }, 1500); // Simulate delay
+      });
+    });
+  </script>
+</body>
+</html>

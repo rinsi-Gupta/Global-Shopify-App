@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Overview</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .sidebar-link {
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .sidebar-link:hover {
+            background-color: #e5eaf0;
+            color: #2791CF;
+        }
+
+        .active-link {
+            background-color: #e5eaf0;
+            color: #2791CF;
+            font-weight: 600;
+        }
+
+        .hover-card:hover {
+            border-color: #e5eaf0;
+            background-color: #e5eaf0;
+        }
+
+        aside {
+            position: sticky;
+            top: 0;
+            height: calc(100vh - 64px);
+            overflow-y: auto;
+        }
+
+        @media (max-width: 768px) {
+            aside {
+                position: static;
+                height: auto;
+            }
+        }
+
+        .profile-image {
+            width: 96px;
+            height: 96px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .upload-button {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col" data-current="overview">
+
+    <!-- Navigation Bar -->
+    <div class="sticky top-0 z-50" id="navbar-container"></div>
+
+    <!-- Main Layout -->
+    <main class="flex flex-grow flex-col md:flex-row">
+
+        <!-- Sidebar -->
+        <aside class="w-full md:w-72 bg-white shadow-lg border-r min-h-screen">
+            <div class="p-6 border-b">
+                <h2 class="text-2xl font-bold text-gray-800">My Account</h2>
+            </div>
+            <nav class="px-6 py-6 space-y-4 text-sm">
+                <a href="overview.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded"
+                    data-link="overview">
+                    <i class="fas fa-chart-line"></i> Overview
+                </a>
+                <div>
+                    <p class="text-xs text-gray-500 uppercase mb-2">Orders</p>
+                    <a href="order.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded"
+                        data-link="orders">
+                        <i class="fas fa-box"></i> Orders & Returns
+                    </a>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500 uppercase mt-4 mb-2">Credits</p>
+                    <a href="coupons.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded"
+                        data-link="coupons">
+                        <i class="fas fa-ticket-alt"></i> Coupons
+                    </a>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500 uppercase mt-4 mb-2">Account</p>
+                    <a href="user.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded"
+                        data-link="profile">
+                        <i class="fas fa-user-circle"></i> Profile
+                    </a>
+                    <a href="address.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded"
+                        data-link="addresses">
+                        <i class="fas fa-address-book"></i> Addresses
+                    </a>
+                    <a href="delete.html"
+                        class="flex items-center gap-2 sidebar-link px-3 py-2 rounded text-red-500 hover:bg-red-100"
+                        data-link="delete">
+                        <i class="fas fa-trash-alt"></i> Delete Account
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <section class="flex-grow bg-gray-100 p-6">
+            <!-- Top Profile Section -->
+            <div class="bg-white p-6 flex flex-col md:flex-row items-center justify-between shadow-sm rounded mb-8">
+                <div class="flex items-center gap-6">
+                    <div id="profileImageContainer" class="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center text-5xl text-white">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div>
+                        <h2 id="userName" class="text-xl font-semibold text-gray-800">Hello, Guest</h2>
+                        <p id="userEmail" class="text-gray-500">Loading...</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4 mt-4 md:mt-0">
+                    <a href="edit-profile.html">
+                        <button class="border border-gray-400 text-sm px-4 py-2 rounded hover:bg-gray-100">
+                            Edit Profile
+                        </button>
+                    </a>
+                    <div id="uploadImageContainer" class="hidden">
+                        <label for="profileImageInput" class="border border-gray-400 text-sm px-4 py-2 rounded hover:bg-gray-100 upload-button">
+                            Add Profile Image
+                        </label>
+                        <input type="file" id="profileImageInput" class="file-input" accept="image/jpeg,image/png,image/gif" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <a href="order.html" class="bg-white border rounded-lg p-6 shadow-sm text-center transition hover-card">
+                    <div class="text-3xl text-gray-700 mb-4"><i class="fas fa-box"></i></div>
+                    <h3 class="text-lg font-semibold text-gray-800">Orders</h3>
+                    <p class="text-sm text-gray-500 mt-1">Check your order status</p>
+                </a>
+                <a href="wishlist.html"
+                    class="bg-white border rounded-lg p-6 shadow-sm text-center transition hover-card">
+                    <div class="text-3xl text-gray-700 mb-4"><i class="fas fa-heart"></i></div>
+                    <h3 class="text-lg font-semibold text-gray-800">Collections & Wishlist</h3>
+                    <p class="text-sm text-gray-500 mt-1">All your curated product collections</p>
+                </a>
+                <a href="coupons.html"
+                    class="bg-white border rounded-lg p-6 shadow-sm text-center transition hover-card">
+                    <div class="text-3xl text-gray-700 mb-4"><i class="fas fa-wallet"></i></div>
+                    <h3 class="text-lg font-semibold text-gray-800">Coupons</h3>
+                    <p class="text-sm text-gray-500 mt-1">Manage Coupons for additional discounts</p>
+                </a>
+                <a href="address.html"
+                    class="bg-white border rounded-lg p-6 shadow-sm text-center transition hover-card">
+                    <div class="text-3xl text-gray-700 mb-4"><i class="fas fa-address-book"></i></div>
+                    <h3 class="text-lg font-semibold text-gray-800">Addresses</h3>
+                    <p class="text-sm text-gray-500 mt-1">Save addresses for hassle-free checkout</p>
+                </a>
+                <a href="cart.html" class="bg-white border rounded-lg p-6 shadow-sm text-center transition hover-card">
+                    <div class="text-3xl text-gray-700 mb-4"><i class="fas fa-shopping-cart"></i></div>
+                    <h3 class="text-lg font-semibold text-gray-800">Cart</h3>
+                    <p class="text-sm text-gray-500 mt-1">Manage Cart for direct orders</p>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t mt-auto">
+        <div id="footer-container" class="text-center text-sm text-gray-500 py-4">
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="navbar.js"></script>
+    <script src="footer.js"></script>
+    <script>
+        // Highlight active sidebar link
+        const current = document.body.getAttribute("data-current");
+        const links = document.querySelectorAll(".sidebar-link");
+        links.forEach(link => {
+            link.classList.toggle("active-link", link.getAttribute("data-link") === current);
+        });
+
+        // Format value helper
+        const formatValue = (value) => value && value.trim() !== "" ? value : "- not added -";
+
+        function showToast(message, color = "#22c55e") {
+            Toastify({
+                text: message,
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                backgroundColor: color,
+                stopOnFocus: true
+            }).showToast();
+        }
+
+        // Fetch user profile
+        async function fetchProfile() {
+            const token = localStorage.getItem("authToken");
+            const userNameElement = document.getElementById("userName");
+            const userEmailElement = document.getElementById("userEmail");
+            const profileImageContainer = document.getElementById("profileImageContainer");
+            const uploadImageContainer = document.getElementById("uploadImageContainer");
+
+            // Check localStorage for user data
+            const loginUser = JSON.parse(localStorage.getItem("loginUser")) || {};
+
+            if (!token || token === "undefined") {
+                userNameElement.textContent = "Hello, Guest";
+                userEmailElement.textContent = "Please log in";
+                profileImageContainer.innerHTML = '<i class="fas fa-user"></i>';
+                uploadImageContainer.classList.remove("hidden");
+                showToast("Please log in to view your dashboard", "#EF4444");
+                setTimeout(() => window.location.href = "signin.html", 2000);
+                return;
+            }
+
+            try {
+                const response = await fetch("http://localhost:5000/api/users/profile/getprofile", {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                });
+
+                const data = await response.json();
+                console.log("Overview profile response:", data);
+
+                if (response.ok && data?.data?.user) {
+                    const user = data.data.user;
+                    // Use API firstName if available, otherwise fall back to localStorage
+                    const firstName = user.firstName && user.firstName.trim() !== "" ? user.firstName : (loginUser.firstName && loginUser.firstName.trim() !== "" ? loginUser.firstName : "User");
+                    userNameElement.textContent = `Hello, ${firstName}`;
+                    userEmailElement.textContent = formatValue(user.email);
+
+                    if (user.profileImage) {
+                        profileImageContainer.innerHTML = `<img src="${user.profileImage}" alt="Profile Image" class="profile-image" />`;
+                    } else {
+                        profileImageContainer.innerHTML = '<i class="fas fa-user"></i>';
+                        uploadImageContainer.classList.remove("hidden");
+                    }
+                } else {
+                    // Fallback to localStorage if API fails
+                    const firstName = loginUser.firstName && loginUser.firstName.trim() !== "" ? loginUser.firstName : "User";
+                    userNameElement.textContent = `Hello, ${firstName}`;
+                    userEmailElement.textContent = "- not available -";
+                    profileImageContainer.innerHTML = '<i class="fas fa-user"></i>';
+                    uploadImageContainer.classList.remove("hidden");
+                    showToast(data.message || "Session expired or invalid user data. Please log in again.", "#EF4444");
+                    setTimeout(() => window.location.href = "signin.html", 2000);
+                }
+            } catch (error) {
+                console.error("Error fetching profile:", error.message);
+                // Fallback to localStorage on error
+                const firstName = loginUser.firstName && loginUser.firstName.trim() !== "" ? loginUser.firstName : "User";
+                userNameElement.textContent = `Hello, ${firstName}`;
+                userEmailElement.textContent = "- not available -";
+                profileImageContainer.innerHTML = '<i class="fas fa-user"></i>';
+                uploadImageContainer.classList.remove("hidden");
+                showToast("Failed to fetch profile. Please try again.", "#EF4444");
+            }
+        }
+
+        // Handle profile image upload
+        document.getElementById("profileImageInput")?.addEventListener("change", async function (e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            // Validate file type
+            const validTypes = ["image/jpeg", "image/png", "image/gif"];
+            if (!validTypes.includes(file.type)) {
+                showToast("Only JPG, PNG, or GIF files are allowed", "#EF4444");
+                return;
+            }
+
+            // Validate file size (5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                showToast("File size must be less than 5MB", "#EF4444");
+                return;
+            }
+
+            const token = localStorage.getItem("authToken");
+            if (!token || token === "undefined") {
+                showToast("Please log in to upload an image", "#EF4444");
+                setTimeout(() => window.location.href = "signin.html", 2000);
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("profileImage", file);
+
+            try {
+                const response = await fetch("http://localhost:5000/api/users/profile", {
+                    method: "PUT",
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: formData
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    showToast("Profile image uploaded successfully", "#22c55e");
+                    setTimeout(() => window.location.reload(), 2000);
+                } else {
+                    showToast(data.message || "Failed to upload image", "#EF4444");
+                }
+            } catch (error) {
+                console.error("Error uploading image:", error.message);
+                showToast("Failed to upload image", "#EF4444");
+            }
+        });
+
+        // Initial fetch
+        document.addEventListener("DOMContentLoaded", fetchProfile);
+    </script>
+</body>
+
+</html>

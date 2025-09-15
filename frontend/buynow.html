@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Buy Now - Handcrafted Wooden Bowl</title>
+
+    <!-- Google Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+    <!-- Toastify CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for enhanced responsiveness */
+        body {
+            font-family: 'Roboto', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin-left: auto;
+            margin-right: auto;
+            flex-grow: 1;
+        }
+
+        #main-media img,
+        #main-media video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 0.5rem;
+        }
+
+        #thumbnails {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        #thumbnails::-webkit-scrollbar {
+            display: none;
+        }
+
+        #image-modal img,
+        #image-modal video {
+            max-width: 90vw;
+            max-height: 90vh;
+            object-fit: contain;
+        }
+
+        #customization-popup select,
+        #customization-popup input,
+        #customization-popup textarea {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        @media (max-width: 640px) {
+            #main-media {
+                height: 200px !important;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .flex-col {
+                flex-direction: column !important;
+            }
+
+            .text-2xl {
+                font-size: 1.25rem !important;
+            }
+
+            .text-3xl {
+                font-size: 1.5rem !important;
+            }
+
+            .px-4 {
+                padding-left: 0.75rem !important;
+                padding-right: 0.75rem !important;
+            }
+
+            .py-2 {
+                padding-top: 0.5rem !important;
+                padding-bottom: 0.5rem !important;
+            }
+
+            #comment-form input,
+            #comment-form textarea {
+                font-size: 0.875rem;
+            }
+        }
+
+        @media (min-width: 640px) and (max-width: 768px) {
+            #main-media {
+                height: 300px !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 font-['Roboto']">
+    <!-- Sticky Navbar -->
+    <div class="sticky top-0 left-0 z-[99]" id="navbar-container"></div>
+
+    <!-- Main Container -->
+    <div class="container mx-auto bg-white p-4 sm:p-6 md:p-8 mt-4 sm:mt-6 rounded-lg shadow-lg">
+        <div class="flex flex-col lg:flex-row gap-4 sm:gap-6">
+            <!-- Product Image Gallery -->
+            <div class="w-full lg:w-1/2">
+                <div class="relative group">
+                    <div id="main-media" class="w-full h-64 sm:h-80 md:h-[400px] rounded-lg shadow-lg hover:shadow-xl transition duration-300 cursor-pointer"></div>
+                </div>
+                <div class="flex mt-3 sm:mt-4 space-x-2 overflow-x-auto" id="thumbnails"></div>
+            </div>
+
+            <!-- Zoomable Modal -->
+            <div id="image-modal" class="z-[999] fixed inset-0 bg-black bg-opacity-80 hidden justify-center items-center">
+                <div class="relative max-w-4xl w-full p-2 sm:p-4 flex justify-center items-center">
+                    <button id="close-modal" class="absolute top-2 right-2 text-white text-2xl sm:text-3xl font-bold z-50">&times;</button>
+                    <div class="overflow-hidden relative">
+                        <img id="modal-image" class="rounded-lg select-none transition-transform duration-200 ease-in-out hidden" />
+                        <video id="modal-video" class="rounded-lg" controls hidden></video>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Details -->
+            <div class="w-full lg:w-1/2 space-y-4 sm:space-y-6">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+                    <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800" id="product-name">Handcrafted Wooden Bowl</h2>
+                    <button onclick="redirectToCheckout()" class="bg-blue-500 text-white px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-lg font-medium transition hover:scale-105 w-full sm:w-auto" id="buy-now-button">
+                        Order Now
+                    </button>
+                </div>
+
+                <!-- Price Section -->
+                <div class="flex flex-wrap items-center space-x-2 sm:space-x-3">
+                    <span class="text-xl sm:text-2xl md:text-3xl font-bold text-red-600" id="product-price">Rs 900.00</span>
+                    <span class="line-through text-base sm:text-lg md:text-xl text-gray-500" id="product-original-price">Rs 1000.00</span>
+                    <span class="px-2 sm:px-3 py-1 bg-red-100 text-red-700 text-xs sm:text-sm rounded-lg" id="product-discount">10% OFF</span>
+                </div>
+
+                <p id="stock-status" class="font-semibold text-green-600 text-sm sm:text-base"></p>
+
+                <!-- Description -->
+                <p class="text-gray-600 leading-relaxed text-sm sm:text-base" id="product-description">
+                    This handcrafted wooden bowl is perfect for serving salads, fruits, or snacks. Made from sustainably sourced wood, it adds a rustic charm to your dining experience.
+                </p>
+
+                <!-- Details Section -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                    <div class="bg-gray-50 p-3 sm:p-4 rounded-lg hover:bg-gray-100 transition">
+                        <h4 class="font-semibold text-sm sm:text-base mb-2">Product Details</h4>
+                        <ul class="space-y-2 text-gray-600 text-xs sm:text-sm" id="product-details-list"></ul>
+                    </div>
+                    <div class="bg-gray-50 p-3 sm:p-4 rounded-lg hover:bg-gray-100 transition">
+                        <h4 class="font-semibold text-sm sm:text-base mb-2">Artisan Details</h4>
+                        <div class="space-y-2 text-gray-600 text-xs sm:text-sm" id="artisan-details-list"></div>
+                    </div>
+                    <div class="bg-gray-50 p-3 sm:p-4 rounded-lg hover:bg-gray-100 transition">
+                        <h4 class="font-semibold text-sm sm:text-base mb-2">Vendor Details</h4>
+                        <div class="space-y-2 text-gray-600 text-xs sm:text-sm" id="vendor-details-list"></div>
+                    </div>
+                </div>
+
+                <!-- Customize + Favorite + Share -->
+                <div class="flex flex-wrap items-center gap-3 sm:gap-4 mt-3 sm:mt-4">
+                    <button onclick="openCustomizationPopup()" class="bg-blue-500 text-white px-3 sm:px-4 py-2 rounded-lg text-sm sm:text-base">Customize</button>
+                    <button onclick="toggleFavorite()" class="w-10 h-10 sm:w-12 sm:h-12 border rounded-lg hover:bg-gray-50 flex items-center justify-center">
+                        <span id="favorite-icon" class="material-symbols-outlined text-gray-500 text-lg sm:text-xl">favorite</span>
+                    </button>
+                    <button onclick="shareProduct()" class="w-10 h-10 sm:w-12 sm:h-12 border rounded-lg hover:bg-gray-50 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-lg sm:text-xl">share</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Customization Modal -->
+        <div id="customization-popup" class="fixed z-[999] inset-0 bg-black bg-opacity-50 hidden justify-center items-center px-2 sm:px-4">
+            <div class="bg-white w-full max-w-md p-4 sm:p-6 rounded-lg shadow-lg">
+                <h2 class="text-lg sm:text-xl md:text-2xl font-bold mb-3 sm:mb-4 text-center">Customization Options</h2>
+                <form id="customization-form" class="space-y-3 sm:space-y-4 text-xs sm:text-sm">
+                    <label class="block font-semibold">Choose Material:</label>
+                    <select id="material" class="border p-2 rounded">
+                        <option value="wood">Wood</option>
+                        <option value="metal">Metal</option>
+                        <option value="plastic">Plastic</option>
+                    </select>
+
+                    <label class="block font-semibold">Choose Design Theme:</label>
+                    <select id="design-theme" class="border p-2 rounded">
+                        <option value="classic">Classic</option>
+                        <option value="modern">Modern</option>
+                        <option value="vintage">Vintage</option>
+                    </select>
+
+                    <label class="block font-semibold">Engraving Options:</label>
+                    <div class="space-y-2">
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="engraving" value="text" checked class="mr-2"> Text Engraving
+                        </label>
+                        <input type="text" id="custom-text" class="border p-2 rounded" placeholder="Enter custom text">
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="engraving" value="image" class="mr-2"> Image Engraving
+                        </label>
+                        <input type="file" id="engraving-image" class="border p-2 rounded" accept="image/*" disabled>
+                    </div>
+
+                    <label class="block font-semibold">Gift Wrapping:</label>
+                    <select id="gift-wrapping" class="border p-2 rounded">
+                        <option value="none">None</option>
+                        <option value="standard">Standard</option>
+                        <option value="premium">Premium</option>
+                    </select>
+
+                    <div class="flex justify-between pt-2">
+                        <button type="button" onclick="applyCustomization()" class="bg-blue-500 text-white px-3 sm:px-4 py-2 rounded-lg text-sm sm:text-base">Apply</button>
+                        <button type="button" onclick="closeCustomizationPopup()" class="bg-red-500 text-white px-3 sm:px-4 py-2 rounded-lg text-sm sm:text-base">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Customer Reviews -->
+        <div class="mt-6 sm:mt-8 bg-gray-50 p-4 sm:p-6 rounded-lg shadow-md">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-3 sm:mb-4">
+                <h3 class="text-lg sm:text-xl md:text-2xl font-bold">Customer Reviews</h3>
+                <button type="button" onclick="openCommentForm()" class="text-blue-500 hover:text-blue-700 flex items-center gap-1 text-sm sm:text-base">
+                    <span class="material-symbols-outlined">add_comment</span>
+                    <span>Add Review</span>
+                </button>
+            </div>
+
+            <!-- Add Review Form (Initially Hidden) -->
+            <div id="comment-form" class="hidden mb-4 sm:mb-6 bg-blue-100 p-3 sm:p-4 rounded-lg shadow">
+                <h3 class="text-base sm:text-lg font-bold mb-3 sm:mb-4">Add Your Review</h3>
+                <input type="text" id="modal-user-id" class="border rounded-lg p-2 w-full mb-3 sm:mb-4 bg-blue-50 text-sm sm:text-base" placeholder="Enter your User ID">
+                <div class="flex items-center mb-3 sm:mb-4">
+                    <span class="font-semibold mr-2 text-sm sm:text-base">Rating:</span>
+                    <div id="modal-rating" class="flex gap-1">
+                        <span class="star cursor-pointer text-lg sm:text-xl" data-value="1" onclick="setStarRating(this)">&#9733;</span>
+                        <span class="star cursor-pointer text-lg sm:text-xl" data-value="2" onclick="setStarRating(this)">&#9733;</span>
+                        <span class="star cursor-pointer text-lg sm:text-xl" data-value="3" onclick="setStarRating(this)">&#9733;</span>
+                        <span class="star cursor-pointer text-lg sm:text-xl" data-value="4" onclick="setStarRating(this)">&#9733;</span>
+                        <span class="star cursor-pointer text-lg sm:text-xl" data-value="5" onclick="setStarRating(this)">&#9733;</span>
+                    </div>
+                </div>
+                <textarea id="modal-comment" class="border rounded-lg p-2 w-full mb-3 sm:mb-4 bg-blue-50 text-sm sm:text-base" rows="4" placeholder="Write your comment..."></textarea>
+                <label class="block font-semibold mb-2 text-sm sm:text-base">Upload Image (Optional):</label>
+                <input type="file" id="review-image" class="border rounded-lg p-2 w-full mb-3 bg-blue-50 sm:mb-4 text-sm sm:text-base" accept="image/*">
+                <div class="flex justify-end mt-3 sm:mt-4">
+                    <button type="button" onclick="submitNewComment()" class="bg-blue-500 text-white px-3 sm:px-4 py-2 rounded-lg text-sm sm:text-base">Submit</button>
+                    <button type="button" onclick="hideCommentForm()" class="ml-2 text-gray-500 hover:text-gray-700 text-sm sm:text-base">Cancel</button>
+                </div>
+            </div>
+
+            <!-- Reviews List -->
+            <div class="space-y-3 sm:space-y-4" id="customer-reviews"></div>
+        </div>
+
+        <!-- Footer -->
+        <div id="footer-container" class="mt-4 sm:mt-6"></div>
+    </div>
+
+    <script>
+        let selectedRating = 0;
+        let isSuperAdmin = false; // Set to true for super admin access (implement actual logic as needed)
+        let comments = [];
+
+        // Fallback functions to prevent errors if function.js is missing
+        function updateCartCount() {
+            console.warn('updateCartCount not implemented. Define in function.js or remove call.');
+        }
+
+        function updateWishlistCount() {
+            console.warn('updateWishlistCount not implemented. Define in function.js or remove call.');
+        }
+
+        function openCommentForm() {
+            document.getElementById("comment-form").classList.remove("hidden");
+            document.getElementById("review-image").disabled = false;
+            document.querySelector("#comment-form button[type='button']").onclick = submitNewComment;
+        }
+
+        function hideCommentForm() {
+            document.getElementById("comment-form").classList.add("hidden");
+            resetStarRating();
+            document.getElementById("review-image").value = "";
+        }
+
+        function setStarRating(el) {
+            selectedRating = parseInt(el.getAttribute("data-value"));
+            let stars = document.querySelectorAll("#modal-rating .star");
+            stars.forEach(star => {
+                star.style.color = star.getAttribute("data-value") <= selectedRating ? "gold" : "gray";
+                star.classList.toggle("selected", star.getAttribute("data-value") <= selectedRating);
+            });
+        }
+
+        function resetStarRating() {
+            let stars = document.querySelectorAll("#modal-rating .star");
+            stars.forEach(star => {
+                star.style.color = "gray";
+                star.classList.remove("selected");
+            });
+            selectedRating = 0;
+        }
+
+        function submitNewComment() {
+            event.preventDefault();
+
+            const userId = document.getElementById("modal-user-id").value.trim();
+            const comment = document.getElementById("modal-comment").value.trim();
+            const imageInput = document.getElementById("review-image");
+            const imageFile = imageInput.files[0];
+
+            if (!userId || !comment || selectedRating === 0) {
+                alert("Please fill all fields (except image) and select a rating.");
+                return;
+            }
+
+            const newComment = {
+                userId,
+                rating: selectedRating,
+                commentText: comment,
+                likes: 0,
+                dislikes: 0,
+                feedback: null,
+                date: new Date().toLocaleDateString(),
+                photo: null
+            };
+
+            if (imageFile) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    newComment.photo = e.target.result;
+                    comments.push(newComment);
+                    saveComments();
+                    renderComments();
+                    document.getElementById("modal-user-id").value = "";
+                    document.getElementById("modal-comment").value = "";
+                    document.getElementById("review-image").value = "";
+                    resetStarRating();
+                    hideCommentForm();
+                };
+                reader.onerror = function(e) {
+                    console.error('Error reading image file:', e);
+                    alert('Failed to upload image. Please try again.');
+                };
+                reader.readAsDataURL(imageFile);
+            } else {
+                comments.push(newComment);
+                saveComments();
+                renderComments();
+                document.getElementById("modal-user-id").value = "";
+                document.getElementById("modal-comment").value = "";
+                document.getElementById("review-image").value = "";
+                resetStarRating();
+                hideCommentForm();
+            }
+        }
+
+        function editComment(index) {
+            if (!isSuperAdmin) {
+                alert("Only super admins can edit reviews.");
+                return;
+            }
+            const comment = comments[index];
+            document.getElementById("modal-user-id").value = comment.userId;
+            document.getElementById("modal-comment").value = comment.commentText;
+            setStarRating(document.querySelector(`#modal-rating .star[data-value="${comment.rating}"]`));
+            document.getElementById("review-image").disabled = true;
+            openCommentForm();
+
+            document.querySelector("#comment-form button[type='button']").onclick = function() {
+                comments[index] = {
+                    ...comments[index],
+                    userId: document.getElementById("modal-user-id").value.trim(),
+                    rating: selectedRating,
+                    commentText: document.getElementById("modal-comment").value.trim(),
+                    date: new Date().toLocaleDateString()
+                };
+                saveComments();
+                renderComments();
+                document.getElementById("modal-user-id").value = "";
+                document.getElementById("modal-comment").value = "";
+                document.getElementById("review-image").value = "";
+                resetStarRating();
+                hideCommentForm();
+            };
+        }
+
+        function deleteComment(index) {
+            if (!isSuperAdmin) {
+                alert("Only super admins can delete reviews.");
+                return;
+            }
+            if (confirm("Are you sure you want to delete this review?")) {
+                comments.splice(index, 1);
+                saveComments();
+                renderComments();
+            }
+        }
+
+        function renderComments() {
+            const customerReviews = document.getElementById("customer-reviews");
+            customerReviews.innerHTML = "";
+
+            comments.forEach((comment, index) => {
+                const avatarHTML = comment.photo
+                    ? `<img src="${comment.photo}" class="w-8 h-8 sm:w-10 sm:h-10 rounded-full" alt="User Photo" onerror="this.outerHTML='<div class=&quot;w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-300 flex items-center justify-center text-white font-bold text-xs sm:text-sm&quot;>${comment.userId.split(' ').map(n => n.charAt(0)).join('').toUpperCase()}</div>'">`
+                    : `<div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-300 flex items-center justify-center text-white font-bold text-xs sm:text-sm">${comment.userId.split(' ').map(n => n.charAt(0)).join('').toUpperCase()}</div>`;
+
+                const feedbackHTML = comment.feedback === null
+                    ? `
+                    <div class="flex items-center mt-2">
+                        <span class="mr-2 text-xs sm:text-sm">Do you find this helpful?</span>
+                        <button class="bg-blue-500 text-white px-2 py-1 rounded-lg mr-2 text-xs sm:text-sm" onclick="submitFeedback(${index}, true)">Yes</button>
+                        <button class="bg-gray-300 text-black px-2 py-1 rounded-lg text-xs sm:text-sm" onclick="submitFeedback(${index}, false)">No</button>
+                    </div>`
+                    : `<span class="text-gray-500 text-xs sm:text-sm">${comment.feedback ? 'Helpful' : 'Not Helpful'}</span>`;
+
+                const commentHTML = `
+                    <div class="border p-3 sm:p-4 rounded-lg shadow-md bg-blue-50">
+                        <div class="flex items-center space-x-2 sm:space-x-3 flex-wrap">
+                            ${avatarHTML}
+                            <span class="text-base sm:text-lg font-semibold">${comment.userId}</span>
+                            <span class="text-yellow-500 text-sm sm:text-base">${'⭐'.repeat(comment.rating)}</span>
+                            <span class="text-gray-500 text-xs sm:text-sm">${comment.date}</span>
+                        </div>
+                        <p class="text-gray-600 mt-2 text-sm sm:text-base">${comment.commentText}</p>
+                        <div class="flex items-center mt-2 sm:mt-3">
+                            <button class="text-green-500 flex items-center mr-3 sm:mr-4 text-sm sm:text-base" onclick="toggleLike(${index})">
+                                👍 <span class="ml-1">${comment.likes}</span>
+                            </button>
+                            <button class="text-red-500 flex items-center text-sm sm:text-base" onclick="toggleDislike(${index})">
+                                👎 <span class="ml-1">${comment.dislikes}</span>
+                            </button>
+                        </div>
+                        ${feedbackHTML}
+                        ${isSuperAdmin ? `
+                        <div class="flex items-center mt-2">
+                            <button class="text-blue-500 hover:text-blue-700 mr-2 text-xs sm:text-sm" onclick="editComment(${index})">Edit</button>
+                            <button class="text-red-500 hover:text-red-700 text-xs sm:text-sm" onclick="deleteComment(${index})">Delete</button>
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
+                customerReviews.innerHTML += commentHTML;
+            });
+        }
+
+        function toggleLike(index) {
+            comments[index].likes++;
+            saveComments();
+            renderComments();
+        }
+
+        function toggleDislike(index) {
+            comments[index].dislikes++;
+            saveComments();
+            renderComments();
+        }
+
+        function submitFeedback(index, isHelpful) {
+            comments[index].feedback = isHelpful;
+            saveComments();
+            renderComments();
+        }
+
+        function saveComments() {
+            try {
+                localStorage.setItem("comments", JSON.stringify(comments));
+            } catch (e) {
+                console.error('Error saving comments to localStorage:', e);
+            }
+        }
+
+        function loadComments() {
+            try {
+                const storedComments = JSON.parse(localStorage.getItem("comments"));
+                if (!storedComments || storedComments.length === 0) {
+                    comments = [
+                        { userId: "Alice Johnson", rating: 5, commentText: "Amazing product!", likes: 10, dislikes: 0, feedback: true, date: new Date().toLocaleDateString(), photo: "images/v-1.jpeg" },
+                        { userId: "Bob Smith", rating: 4, commentText: "Very good quality.", likes: 8, dislikes: 1, feedback: true, date: new Date().toLocaleDateString(), photo: "images/v-2.jpeg" },
+                        { userId: "Charlie Brown", rating: 5, commentText: "Love it!", likes: 12, dislikes: 0, feedback: true, date: new Date().toLocaleDateString(), photo: "images/v-3.jpeg" },
+                        { userId: "Dana White", rating: 4, commentText: "Nice craftsmanship.", likes: 7, dislikes: 2, feedback: true, date: new Date().toLocaleDateString(), photo: "images/v-4.jpeg" },
+                        { userId: "Eve Green", rating: 5, commentText: "Perfect for my home.", likes: 15, dislikes: 0, feedback: true, date: new Date().toLocaleDateString(), photo: "images/v-5.jpeg" },
+                        { userId: "Frank Harris", rating: 3, commentText: "Good but could be better.", likes: 5, dislikes: 3, feedback: false, date: new Date().toLocaleDateString(), photo: "images/v-6.jpeg" },
+                        { userId: "Grace Lee", rating: 5, commentText: "Highly recommend!", likes: 20, dislikes: 0, feedback: true, date: new Date().toLocaleDateString(), photo: "images/v-1.jpeg" },
+                        { userId: "Henry Davis", rating: 4, commentText: "Satisfied with purchase.", likes: 9, dislikes: 1, feedback: true, date: new Date().toLocaleDateString(), photo: "images/v-4.jpeg" },
+                        { userId: "Ivy Clark", rating: 5, commentText: "Excellent!", likes: 11, dislikes: 0, feedback: true, date: new Date().toLocaleDateString(), photo: "images/v-5.jpeg" }
+                    ];
+                    saveComments();
+                } else {
+                    comments = storedComments;
+                }
+                renderComments();
+            } catch (e) {
+                console.error('Error loading comments from localStorage:', e);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const productName = urlParams.get("name") || "Handcrafted Wooden Bowl";
+                const productImage = urlParams.get("image") || "images/product1.jpg";
+                const productDescription = urlParams.get("description") || "This handcrafted wooden bowl is perfect for serving salads, fruits, or snacks. Made from sustainably sourced wood, it adds a rustic charm to your dining experience.";
+                const rawPrice = urlParams.get("price") || "1000.00";
+                const cleanedPrice = rawPrice.replace(/[^\d.]/g, "");
+                const originalPrice = parseFloat(cleanedPrice) || 1000.00;
+
+                const discountPercentage = 10;
+                const discountAmount = (originalPrice * discountPercentage) / 100;
+                const discountedPrice = originalPrice - discountAmount;
+
+                document.getElementById("product-name").textContent = productName;
+                document.getElementById("product-description").textContent = productDescription;
+                document.getElementById("product-price").textContent = `Rs ${discountedPrice.toFixed(2)}`;
+                document.getElementById("product-original-price").textContent = `Rs ${originalPrice.toFixed(2)}`;
+                document.getElementById("product-discount").textContent = `${discountPercentage}% OFF`;
+
+                const isInStock = Math.random() < 0.5;
+                const stockStatusElement = document.getElementById("stock-status");
+                const buyNowButton = document.getElementById("buy-now-button");
+
+                if (isInStock) {
+                    stockStatusElement.textContent = "In Stock";
+                    stockStatusElement.style.color = "green";
+                    buyNowButton.disabled = false;
+                    buyNowButton.classList.remove("opacity-50", "cursor-not-allowed");
+                } else {
+                    stockStatusElement.textContent = "Out of Stock";
+                    stockStatusElement.style.color = "red";
+                    buyNowButton.disabled = true;
+                    buyNowButton.classList.add("opacity-50", "cursor-not-allowed");
+                }
+
+                const media = [
+                    { type: 'image', src: productImage },
+                    { type: 'image', src: 'images/product2.jpg' },
+                    { type: 'image', src: 'images/product3.jpg' },
+                    { type: 'video', src: 'videos/product-video.mp4', thumbnail: 'images/video-thumbnail.jpg' }
+                ];
+
+                function loadMain(index) {
+                    try {
+                        const item = media[index];
+                        const main = document.getElementById('main-media');
+                        main.innerHTML = '';
+                        if (item.type === 'image') {
+                            const img = document.createElement('img');
+                            img.id = 'main-image';
+                            img.src = item.src;
+                            img.alt = 'Product Image';
+                            img.classList.add('w-full', 'h-full', 'object-cover', 'rounded-lg', 'cursor-pointer');
+                            main.appendChild(img);
+
+                            img.addEventListener('click', function () {
+                                document.getElementById('modal-image').src = img.src;
+                                document.getElementById('modal-image').classList.remove('hidden');
+                                document.getElementById('modal-video').classList.add('hidden');
+                                document.getElementById('image-modal').classList.remove('hidden');
+                            });
+                        } else if (item.type === 'video') {
+                            const video = document.createElement('video');
+                            video.id = 'main-video';
+                            video.src = item.src;
+                            video.controls = true;
+                            video.classList.add('w-full', 'h-full', 'object-cover', 'rounded-lg');
+                            main.appendChild(video);
+
+                            video.addEventListener('click', function () {
+                                document.getElementById('modal-video').src = video.src;
+                                document.getElementById('modal-video').classList.remove('hidden');
+                                document.getElementById('modal-image').classList.add('hidden');
+                                document.getElementById('image-modal').classList.remove('hidden');
+                            });
+                        }
+                    } catch (e) {
+                        console.error('Error loading main media:', e);
+                    }
+                }
+
+                const thumbnails = document.getElementById('thumbnails');
+                media.forEach((item, index) => {
+                    try {
+                        const thumbDiv = document.createElement('div');
+                        thumbDiv.classList.add('w-16', 'h-16', 'sm:w-20', 'sm:h-20', 'cursor-pointer', 'flex-shrink-0', 'relative');
+                        const thumbImg = document.createElement('img');
+                        thumbImg.src = item.type === 'image' ? item.src : item.thumbnail;
+                        thumbImg.classList.add('w-full', 'h-full', 'object-cover', 'rounded');
+                        thumbDiv.appendChild(thumbImg);
+                        if (item.type === 'video') {
+                            const playIcon = document.createElement('div');
+                            playIcon.classList.add('absolute', 'top-1/2', 'left-1/2', 'transform', '-translate-x-1/2', '-translate-y-1/2', 'text-white', 'text-lg', 'sm:text-2xl', 'opacity-70');
+                            playIcon.innerHTML = '<i class="fas fa-play"></i>';
+                            thumbDiv.appendChild(playIcon);
+                        }
+                        thumbDiv.addEventListener('click', () => loadMain(index));
+                        thumbnails.appendChild(thumbDiv);
+                    } catch (e) {
+                        console.error('Error creating thumbnail:', e);
+                    }
+                });
+
+                loadMain(0);
+
+                document.getElementById('close-modal').addEventListener('click', () => {
+                    document.getElementById('image-modal').classList.add('hidden');
+                    document.getElementById('modal-video').pause();
+                });
+
+                document.getElementById('image-modal').addEventListener('click', (event) => {
+                    if (event.target === document.getElementById('image-modal')) {
+                        document.getElementById('image-modal').classList.add('hidden');
+                        document.getElementById('modal-video').pause();
+                    }
+                });
+
+                let scale = 1;
+                const zoomStep = 0.2;
+
+                document.getElementById('modal-image').addEventListener('wheel', function (event) {
+                    event.preventDefault();
+                    if (event.deltaY < 0) {
+                        scale += zoomStep;
+                    } else {
+                        scale -= zoomStep;
+                    }
+                    scale = Math.min(Math.max(1, scale), 3);
+                    document.getElementById('modal-image').style.transform = `scale(${scale})`;
+                });
+
+                let touchStartDist = 0;
+                document.getElementById('modal-image').addEventListener('touchstart', function (event) {
+                    if (event.touches.length === 2) {
+                        event.preventDefault();
+                        touchStartDist = getTouchDistance(event.touches);
+                    }
+                });
+
+                document.getElementById('modal-image').addEventListener('touchmove', function (event) {
+                    if (event.touches.length === 2) {
+                        event.preventDefault();
+                        const newDist = getTouchDistance(event.touches);
+                        if (newDist > touchStartDist) {
+                            scale += zoomStep;
+                        } else {
+                            scale -= zoomStep;
+                        }
+                        scale = Math.min(Math.max(1, scale), 3);
+                        document.getElementById('modal-image').style.transform = `scale(${scale})`;
+                        touchStartDist = newDist;
+                    }
+                });
+
+                function getTouchDistance(touches) {
+                    const dx = touches[0].clientX - touches[1].clientX;
+                    const dy = touches[0].clientY - touches[1].clientY;
+                    return Math.sqrt(dx * dx + dy * dy);
+                }
+
+                const productDetails = [
+                    { icon: "fa-palette", label: "Hand-painted Design" },
+                    { icon: "fa-ruler-vertical", label: "30cm Height" },
+                    { icon: "fa-water", label: "Waterproof Finish" }
+                ];
+
+                const artisanDetails = [
+                    { icon: "fa-brush", label: "Handmade in Small Batches" },
+                    { icon: "fa-clock", label: "Creation Time: 5-7 Days" }
+                ];
+
+                const vendorDetails = [
+                    { icon: "fa-building", label: "Name: <a href='vendor1.html' class='text-blue-500 hover:underline hover:text-blue-500'>Craftsy Handicrafts Pvt. Ltd.</a>" },
+                    { icon: "fa-calendar", label: "Since: 2015" },
+                    { icon: "fa-star", label: "Rating: 4.5/5" }
+                ];
+
+                function displayProductDetails() {
+                    try {
+                        const productList = document.getElementById("product-details-list");
+                        productList.innerHTML = productDetails
+                            .map(item => `<li class="flex items-center"><i class="fas ${item.icon} mr-2 text-gray-500"></i> ${item.label}</li>`)
+                            .join("");
+                    } catch (e) {
+                        console.error('Error displaying product details:', e);
+                    }
+                }
+
+                function displayArtisanDetails() {
+                    try {
+                        const artisanList = document.getElementById("artisan-details-list");
+                        artisanList.innerHTML = artisanDetails
+                            .map(item => `<li class="flex items-center"><i class="fas ${item.icon} mr-2 text-gray-500"></i> ${item.label}</li>`)
+                            .join("");
+                    } catch (e) {
+                        console.error('Error displaying artisan details:', e);
+                    }
+                }
+
+                function displayVendorDetails() {
+                    try {
+                        const vendorList = document.getElementById("vendor-details-list");
+                        vendorList.innerHTML = vendorDetails
+                            .map(item => `<li class="flex items-center"><i class="fas ${item.icon} mr-2 text-gray-500"></i> ${item.label}</li>`)
+                            .join("");
+                    } catch (e) {
+                        console.error('Error displaying vendor details:', e);
+                    }
+                }
+
+                displayProductDetails();
+                displayArtisanDetails();
+                displayVendorDetails();
+
+                function openCustomizationPopup() {
+                    document.getElementById("customization-popup").classList.remove("hidden");
+                }
+
+                function closeCustomizationPopup() {
+                    document.getElementById("customization-popup").classList.add("hidden");
+                }
+
+                function applyCustomization() {
+                    try {
+                        const originalPriceText = document.getElementById("product-price").textContent.replace('Rs ', '');
+                        let originalPrice = parseFloat(originalPriceText) || 0;
+                        const customizationCharge = originalPrice * 0.15;
+                        let finalPrice = originalPrice + customizationCharge;
+                        document.getElementById("product-price").textContent = `Rs ${finalPrice.toFixed(2)}`;
+                        closeCustomizationPopup();
+                    } catch (e) {
+                        console.error('Error applying customization:', e);
+                    }
+                }
+
+                function redirectToCheckout() {
+                    try {
+                        const productName = document.getElementById("product-name").textContent;
+                        const productPrice = document.getElementById("product-price").textContent.replace('Rs ', '');
+                        const productDescription = document.getElementById("product-description").textContent;
+                        const productImage = document.getElementById("main-image") ? document.getElementById("main-image").src : '';
+
+                        const checkoutURL = `checkout.html?name=${encodeURIComponent(productName)}&price=${encodeURIComponent(productPrice)}&description=${encodeURIComponent(productDescription)}&image=${encodeURIComponent(productImage)}`;
+                        window.location.href = checkoutURL;
+                    } catch (e) {
+                        console.error('Error redirecting to checkout:', e);
+                    }
+                }
+
+                function toggleFavorite() {
+                    try {
+                        const productName = document.getElementById("product-name").textContent;
+                        const productImage = document.getElementById("main-image") ? document.getElementById("main-image").src : '';
+                        const productPrice = document.getElementById("product-price").textContent;
+                        const productDescription = document.getElementById("product-description").textContent;
+
+                        let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+                        const productIndex = wishlist.findIndex(item => item.name === productName);
+
+                        if (productIndex === -1) {
+                            wishlist.push({ name: productName, image: productImage, price: productPrice, description: productDescription });
+                            document.getElementById("favorite-icon").textContent = "favorite";
+                            document.getElementById("favorite-icon").style.color = "red";
+                            alert(`${productName} has been added to your wishlist!`);
+                        } else {
+                            wishlist.splice(productIndex, 1);
+                            document.getElementById("favorite-icon").textContent = "favorite_border";
+                            document.getElementById("favorite-icon").style.color = "gray";
+                            alert(`${productName} has been removed from your wishlist!`);
+                        }
+
+                        localStorage.setItem("wishlist", JSON.stringify(wishlist));
+                    } catch (e) {
+                        console.error('Error toggling favorite:', e);
+                    }
+                }
+
+                function shareProduct() {
+                    try {
+                        const productName = document.getElementById("product-name").textContent;
+                        const productPrice = document.getElementById("product-price").textContent;
+                        const productDescription = document.getElementById("product-description").textContent;
+                        const productImage = document.getElementById("main-image") ? document.getElementById("main-image").src : '';
+
+                        const shareData = {
+                            title: productName,
+                            text: `${productDescription}\nPrice: ${productPrice}`,
+                            url: window.location.href
+                        };
+
+                        if (navigator.share) {
+                            navigator.share(shareData)
+                                .then(() => console.log('Product shared successfully!'))
+                                .catch((error) => console.error('Error sharing product:', error));
+                        } else {
+                            alert('Sharing is not supported in this browser. You can copy the link: ' + shareData.url);
+                        }
+                    } catch (e) {
+                        console.error('Error sharing product:', e);
+                    }
+                }
+
+                // Initialize
+                updateCartCount();
+                updateWishlistCount();
+                loadComments();
+            } catch (e) {
+                console.error('Error during DOMContentLoaded:', e);
+            }
+        });
+    </script>
+    <!-- Toastify JS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="./function.js"></script>
+    <!-- External Scripts -->
+    <script src="navbar.js"></script>
+    <script src="footer.js"></script>
+</body>
+
+</html>

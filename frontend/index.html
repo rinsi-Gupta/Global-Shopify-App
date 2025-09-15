@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GlobalShopify</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+        rel="stylesheet">
+    <link href="./src/styles/output.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <!-- Toastify CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+    <!-- Toastify JS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <script src="topratedproducts.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="min-h-screen">
+    <!-- Sticky Navbar Container -->
+    <div class="sticky top-0 left-0 z-[99]" id="navbar-container"></div>
+
+    <!-- Hero Section -->
+    <div class="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 items-stretch">
+
+            <!-- Left Hero Content (2/3 width on large screens) -->
+            <div
+                class="relative z-0 bg-yellow-50 p-6 sm:p-10 md:p-14 rounded-2xl shadow-lg overflow-hidden lg:col-span-2 h-[500px] flex flex-col md:flex-row items-center justify-between">
+
+                <!-- Text Content -->
+                <div class="relative z-10 w-full md:w-3/5 h-full flex flex-col justify-center md:pr-12">
+                    <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
+                        Discover Authentic Handicrafts!
+                    </h2>
+                    <p class="text-gray-700 mb-8 text-base sm:text-lg leading-relaxed font-light">
+                        Handmade treasures crafted by skilled artisans.
+                    </p>
+                    <a href="product.html"
+                        class="inline-block w-fit px-4 py-3 bg-black text-white rounded-full text-sm font-semibold hover:bg-gray-800 transition">
+                        Shop Now
+                    </a>
+                </div>
+
+                <!-- Hero Image -->
+                <div class="relative w-full md:w-[45%] h-[220px] sm:h-[300px] md:h-full">
+                    <img id="changingImage" src="images/hero1.jpg" alt="Handicraft Image"
+                        class="w-full h-full object-cover rounded-2xl md:rounded-l-[250px]" />
+                </div>
+            </div>
+
+            <!-- Right-side Product/Ad -->
+            <div class="relative shadow-xl rounded-2xl overflow-hidden w-full h-[500px]">
+                <img src="images/hero4.avif" alt="Handmade Pottery" class="w-full h-full object-cover rounded-2xl" />
+                <div class="absolute inset-0 bg-black bg-opacity-30"></div>
+                <div class="absolute bottom-4 left-4 text-white">
+                    <h3 class="text-xl sm:text-2xl text-white font-bold tracking-wide">Customized Portraits</h3>
+                    <a href="portrait.html"
+                        class="text-sm font-semibold text-white underline hover:text-gray-300 transition">
+                        Shop Now
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- Top Rated Picks -->
+    <div id="explore-section" class="w-full px-4 sm:px-6 lg:px-12 py-10 mx-auto">
+        <!-- Section Heading -->
+        <h1 class="text-xl sm:text-3xl md:text-4xl font-bold text-center text-gray-900 tracking-wide mb-6">
+            <span class="bg-gradient-to-r from-pink-600 to-purple-500 text-transparent bg-clip-text">
+                Top Rated Products
+            </span>
+        </h1>
+
+        <!-- Carousel Wrapper -->
+        <div class="relative w-full max-w-[1400px] mx-auto">
+            <!-- Swiper Container -->
+            <div class="swiper mySwiper1 w-full rounded-xl overflow-hidden shadow-lg">
+                <div class="swiper-wrapper" id="mostly-purchased-container">
+                    <div class="swiper-slide h-[30rem]">
+                        <div class="bg-white rounded-lg shadow-md p-4 h-full flex flex-col justify-between gap-3">
+
+                            <!-- ✅ FIXED HEIGHT IMAGE CONTAINER -->
+                            <div
+                                class="w-full h-40 overflow-hidden rounded-md bg-gray-100 flex items-center justify-center">
+                                <img src="https://example.com/your-image.jpg" alt="Product"
+                                    class="w-full h-full object-cover transition duration-300 ease-in-out" />
+                            </div>
+
+                            <!-- Product Info -->
+                            <div class="flex flex-col flex-grow justify-between">
+                                <h2 class="text-sm font-semibold text-gray-800 line-clamp-2 min-h-[3rem] leading-tight">
+                                    Trinket Trove
+                                </h2>
+                                <p class="text-sm text-gray-600">Handcrafted woven cane lighting.</p>
+
+                                <div class="flex items-center gap-1 mt-1 text-yellow-400 text-sm">
+                                    <!-- Example Stars -->
+                                    <span class="material-symbols-outlined">star</span>
+                                    <span class="material-symbols-outlined">star</span>
+                                    <span class="material-symbols-outlined">star</span>
+                                    <span class="material-symbols-outlined">star_half</span>
+                                    <span class="material-symbols-outlined text-gray-300">star</span>
+                                    <span class="text-gray-600 ml-1">(4/5)</span>
+                                </div>
+
+                                <div class="mt-1 flex justify-between items-center">
+                                    <span class="font-semibold text-gray-900">Rs 8,457</span>
+                                    <div class="flex gap-2">
+                                        <span class="material-symbols-outlined text-gray-600">shopping_cart</span>
+                                        <span class="material-symbols-outlined text-gray-600">favorite_border</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- JS dynamically inserts more slides here -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- Offers Section -->
+    <section class="w-full px-4 sm:px-6 lg:px-12 py-10 mx-auto">
+        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-center text-gray-900 tracking-wide mb-8">
+            <span class="bg-gradient-to-r from-red-600 to-red-500 text-transparent bg-clip-text">
+                Hot Deals
+            </span>
+        </h2>
+
+        <div class="relative w-full max-w-[1400px] mx-auto">
+            <!-- Swiper Container -->
+            <div class="swiper mySwiper2 rounded-xl overflow-hidden shadow-lg">
+                <div class="swiper-wrapper" id="offers-container">
+                    <!-- Dynamic offers will be injected here -->
+                </div>
+            </div>
+
+
+        </div>
+    </section>
+
+
+    <!-- Gift Card Section -->
+    <section class="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-12 py-10">
+        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-center text-gray-900 tracking-wide mb-8">
+            <span class="bg-gradient-to-r from-yellow-800 to-yellow-500 text-transparent bg-clip-text">
+                Choose & Gift with Love
+            </span>
+        </h2>
+
+        <div class="flex flex-wrap justify-center gap-6 sm:gap-8">
+            <!-- Card Item -->
+            <a href="her.html" class="flex flex-col items-center w-32 sm:w-40 md:w-48">
+                <div
+                    class="w-full aspect-square rounded-full overflow-hidden border-4 border-gray-300 hover:border-gray-500 transition">
+                    <img src="images/her7.webp" alt="Gifts for Her" class="w-full h-full object-cover" />
+                </div>
+                <span class="mt-2 text-center text-gray-700 text-sm sm:text-base font-semibold">Gifts for Her</span>
+            </a>
+
+            <a href="him.html" class="flex flex-col items-center w-32 sm:w-40 md:w-48">
+                <div
+                    class="w-full aspect-square rounded-full overflow-hidden border-4 border-gray-300 hover:border-gray-500 transition">
+                    <img src="images/him1.jpg" alt="Gifts for Him" class="w-full h-full object-cover" />
+                </div>
+                <span class="mt-2 text-center text-gray-700 text-sm sm:text-base font-semibold">Gifts for Him</span>
+            </a>
+
+            <a href="festive.html" class="flex flex-col items-center w-32 sm:w-40 md:w-48">
+                <div
+                    class="w-full aspect-square rounded-full overflow-hidden border-4 border-gray-300 hover:border-gray-500 transition">
+                    <img src="images/festive3.jpg" alt="Festive Gifts" class="w-full h-full object-cover" />
+                </div>
+                <span class="mt-2 text-center text-gray-700 text-sm sm:text-base font-semibold">Festive Gifts</span>
+            </a>
+
+            <a href="birthday.html" class="flex flex-col items-center w-32 sm:w-40 md:w-48">
+                <div
+                    class="w-full aspect-square rounded-full overflow-hidden border-4 border-gray-300 hover:border-gray-500 transition">
+                    <img src="images/birth1.jpg" alt="Birthday Gifts" class="w-full h-full object-cover" />
+                </div>
+                <span class="mt-2 text-center text-gray-700 text-sm sm:text-base font-semibold">Birthday Gifts</span>
+            </a>
+
+            <a href="wedding.html" class="flex flex-col items-center w-32 sm:w-40 md:w-48">
+                <div
+                    class="w-full aspect-square rounded-full overflow-hidden border-4 border-gray-300 hover:border-gray-500 transition">
+                    <img src="images/wed1.jpg" alt="Wedding Gifts" class="w-full h-full object-cover" />
+                </div>
+                <span class="mt-2 text-center text-gray-700 text-sm sm:text-base font-semibold">Wedding Gifts</span>
+            </a>
+
+            <a href="personal.html" class="flex flex-col items-center w-32 sm:w-40 md:w-48">
+                <div
+                    class="w-full aspect-square rounded-full overflow-hidden border-4 border-gray-300 hover:border-gray-500 transition">
+                    <img src="images/frame1.jpg" alt="Personalized Gifts" class="w-full h-full object-cover" />
+                </div>
+                <span class="mt-2 text-center text-gray-700 text-sm sm:text-base font-semibold">Personalized
+                    Gifts</span>
+            </a>
+        </div>
+    </section>
+
+
+    <!-- Vendor Section -->
+    <!-- <section id="vendor-section" class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-12 py-10">
+        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-center text-gray-900 tracking-wide mb-10">
+            <span class="bg-gradient-to-r from-blue-700 to-cyan-400 text-transparent bg-clip-text">
+                Discover Small Shops
+            </span>
+        </h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <a href="vendor1.html"
+                class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                <div class="flex flex-col sm:flex-row p-6 gap-4">
+                    <div class="flex-shrink-0 mx-auto sm:mx-0">
+                        <img src="images/v-1.jpeg" alt="Vendor 1"
+                            class="w-28 h-28 sm:w-32 sm:h-32 rounded-full object-cover border-4 border-blue-100 hover:border-blue-200 transition-all duration-300">
+                    </div>
+                    <div class="flex-grow text-center sm:text-left">
+                        <span class="block text-lg sm:text-xl font-bold mb-2">Craftsy</span>
+                        <p class="text-gray-600 text-sm sm:text-base mb-4">Skillfully made crafts with personal charm.
+                        </p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700 mb-4">
+                            <div class="flex items-center justify-center sm:justify-start gap-1">
+                                <span class="material-symbols-outlined text-blue-500">location_on</span>
+                                <span>New Delhi, India</span>
+                            </div>
+                            <div class="flex items-center justify-center sm:justify-start gap-1">
+                                <span class="material-symbols-outlined text-blue-500">star</span>
+                                <span>4.8/5</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-center sm:justify-end">
+                            <button
+                                class="bg-blue-500 text-white px-5 py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm sm:text-base">
+                                View Profile
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+           
+            <a href="vendor2.html"
+                class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                <div class="flex flex-col sm:flex-row p-6 gap-4">
+                    <div class="flex-shrink-0 mx-auto sm:mx-0">
+                        <img src="images/v-2.jpeg" alt="Vendor 2"
+                            class="w-28 h-28 sm:w-32 sm:h-32 rounded-full object-cover border-4 border-blue-100 hover:border-blue-200 transition-all duration-300">
+                    </div>
+                    <div class="flex-grow text-center sm:text-left">
+                        <span class="block text-lg sm:text-xl font-bold mb-2">NatureNest</span>
+                        <p class="text-gray-600 text-sm sm:text-base mb-4">Eco-friendly home decor inspired by nature.
+                        </p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700 mb-4">
+                            <div class="flex items-center justify-center sm:justify-start gap-1">
+                                <span class="material-symbols-outlined text-blue-500">location_on</span>
+                                <span>Bangalore, India</span>
+                            </div>
+                            <div class="flex items-center justify-center sm:justify-start gap-1">
+                                <span class="material-symbols-outlined text-blue-500">star</span>
+                                <span>4.6/5</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-center sm:justify-end">
+                            <button
+                                class="bg-blue-500 text-white px-5 py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm sm:text-base">
+                                View Profile
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+          
+            <a href="vendor3.html"
+                class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                <div class="flex flex-col sm:flex-row p-6 gap-4">
+                    <div class="flex-shrink-0 mx-auto sm:mx-0">
+                        <img src="images/v-3.jpg" alt="Vendor 3"
+                            class="w-28 h-28 sm:w-32 sm:h-32 rounded-full object-cover border-4 border-blue-100 hover:border-blue-200 transition-all duration-300">
+                    </div>
+                    <div class="flex-grow text-center sm:text-left">
+                        <span class="block text-lg sm:text-xl font-bold mb-2">Weave & Co.</span>
+                        <p class="text-gray-600 text-sm sm:text-base mb-4">Authentic handwoven textiles with legacy.</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700 mb-4">
+                            <div class="flex items-center justify-center sm:justify-start gap-1">
+                                <span class="material-symbols-outlined text-blue-500">location_on</span>
+                                <span>Kolkata, India</span>
+                            </div>
+                            <div class="flex items-center justify-center sm:justify-start gap-1">
+                                <span class="material-symbols-outlined text-blue-500">star</span>
+                                <span>4.9/5</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-center sm:justify-end">
+                            <button
+                                class="bg-blue-500 text-white px-5 py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm sm:text-base">
+                                View Profile
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+          
+            <a href="vendor4.html"
+                class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                <div class="flex flex-col sm:flex-row p-6 gap-4">
+                    <div class="flex-shrink-0 mx-auto sm:mx-0">
+                        <img src="images/v-4.jpg" alt="Vendor 4"
+                            class="w-28 h-28 sm:w-32 sm:h-32 rounded-full object-cover border-4 border-blue-100 hover:border-blue-200 transition-all duration-300">
+                    </div>
+                    <div class="flex-grow text-center sm:text-left">
+                        <span class="block text-lg sm:text-xl font-bold mb-2">Tribal Touch</span>
+                        <p class="text-gray-600 text-sm sm:text-base mb-4">Handcrafted tribal jewelry & accessories.</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700 mb-4">
+                            <div class="flex items-center justify-center sm:justify-start gap-1">
+                                <span class="material-symbols-outlined text-blue-500">location_on</span>
+                                <span>Guwahati, India</span>
+                            </div>
+                            <div class="flex items-center justify-center sm:justify-start gap-1">
+                                <span class="material-symbols-outlined text-blue-500">star</span>
+                                <span>4.7/5</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-center sm:justify-end">
+                            <button
+                                class="bg-blue-500 text-white px-5 py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm sm:text-base">
+                                View Profile
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <a href="vendor5.html"
+                class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                <div class="flex flex-col sm:flex-row p-6 gap-4">
+                    <div class="flex-shrink-0 mx-auto sm:mx-0">
+                        <img src="images/v-5.jpeg" alt="Vendor 5"
+                            class="w-28 h-28 sm:w-32 sm:h-32 rounded-full object-cover border-4 border-blue-100 hover:border-blue-200 transition-all duration-300">
+                    </div>
+                    <div class="flex-grow text-center sm:text-left">
+                        <span class="block text-lg sm:text-xl font-bold mb-2">ClayCrafters</span>
+                        <p class="text-gray-600 text-sm sm:text-base mb-4">Sustainable pottery for every occasion &
+                            festivals</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700 mb-4">
+                            <div class="flex items-center justify-center sm:justify-start gap-1">
+                                <span class="material-symbols-outlined text-blue-500">location_on</span>
+                                <span>Jaipur, India</span>
+                            </div>
+                            <div class="flex items-center justify-center sm:justify-start gap-1">
+                                <span class="material-symbols-outlined text-blue-500">star</span>
+                                <span>4.5/5</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-center sm:justify-end">
+                            <button
+                                class="bg-blue-500 text-white px-5 py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm sm:text-base">
+                                View Profile
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <a href="vendor6.html"
+                class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                <div class="flex flex-col sm:flex-row p-6 gap-4">
+                    <div class="flex-shrink-0 mx-auto sm:mx-0">
+                        <img src="images/v-6.jpeg" alt="Vendor 6"
+                            class="w-28 h-28 sm:w-32 sm:h-32 rounded-full object-cover border-4 border-blue-100 hover:border-blue-200 transition-all duration-300">
+                    </div>
+                    <div class="flex-grow text-center sm:text-left">
+                        <span class="block text-lg sm:text-xl font-bold mb-2">Bamboo Bliss</span>
+                        <p class="text-gray-600 text-sm sm:text-base mb-4">Elegant bamboo homeware handcrafted with
+                            care.</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-700 mb-4">
+                            <div class="flex items-center justify-center sm:justify-start gap-1">
+                                <span class="material-symbols-outlined text-blue-500">location_on</span>
+                                <span>Kerala, India</span>
+                            </div>
+                            <div class="flex items-center justify-center sm:justify-start gap-1">
+                                <span class="material-symbols-outlined text-blue-500">star</span>
+                                <span>4.9/5</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-center sm:justify-end">
+                            <button
+                                class="bg-blue-500 text-white px-5 py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm sm:text-base">
+                                View Profile
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+        </div>
+    </section> -->
+
+
+    <!-- Reviews Section Carousel -->
+    <div id="reviews-section" class="max-w-[1600px] mx-auto px-4 py-12 overflow-hidden">
+        <h1 class="text-4xl font-bold text-center text-gray-900 tracking-wide mb-10">
+            <span class="bg-gradient-to-r from-orange-600 to-red-500 text-transparent bg-clip-text">
+                Testimonials
+            </span>
+        </h1>
+
+        <!-- Carousel Wrapper -->
+        <div class="overflow-hidden w-full">
+            <div id="carousel-track" class="flex transition-transform duration-700 ease-in-out">
+
+                <!-- Card 1 -->
+                <div
+                    class="carousel-card min-w-[350px] md:min-w-[500px] bg-blue-50 rounded-2xl p-8 shadow-lg mx-2 border border-gray-200">
+                    <div class="text-6xl text-gray-800 mb-4">
+                        <span class="material-symbols-outlined text-5xl text-blue-400">&ldquo;</span>
+                    </div>
+                    <p class="text-lg text-gray-800 leading-relaxed font-medium">
+                        The handcrafted bracelet I bought was absolutely stunning.
+                        The attention to detail is incredible, and it truly feels like a one-of-a-kind piece.
+                    </p>
+                    <div class="flex items-center mt-6">
+                        <img src="images/v-3.jpg"
+                            class="w-14 h-14 rounded-full object-cover mr-4 border-2 border-white shadow-md"
+                            alt="Priya Sharma" />
+                        <div>
+                            <h4 class="font-semibold text-gray-900 text-xl">Priya Sharma</h4>
+                            <div class="flex text-yellow-400">
+                                ★★★★★
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div
+                    class="carousel-card min-w-[350px] md:min-w-[500px] bg-blue-50 rounded-2xl p-8 shadow-lg mx-2 border border-gray-200">
+                    <div class="text-6xl text-gray-800 mb-4">
+                        <span class="material-symbols-outlined text-5xl text-blue-400">&ldquo;</span>
+                    </div>
+                    <p class="text-lg text-gray-800 leading-relaxed font-medium">
+                        Functional and beautiful wooden cutlery holder.
+                        The finish is smooth and fits perfectly on our kitchen shelf.
+                        Packaging was secure and arrived intact.
+                    </p>
+                    <div class="flex items-center mt-6">
+                        <img src="images/v-2.jpeg"
+                            class="w-14 h-14 rounded-full object-cover mr-4 border-2 border-white shadow-md"
+                            alt="Rahul Verma" />
+                        <div>
+                            <h4 class="font-semibold text-gray-900 text-xl">Rahul Verma</h4>
+                            <div class="flex text-yellow-400">
+                                ★★★★☆
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div
+                    class="carousel-card min-w-[350px] md:min-w-[500px] bg-blue-50 rounded-2xl p-8 shadow-lg mx-2 border border-gray-200">
+                    <div class="text-6xl text-gray-800 mb-4">
+                        <span class="material-symbols-outlined text-5xl text-blue-400">&ldquo;</span>
+                    </div>
+                    <p class="text-lg text-gray-800 leading-relaxed font-medium">
+                        The personalized portrait was a perfect gift!
+                        The artist captured the emotions so well.
+                        It brought tears of joy and now hangs proudly in our living room.
+                    </p>
+                    <div class="flex items-center mt-6">
+                        <img src="images/v-2.jpeg"
+                            class="w-14 h-14 rounded-full object-cover mr-4 border-2 border-white shadow-md"
+                            alt="Anita Desai" />
+                        <div>
+                            <h4 class="font-semibold text-gray-900 text-xl">Anita Desai</h4>
+                            <div class="flex text-yellow-400">
+                                ★★★★★
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div
+                    class="carousel-card min-w-[350px] md:min-w-[500px] bg-blue-50 rounded-2xl p-8 shadow-lg mx-2 border border-gray-200">
+                    <div class="text-6xl text-gray-800 mb-4">
+                        <span class="material-symbols-outlined text-5xl text-blue-400">&ldquo;</span>
+                    </div>
+                    <p class="text-lg text-gray-800 leading-relaxed font-medium">
+                        Fast delivery and really good product quality.
+                        I was surprised at how premium it looked in person.
+                        Colors and texture matched perfectly.
+                    </p>
+                    <div class="flex items-center mt-6">
+                        <img src="images/v-4.jpg"
+                            class="w-14 h-14 rounded-full object-cover mr-4 border-2 border-white shadow-md"
+                            alt="Sahil Mehra" />
+                        <div>
+                            <h4 class="font-semibold text-gray-900 text-xl">Sahil Mehra</h4>
+                            <div class="flex text-yellow-400">
+                                ★★★★☆
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 5 -->
+                <div
+                    class="carousel-card min-w-[350px] md:min-w-[500px] bg-blue-50 rounded-2xl p-8 shadow-lg mx-2 border border-gray-200">
+                    <div class="text-6xl text-gray-800 mb-4">
+                        <span class="material-symbols-outlined text-5xl text-blue-400">&ldquo;</span>
+                    </div>
+                    <p class="text-lg text-gray-800 leading-relaxed font-medium">
+                        I gifted a set of handmade coasters and they were a total hit at the party!
+                        Amazing packaging and the craftsmanship is top-notch.
+                    </p>
+                    <div class="flex items-center mt-6">
+                        <img src="images/v-5.jpeg"
+                            class="w-14 h-14 rounded-full object-cover mr-4 border-2 border-white shadow-md"
+                            alt="Meena Rathi" />
+                        <div>
+                            <h4 class="font-semibold text-gray-900 text-xl">Meena Rathi</h4>
+                            <div class="flex text-yellow-400">
+                                ★★★★★
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 6 -->
+                <div
+                    class="carousel-card min-w-[350px] md:min-w-[500px] bg-blue-50 rounded-2xl p-8 shadow-lg mx-2 border border-gray-200">
+                    <div class="text-6xl text-gray-800 mb-4">
+                        <span class="material-symbols-outlined text-5xl text-blue-400">&ldquo;</span>
+                    </div>
+                    <p class="text-lg text-gray-800 leading-relaxed font-medium">
+                        I ordered a personalized key holder and it's not only practical but looks so aesthetic! Love the
+                        handmade touch
+                        and attention to detail.
+                    </p>
+                    <div class="flex items-center mt-6">
+                        <img src="images/v-1.jpeg"
+                            class="w-14 h-14 rounded-full object-cover mr-4 border-2 border-white shadow-md"
+                            alt="Ayaan Iqbal" />
+                        <div>
+                            <h4 class="font-extrabold text-gray-900 text-xl">Ayaan Iqbal</h4>
+                            <div class="flex text-yellow-400">
+                                ★★★★★
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 7 -->
+                <div
+                    class="carousel-card min-w-[350px] md:min-w-[500px] bg-blue-50 rounded-2xl p-8 shadow-lg mx-2 border border-gray-200">
+                    <div class="text-6xl text-gray-800 mb-4">
+                        <span class="material-symbols-outlined text-5xl text-blue-400">&ldquo;</span>
+                    </div>
+                    <p class="text-lg text-gray-800 leading-relaxed font-medium">
+                        Such a delightful shopping experience!
+                        Everything from browsing to unboxing felt so curated.
+                        Will definitely buy again.
+                    </p>
+                    <div class="flex items-center mt-6">
+                        <img src="images/v-2.jpeg"
+                            class="w-14 h-14 rounded-full object-cover mr-4 border-2 border-white shadow-md"
+                            alt="Neha Kapoor" />
+                        <div>
+                            <h4 class="font-semibold text-gray-900 text-xl">Neha Kapoor</h4>
+                            <div class="flex text-yellow-400">
+                                ★★★★★
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- About Us Section -->
+    <div class="max-w-[1600px] mx-auto p-4 md:p-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12">
+            <!-- Left Content Block -->
+            <div
+                class="relative rounded-2xl overflow-hidden bg-cover bg-center md:col-span-2 border-4 border-white shadow-xl w-full h-[300px] sm:h-[400px] md:h-[470px]">
+                <div
+                    class="absolute inset-0 bg-[url('images/backimg.jpg')] bg-cover bg-center p-4 sm:p-6 md:p-8 flex items-center justify-center">
+                    <div
+                        class="relative max-w-xl sm:left-[5rem] md:left-[10rem] lg:left-[15rem] top-0 md:top-[1rem] text-center md:text-left">
+                        <h2
+                            class="text-2xl sm:text-3xl md:text-4xl font-semibold mb-4 md:mb-6 text-black leading-tight">
+                            GlobalShopify: Handcrafted Marketplace
+                        </h2>
+                        <p class="text-sm w-full sm:text-base md:text-md text-black text-justify max-w-md">
+                           GlobalShopify: A marketplace where Brands Meet Customers, Seamlessly.
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Carousel Section -->
+            <div class="relative rounded-2xl overflow-hidden w-full h-[300px] sm:h-[400px] md:h-[470px]">
+                <div class="carousel-wrapper h-full">
+                    <div class="carousel-images h-full">
+                        <img src="images/slide-1.avif" class="w-full h-full object-cover rounded-2xl" />
+                        <img src="images/silde-2.jpg" class="w-full h-full object-cover rounded-2xl" />
+                        <img src="images/h1.jpg" class="w-full h-full object-cover rounded-2xl" />
+                        <img src="images/h2.jpg" class="w-full h-full object-cover rounded-2xl" />
+                    </div>
+                    <button id="prev" class="carousel-arrow carousel-arrow-left">❮</button>
+                    <button id="next" class="carousel-arrow carousel-arrow-right">❯</button>
+                    <div class="carousel-indicators">
+                        <button class="w-2 h-2 rounded-full bg-white/50 hover:bg-white transition-colors"></button>
+                        <button class="w-2 h-2 rounded-full bg-white/50 hover:bg-white transition-colors"></button>
+                        <button class="w-2 h-2 rounded-full bg-white/50 hover:bg-white transition-colors"></button>
+                        <button class="w-2 h-2 rounded-full bg-white/50 hover:bg-white transition-colors"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    </div>
+
+    <div id="footer-container"></div>
+
+    <style>
+        .carousel-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .carousel-card.active:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+        }
+
+        .highlighted-card {
+            transform: scale(1.05);
+            z-index: 10;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .highlighted-card:hover {
+            transform: scale(1.08);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        @media (hover: hover) {
+            .carousel-card.active:hover {
+                transform: scale(1.05);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+                z-index: 10;
+            }
+        }
+    </style>
+
+
+    <script>
+        function scrollToVendor() {
+            document.getElementById("vendor-section").scrollIntoView({ behavior: "smooth" });
+        }
+        function scrollToSection() {
+            document.getElementById('explore-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Carousel
+        const carouselImages = document.querySelector('.carousel-images');
+        const prevBtn = document.getElementById('prev');
+        const nextBtn = document.getElementById('next');
+        const totalImages = document.querySelectorAll('.carousel-images img').length;
+        let index = 0;
+
+        function goToNext() {
+            index = (index + 1) % totalImages;
+            updateSlider();
+        }
+
+        function goToPrev() {
+            index = (index - 1 + totalImages) % totalImages;
+            updateSlider();
+        }
+
+        function updateSlider() {
+            carouselImages.style.transform = `translateX(-${index * 100}%)`;
+        }
+
+        nextBtn.addEventListener('click', goToNext);
+        prevBtn.addEventListener('click', goToPrev);
+        setInterval(goToNext, 5000);
+
+        document.querySelectorAll(".add-to-cart").forEach(button => {
+            button.addEventListener("click", function (event) {
+                let productCard = this.closest(".swiper-slide");
+                let name = productCard.querySelector("h3").textContent;
+                let image = productCard.querySelector("img").src;
+                let price = productCard.querySelector(".text-lg").textContent;
+                addToCart(event, name, image, price);
+            });
+        });
+
+        document.querySelectorAll(".favorite-icon").forEach(button => {
+            button.addEventListener("click", function (event) {
+                let productCard = this.closest(".swiper-slide");
+                let name = productCard.querySelector("h3").textContent;
+                let image = productCard.querySelector("img").src;
+                let description = productCard.querySelector("p").textContent;
+                let price = productCard.querySelector(".text-lg").textContent;
+                addToWishlist(event, name, image, description, price);
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            updateCartCount();
+            updateWishlistCount();
+        });
+
+        window.onload = function () {
+            const images = ["images/hero1.avif", "images/hero2.avif", "images/hero3.webp"];
+            let index = 0;
+            const imageElement = document.getElementById('changingImage');
+
+            function changeImage() {
+                imageElement.src = images[index];
+                index = (index + 1) % images.length;
+            }
+
+            changeImage();
+            setInterval(changeImage, 5000);
+        };
+
+        const mostlyPurchasedProducts = [
+            { name: "Criss-cross Basket", description: "A sturdy, decorative woven container.", price: "Rs 2,123", image: "images/bask-1.webp", rating: 4.5, link: "buy-now.html" },
+            { name: "Wooden Cutlery Holder", description: "Handcrafted wooden organizer", price: "Rs 3,813", image: "images/stand-1.jpg", rating: 5.0, link: "buy-now.html" },
+            { name: "Matki Candles", description: "Handcrafted candles for a rustic glow.", price: "Rs 2,450", image: "images/festive2.jpg", rating: 4.0, link: "buy-now.html" },
+            { name: "Candelabrum", description: "An elegant multi-armed candle holder.", price: "Rs 1,740", image: "images/candle-5.jpg", rating: 4.5, link: "buy-now.html" },
+            // { name: "Velvet Vault", description: "Vintage metal or clay lanterns.", price: "Rs 8,457", image: "images/deco5.webp", rating: 4.0, link: "buy-now.html" },
+            { name: "Bird Pot", description: "A sleek, polished, and elegant finish.", price: "Rs 1,694", image: "images/plant3.webp", rating: 5.0, link: "buy-now.html" }
+        ];
+
+        const offerProducts = [
+            { name: "Hand stamped bracelet", image: "images/her1.webp", description: "Engraved custom bracelet", price: "Rs 2,123", color: "gray", rating: 4.5, offer: "20% off" },
+            { name: "Personalized Birthday Box", image: "images/her2.webp", description: "Customized birthday gift set", price: "Rs 2,457", color: "pink", rating: 5.0, offer: "18% off" },
+            { name: "Custom Watercolor Portrait", image: "images/her3.webp", description: "Personalized artistic portrait", price: "Rs 1,670", color: "blue", rating: 4.0, offer: "10% off" },
+            { name: "Garnet Heart Charm Ring", image: "images/her4.webp", description: "Garnet heart ring charm", price: "Rs 5,670", color: "red", rating: 4.0, offer: "20% off" },
+            { name: "Custom Chains", image: "images/her5.webp", description: "Personalized elegant chains", price: "Rs 9,670", color: "gold", rating: 5.0, offer: "20% off" },
+            { name: "Custom Earnings", image: "images/her6.webp", description: "Unique handcrafted earrings", price: "Rs 3,670", color: "blue", rating: 4.5, offer: "18% off" },
+            { name: "Custom Bracelet", image: "images/her7.webp", description: "Personalized stylish wristwear", price: "Rs 4,670", color: "black", rating: 4.0, offer: "10% off" }
+        ];
+
+        function renderProducts(products, containerId, isOfferSection) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = "";
+            products.forEach(product => {
+                const ratingStars = generateStars(product.rating);
+                const productHTML = `
+                   <div class="swiper-slide bg-white p-4 rounded-lg shadow-lg w-[20rem] h-[24rem] sm:h-[28rem] md:h-[30rem] flex flex-col justify-between">
+
+                        <div class="relative h-[60%]">
+                            <a href="buynow.html?name=${encodeURIComponent(product.name)}&image=${encodeURIComponent(product.image)}&description=${encodeURIComponent(product.description)}&price=${encodeURIComponent(product.price)}">
+                                <img src="${product.image}" class="w-[500px] h-full object-cover rounded-lg" alt="${product.name}">
+                            </a>
+                            ${isOfferSection && product.offer ? `<span class="absolute top-2 left-2 bg-red-500 text-white text-sm px-2 py-1 rounded">${product.offer}</span>` : ""}
+                        </div>
+                        <div class="p-4 flex flex-col flex-grow">
+                            <h3 class="text-lg font-bold">${product.name}</h3>
+                            <p class="text-gray-600 flex-grow line-clamp-2">${product.description}</p>
+                            <div class="flex items-center mt-2">
+                                ${ratingStars}
+                                <span class="text-gray-600 text-sm ml-2">(${product.rating}/5)</span>
+                            </div>
+                            <div class="flex justify-between items-center mt-2">
+                                <p class="text-lg font-bold">${product.price}</p>
+                                <div class="flex items-center">
+<a href="#" 
+   class="relative cursor-pointer group flex right-[2rem] toggle-cart" 
+   onclick="addToCart(event, '${product.name}', '${product.image}', '${product.price}')">
+    <span class="material-symbols-outlined cart-icon text-2xl transform transition-transform duration-300 group-hover:scale-110 group-hover:-translate-y-1" 
+          style="font-variation-settings: 'FILL' 0; color: black;">
+        shopping_cart
+    </span>
+</a>
+
+<a href="#wish" 
+   class="relative cursor-pointer group flex right-[1rem] toggle-wishlist" 
+   onclick="addToWishlist(event, '${product.name}', '${product.image}', '${product.description}', '${product.price}')"> 
+    <span class="material-symbols-outlined favorite-icon text-2xl transform transition-transform duration-300 group-hover:scale-110 group-hover:-translate-y-1" 
+          style="font-variation-settings: 'FILL' 0; color: black;">
+        favorite
+    </span>  
+</a>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += productHTML;
+            });
+        }
+
+
+        function updateIconState() {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+            document.querySelectorAll(".add-to-cart").forEach(cartBtn => {
+                let productName = cartBtn.getAttribute("onclick").match(/'([^']+)'/)[1];
+                let icon = cartBtn.querySelector(".material-symbols-outlined");
+                if (cart.some(item => item.name === productName)) {
+                    icon.style.color = "text-red-500";
+                } else {
+                    icon.style.color = "text-red-500";
+                }
+            });
+            document.querySelectorAll(".favorite-icon").forEach(wishIcon => {
+                let productName = wishIcon.parentElement.getAttribute("onclick").match(/'([^']+)'/)[1];
+                if (wishlist.some(item => item.name === productName)) {
+                    wishIcon.style.color = "text-red-500";
+                } else {
+                    wishIcon.style.color = "text-red-500";
+                }
+            });
+        }
+
+        function generateStars(rating) {
+            const fullStar = '<span class="material-symbols-outlined text-yellow-500">star</span>';
+            const halfStar = '<span class="material-symbols-outlined text-yellow-500">star_half</span>';
+            const emptyStar = '<span class="material-symbols-outlined text-gray-300">star</span>';
+            let starsHTML = "";
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 !== 0;
+            const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+            starsHTML += fullStar.repeat(fullStars);
+            if (hasHalfStar) starsHTML += halfStar;
+            starsHTML += emptyStar.repeat(emptyStars);
+            return starsHTML;
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            renderProducts(mostlyPurchasedProducts, "mostly-purchased-container", false);
+            renderProducts(offerProducts, "offers-container", true);
+            const swiper1 = new Swiper(".mySwiper1", {
+                slidesPerView: 4,
+                spaceBetween: 20,
+                loop: true,
+                autoplay: { delay: 3000, disableOnInteraction: false },
+                navigation: { nextEl: "#next1", prevEl: "#prev1" }
+            });
+            const swiper2 = new Swiper(".mySwiper2", {
+                slidesPerView: 4,
+                spaceBetween: 20,
+                loop: true,
+                autoplay: { delay: 3000, disableOnInteraction: false },
+                navigation: { nextEl: "#next2", prevEl: "#prev2" }
+            });
+            updateCartCount();
+            updateWishlistCount();
+            updateIconState();
+        });
+
+        // For Reviews section
+        const track = document.getElementById('carousel-track');
+        const cards = track.querySelectorAll('.carousel-card');
+        index = 0;
+
+        function getCardWidth() {
+            const card = track.querySelector('div');
+            return card.offsetWidth + 16; // includes mx-2 (margin)
+        }
+
+        function getMaxScrollX() {
+            const trackWidth = track.scrollWidth;
+            const containerWidth = track.parentElement.offsetWidth;
+            return trackWidth - containerWidth;
+        }
+
+        function updateActiveCard() {
+            cards.forEach(card => card.classList.remove('active'));
+
+            const containerWidth = track.parentElement.offsetWidth;
+            const cardWidth = getCardWidth();
+            const cardsPerView = Math.floor(containerWidth / cardWidth);
+
+            const middleVisibleCardIndex = index + Math.floor(cardsPerView / 2);
+
+            if (cards[middleVisibleCardIndex]) {
+                cards[middleVisibleCardIndex].classList.add('active');
+            }
+        }
+
+
+        function scrollCarousel() {
+            const cardWidth = getCardWidth();
+            const maxScrollX = getMaxScrollX();
+
+            index++;
+            let newX = index * cardWidth;
+
+            if (newX > maxScrollX) {
+                index = 0;
+                newX = 0;
+            }
+
+            track.style.transform = `translateX(-${newX}px)`;
+            updateActiveCard();
+        }
+
+        // Initial active card
+        updateActiveCard();
+
+        setInterval(scrollCarousel, 3000);
+
+        window.addEventListener('resize', () => {
+            index = 0;
+            track.style.transform = `translateX(0px)`;
+            updateActiveCard();
+        });
+
+        function updateActiveCard() {
+            cards.forEach(card => card.classList.remove('active'));
+
+            const containerWidth = track.parentElement.offsetWidth;
+            const cardWidth = getCardWidth();
+            const cardsPerView = Math.floor(containerWidth / cardWidth);
+
+            const middleVisibleCardIndex = index + Math.floor(cardsPerView / 2);
+
+            if (cards[middleVisibleCardIndex]) {
+                cards[middleVisibleCardIndex].classList.add('active');
+            }
+        }
+
+
+    </script>
+    <script src="./function.js"></script>
+
+    <script src="navbar.js"></script>
+    <script src="footer.js"></script>
+</body>
+
+</html>

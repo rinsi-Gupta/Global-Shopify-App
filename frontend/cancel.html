@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cancellation & Return Policy - GlobalShopify</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background: linear-gradient(to right, #fdfbfb, #ebedee);
+    }
+
+    .active-tab {
+      font-weight: 700;
+      color: #EA580C;
+      border-bottom: 3px solid #EA580C;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+  </style>
+</head>
+
+<body class="text-gray-800">
+
+  <!-- Navbar -->
+  <div id="navbar-container"></div>
+
+  <!-- Header -->
+  <header class="bg-indigo-900 text-white py-6 text-center shadow-md">
+    <h1 class="text-4xl font-bold">Cancellation & Return Policy</h1>
+    <p class="text-sm mt-1">Last Updated: August 1, 2025</p>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-4 py-10 flex flex-col lg:flex-row gap-10">
+
+    <!-- Sidebar Navigation -->
+    <aside class="lg:w-1/4 w-full sticky top-10 self-start">
+      <nav class="space-y-6 text-blue-900" id="tab-menu">
+        <button class="block w-full text-left hover:text-orange-600 active-tab" data-tab="cancel">Cancellation Policy</button>
+        <button class="block w-full text-left hover:text-orange-600" data-tab="return">Return Policy</button>
+        <button class="block w-full text-left hover:text-orange-600" data-tab="exchange">Exchange Policy</button>
+        <button class="block w-full text-left hover:text-orange-600" data-tab="initiate">How to Initiate a Return?</button>
+        <button class="block w-full text-left hover:text-orange-600" data-tab="refund">Refund Policy</button>
+        <button class="block w-full text-left hover:text-orange-600" data-tab="late">Late or Missing Refunds</button>
+        <button class="block w-full text-left hover:text-orange-600" data-tab="help">Need Help?</button>
+      </nav>
+    </aside>
+
+    <!-- Content Area -->
+    <section class="lg:w-3/4 w-full space-y-12" id="tab-content">
+
+      <div id="cancel" class="tab-content active">
+        <h2 class="text-2xl font-semibold text-indigo-800 mb-2">Cancellation Policy</h2>
+        <ul class="list-disc pl-5 space-y-1 text-gray-700">
+          <li>Orders can be canceled within <strong>24 hours</strong> of placement.</li>
+          <li>Orders already processed may not be eligible for cancellation.</li>
+          <li>Contact us at <strong>support@GlobalShopify.com</strong> for cancellation.</li>
+          <li>Refunds processed within <strong>7 business days</strong> of approval.</li>
+          <li>Custom or personalized items cannot be canceled.</li>
+        </ul>
+      </div>
+
+      <div id="return" class="tab-content">
+        <h2 class="text-2xl font-semibold text-indigo-800 mb-2">Return Policy</h2>
+        <ul class="list-disc pl-5 space-y-1 text-gray-700">
+          <li>Returns accepted within <strong>7 days</strong> of delivery.</li>
+          <li>Items must be unused and in original packaging.</li>
+          <li>No returns on customized/personalized products.</li>
+          <li>Report defects/damages with pictures immediately.</li>
+          <li>Refunds or replacements processed within <strong>10 business days</strong>.</li>
+          <li>Sale items and gift cards are non-returnable.</li>
+        </ul>
+      </div>
+
+      <div id="exchange" class="tab-content">
+        <h2 class="text-2xl font-semibold text-indigo-800 mb-2">Exchange Policy</h2>
+        <ul class="list-disc pl-5 space-y-1 text-gray-700">
+          <li>Only applicable for defective/damaged items.</li>
+          <li>Email us at <strong>support@GlobalShopify.com</strong> within 7 days.</li>
+          <li>Customer bears return shipping unless due to our error.</li>
+        </ul>
+      </div>
+
+      <div id="initiate" class="tab-content">
+        <h2 class="text-2xl font-semibold text-indigo-800 mb-2">How to Initiate a Return?</h2>
+        <ol class="list-decimal pl-5 space-y-1 text-gray-700">
+          <li>Contact us at <strong>support@GlobalShopify.com</strong> with order details.</li>
+          <li>We’ll send return instructions and address.</li>
+          <li>Use a trackable shipping method to send the item.</li>
+          <li>After inspection, we’ll process your refund or exchange.</li>
+          <li>Refund is issued post product verification.</li>
+        </ol>
+      </div>
+
+      <div id="refund" class="tab-content">
+        <h2 class="text-2xl font-semibold text-indigo-800 mb-2">Refund Policy</h2>
+        <ul class="list-disc pl-5 space-y-1 text-gray-700">
+          <li>Refunds issued to original payment method within <strong>7–10 business days</strong>.</li>
+          <li>Shipping charges are <strong>non-refundable</strong> (unless due to error).</li>
+          <li>Contact us if refund is delayed beyond timeline.</li>
+          <li>COD refunds via bank transfer or store credit.</li>
+          <li>Prepaid refunds go back to original payment source.</li>
+        </ul>
+      </div>
+
+      <div id="late" class="tab-content">
+        <h2 class="text-2xl font-semibold text-indigo-800 mb-2">Late or Missing Refunds</h2>
+        <ul class="list-disc pl-5 space-y-1 text-gray-700">
+          <li>Check your bank account or card statement first.</li>
+          <li>Contact your bank if refund isn't reflected.</li>
+          <li>Still no refund? Email us at <strong>support@GlobalShopify.com</strong>.</li>
+        </ul>
+      </div>
+
+      <div id="help" class="tab-content">
+        <h2 class="text-2xl font-semibold text-indigo-800 mb-2">Need Help?</h2>
+        <p class="text-gray-700">
+          For any cancellation, return, or refund inquiries, contact us at <strong>support@GlobalShopify.com</strong> or call <strong>+1234567890</strong>.
+        </p>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <div id="footer-container"></div>
+
+  <!-- Scripts -->
+  <script src="navbar.js"></script>
+  <script src="footer.js"></script>
+
+  <script>
+    const tabs = document.querySelectorAll('#tab-menu button');
+    const contents = document.querySelectorAll('.tab-content');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(btn => btn.classList.remove('active-tab'));
+        contents.forEach(content => content.classList.remove('active'));
+
+        tab.classList.add('active-tab');
+        document.getElementById(tab.dataset.tab).classList.add('active');
+      });
+    });
+  </script>
+
+</body>
+
+</html>

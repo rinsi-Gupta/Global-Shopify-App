@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Help Center - GlobalShopify</title>
+
+  <!-- Google Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Toastify -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+  <style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background-color: #F9F9F9;
+      color: #2E2E2E;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Sticky Navigation Bar */
+    .navbar {
+      background-color: #1E90FF;
+      color: #FFFFFF;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .navbar-logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #FFFFFF;
+      text-decoration: none;
+    }
+
+    .navbar-links a {
+      color: #FFFFFF;
+      margin-left: 1.5rem;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+
+    .navbar-links a:hover {
+      color: #E6F0FA;
+    }
+
+    /* Footer */
+    .footer {
+      background-color: #2E2E2E;
+      color: #FFFFFF;
+      padding: 2rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-column h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .footer-column a {
+      color: #D3D3D3;
+      text-decoration: none;
+      display: block;
+      margin-bottom: 0.5rem;
+      transition: color 0.3s;
+    }
+
+    .footer-column a:hover {
+      color: #1E90FF;
+    }
+
+    /* Sticky Sidebar */
+    .sidebar {
+      position: sticky;
+      top: 0;
+      overflow-y: auto;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-content {
+      flex-grow: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .main-content {
+      flex: 1 1 auto;
+      overflow-y: auto;
+      max-height: calc(100vh - 64px);
+    }
+
+    .toggle-section {
+      background-color: #FFFFFF;
+      border: 1px solid #E6F0FA;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .toggle-section:hover {
+      background-color: #E6F0FA;
+    }
+
+    .toggle-content {
+      display: none;
+      padding: 16px;
+      background-color: #FFFFFF;
+      border-radius: 0 0 8px 8px;
+      margin-top: -1px;
+      border: 1px solid #E6F0FA;
+    }
+
+    .toggle-section.active .toggle-content {
+      display: block;
+    }
+
+    .toggle-section.active .toggle-arrow {
+      transform: rotate(90deg);
+    }
+
+    .toggle-arrow {
+      transition: transform 0.3s;
+      color: #1E90FF;
+    }
+
+    .order-card {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      background-color: #FFFFFF;
+      border: 1px solid #E6F0FA;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .order-card img {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      margin-right: 10px;
+      border-radius: 4px;
+    }
+
+    .order-card .status {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: #2E2E2E;
+    }
+
+    .order-card .status span {
+      background-color: #1E90FF;
+      color: #FFFFFF;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+    }
+
+    .order-products {
+      display: none;
+      padding: 10px 0;
+      background-color: #FFFFFF;
+      margin-top: 5px;
+      border: 1px solid #E6F0FA;
+      border-radius: 4px;
+    }
+
+    .order-card.active .order-products {
+      display: block;
+    }
+
+    .product-item {
+      display: flex;
+      align-items: center;
+      padding: 8px;
+      border: 1px solid #E6F0FA;
+      border-radius: 4px;
+      margin-bottom: 5px;
+      cursor: pointer;
+    }
+
+    .product-item img {
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+      margin-right: 10px;
+      border-radius: 4px;
+    }
+
+    .request-section {
+      display: none;
+      padding: 16px;
+      background-color: #FFFFFF;
+      border-radius: 8px;
+      margin-top: 10px;
+      border: 1px solid #E6F0FA;
+      position: relative;
+    }
+
+    .order-card.active .request-section.active {
+      display: block;
+    }
+
+    .contact-button {
+      background-color: #1E90FF;
+      color: #FFFFFF;
+      padding: 8px 16px;
+      border-radius: 8px;
+      text-align: center;
+      margin-top: 10px;
+      cursor: pointer;
+      display: inline-block;
+      transition: background-color 0.3s;
+    }
+
+    .contact-button:hover {
+      background-color: #1873CC;
+    }
+
+    .cancel-button {
+      background-color: #2E2E2E;
+      color: #FFFFFF;
+      padding: 8px 16px;
+      border-radius: 8px;
+      text-align: center;
+      margin-top: 10px;
+      cursor: pointer;
+      display: inline-block;
+      margin-right: 10px;
+      transition: background-color 0.3s;
+    }
+
+    .cancel-button:hover {
+      background-color: #4A4A4A;
+    }
+
+    .issue-item,
+    .recent-issue-item {
+      background-color: #FFFFFF;
+      border: 1px solid #E6F0FA;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .issue-item:hover,
+    .recent-issue-item:hover {
+      background-color: #E6F0FA;
+    }
+
+    .issue-item.active .issue-details,
+    .recent-issue-item.active .issue-details {
+      display: block;
+    }
+
+    .issue-details {
+      display: none;
+      padding-top: 10px;
+      color: #666;
+    }
+
+    .topic-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .topic-card {
+      background-color: #FFFFFF;
+      border: 1px solid #E6F0FA;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .topic-card:hover {
+      background-color: #E6F0FA;
+    }
+
+    .topic-card .icon {
+      font-size: 24px;
+      margin-bottom: 10px;
+      color: #1E90FF;
+    }
+
+    .topic-card .label {
+      font-size: 14px;
+      color: #2E2E2E;
+    }
+
+    .topic-card.active {
+      background-color: #E6F0FA;
+      border-color: #1E90FF;
+    }
+
+    .topic-content {
+      display: none;
+      padding: 16px;
+      background-color: #FFFFFF;
+      border: 1px solid #E6F0FA;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+
+    .topic-content.active {
+      display: block;
+    }
+
+    /* Active Sidebar Link */
+    .active-link {
+      background-color: #1E90FF;
+      color: #FFFFFF !important;
+    }
+
+    .active-link:hover {
+      background-color: #1873CC;
+    }
+
+    /* Form Elements */
+    input,
+    select,
+    textarea {
+      border-color: #E6F0FA !important;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #1E90FF !important;
+      ring-color: #1E90FF !important;
+    }
+
+    /* FAQ Styling */
+    .faq-item {
+      background-color: #FFFFFF;
+      border: 1px solid #E6F0FA;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .faq-item:hover {
+      background-color: #E6F0FA;
+    }
+
+    .faq-item.active .faq-details {
+      display: block;
+    }
+
+    .faq-details {
+      display: none;
+      padding-top: 10px;
+      color: #666;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col" data-current="help">
+  <!-- Navigation Bar -->
+  <div id="navbar-container" class="sticky top-0 z-50"></div>
+
+  <!-- Main Content -->
+  <main class="flex-grow flex flex-col md:flex-row">
+    <!-- Sidebar -->
+    <aside class="w-full md:w-80 mt-2 bg-white shadow-lg border-r sidebar">
+      <div class="p-6 border-b">
+        <h2 class="text-2xl font-bold text-gray-800">My Account</h2>
+      </div>
+      <nav class="px-6 py-2 space-y-4 text-sm">
+        <div>
+          <p class="text-xs text-gray-500 uppercase mb-2">Account Settings</p>
+          <a href="profile.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded" data-link="profile">
+            <i class="fas fa-user-circle"></i> Personal Info
+          </a>
+          <a href="security.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded" data-link="security">
+            <i class="fas fa-lock"></i> Security
+          </a>
+          <a href="settings.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded"
+            data-link="notifications">
+            <i class="fas fa-bell"></i> Notifications
+          </a>
+          <a href="privacy.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded" data-link="privacy">
+            <i class="fas fa-shield-alt"></i> Privacy
+          </a>
+        </div>
+        <div>
+          <p class="text-xs text-gray-500 uppercase mt-4 mb-2">Orders</p>
+          <a href="order.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded" data-link="orders">
+            <i class="fas fa-box"></i> Orders
+          </a>
+        </div>
+        <div>
+          <p class="text-xs text-gray-500 uppercase mt-4 mb-2">Wishlist</p>
+          <a href="wishlist.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded" data-link="wishlist">
+            <i class="fas fa-heart"></i> Wishlist
+          </a>
+        </div>
+        <div>
+          <p class="text-xs text-gray-500 uppercase mt-4 mb-2">Payments</p>
+          <a href="payment.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded" data-link="payments">
+            <i class="fas fa-credit-card"></i> Payments
+          </a>
+        </div>
+        <div>
+          <p class="text-xs text-gray-500 uppercase mt-4 mb-2">Support</p>
+          <a href="help.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded active-link"
+            data-link="help">
+            <i class="fas fa-question-circle"></i> Help Center
+          </a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Help Center Section -->
+    <section id="main-content" class="main-content p-4 mt-1">
+      <div class="bg-white p-6 rounded-lg shadow">
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">HELP CENTER</h1>
+        <p class="text-gray-600 mb-6">We are here to help you</p>
+
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">SELECT QUERY TYPE</h2>
+
+        <!-- Order Related Queries -->
+        <div class="toggle-section" data-target="order-content">
+          <div class="flex items-center justify-between px-4 py-2">
+            <span class="text-gray-700 font-medium">Order Related Queries</span>
+            <span class="toggle-arrow material-symbols-outlined">expand_more</span>
+          </div>
+          <div class="toggle-content" id="order-content">
+            <p class="text-gray-600 mb-4">Select the item we can help you with</p>
+            <div id="order-list"></div>
+            <div class="issue-details">
+              <p class="text-gray-600">Additional information: You can also check your order status by contacting
+                customer support for real-time updates.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Non-order Related Issues -->
+        <div class="toggle-section" data-target="non-order-content">
+          <div class="flex items-center justify-between px-4 py-2">
+            <span class="text-gray-700 font-medium">Non-order Related Issues</span>
+            <span class="toggle-arrow material-symbols-outlined">expand_more</span>
+          </div>
+          <div class="toggle-content" id="non-order-content">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Browse Topics</h3>
+            <div class="topic-grid">
+              <div class="topic-card" data-target="account-content">
+                <span class="icon material-symbols-outlined">person</span>
+                <div class="label">Account</div>
+              </div>
+              <div class="topic-card" data-target="returns-content">
+                <span class="icon material-symbols-outlined">sync</span>
+                <div class="label">Returns & Exchanges</div>
+              </div>
+              <div class="topic-card" data-target="credit-content">
+                <span class="icon material-symbols-outlined">crown</span>
+                <div class="label">GlobalShopify Credit & Insider</div>
+              </div>
+              <div class="topic-card" data-target="offers-content">
+                <span class="icon material-symbols-outlined">local_offer</span>
+                <div class="label">Offers</div>
+              </div>
+              <div class="topic-card" data-target="payments-content">
+                <span class="icon material-symbols-outlined">payment</span>
+                <div class="label">Payments</div>
+              </div>
+              <div class="topic-card" data-target="cancellations-content">
+                <span class="icon material-symbols-outlined">cancel</span>
+                <div class="label">Cancellations & Charges</div>
+              </div>
+            </div>
+
+            <!-- Account Content -->
+            <div class="topic-content" id="account-content">
+              <h3 class="text-lg font-semibold text-gray-800 mb-4">Account Related Queries</h3>
+              <p class="text-gray-600 mb-4">For account related issues refer to the below questions to get the complete
+                information and if you're still unable to access your account? Click on the Contact Us option to talk to
+                our customer care.</p>
+              <div class="issue-item" data-target="issue-login">
+                <div class="flex items-center justify-between">
+                  <span class="text-gray-700">How do I login to my GlobalShopify account?</span>
+                  <span class="toggle-arrow material-symbols-outlined">expand_more</span>
+                </div>
+                <div class="issue-details" id="issue-login">
+                  <p class="text-gray-600">Visit the GlobalShopify login page, enter your email and password, and click
+                    'Login'. If you face issues, ensure your credentials are correct or use the 'Forgot Password'
+                    option.</p>
+                  <p class="text-gray-600">Additional tip: Use two-factor authentication for added security.</p>
+                </div>
+              </div>
+              <div class="issue-item" data-target="issue-login-fail">
+                <div class="flex items-center justify-between">
+                  <span class="text-gray-700">I am not able to login to my GlobalShopify account.</span>
+                  <span class="toggle-arrow material-symbols-outlined">expand_more</span>
+                </div>
+                <div class="issue-details" id="issue-login-fail">
+                  <p class="text-gray-600">Check your internet connection, verify your email and password, or reset your
+                    password using the 'Forgot Password' link.</p>
+                  <p class="text-gray-600">Note: If issues persist, clear your browser cache or try a different device.
+                  </p>
+                </div>
+              </div>
+              <div class="issue-item" data-target="issue-otp">
+                <div class="flex items-center justify-between">
+                  <span class="text-gray-700">Why am I not getting an OTP?</span>
+                  <span class="toggle-arrow material-symbols-outlined">expand_more</span>
+                </div>
+                <div class="issue-details" id="issue-otp">
+                  <p class="text-gray-600">Ensure your phone number is correct, check your signal, or request a new OTP.
+                    Contact support if the issue persists.</p>
+                  <p class="text-gray-600">Tip: Verify your number is registered with your account.</p>
+                </div>
+              </div>
+              <div class="issue-item" data-target="issue-forgot-password">
+                <div class="flex items-center justify-between">
+                  <span class="text-gray-700">I am not getting the Forgot Password link.</span>
+                  <span class="toggle-arrow material-symbols-outlined">expand_more</span>
+                </div>
+                <div class="issue-details" id="issue-forgot-password">
+                  <p class="text-gray-600">Check your spam/junk folder, verify your email, or try requesting the link
+                    again. Contact support for further assistance.</p>
+                  <p class="text-gray-600">Additional help: Ensure your email provider isn’t blocking GlobalShopify
+                    emails.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Returns & Exchanges Content -->
+            <div class="topic-content" id="returns-content">
+              <h3 class="text-lg font-semibold text-gray-800 mb-4">Returns & Exchanges Queries</h3>
+              <p class="text-gray-600 mb-4">Learn about returning or exchanging items purchased from GlobalShopify.
+                Contact support for assistance if needed.</p>
+              <div class="issue-item" data-target="issue-return-policy">
+                <div class="flex items-center justify-between">
+                  <span class="text-gray-700">What is the return policy for GlobalShopify?</span>
+                  <span class="toggle-arrow material-symbols-outlined">expand_more</span>
+                </div>
+                <div class="issue-details" id="issue-return-policy">
+                  <p class="text-gray-600">GlobalShopify offers a 30-day return policy for unused items in original
+                    packaging. Initiate a return via your account under 'Orders'.</p>
+                  <p class="text-gray-600">Note: Items must be unopened and in resalable condition.</p>
+                </div>
+              </div>
+              <div class="issue-item" data-target="issue-return-process">
+                <div class="flex items-center justify-between">
+                  <span class="text-gray-700">How do I start a return or exchange?</span>
+                  <span class="toggle-arrow material-symbols-outlined">expand_more</span>
+                </div>
+                <div class="issue-details" id="issue-return-process">
+                  <p class="text-gray-600">Log into your GlobalShopify account, go to 'Orders', select the item, and
+                    choose 'Return' or 'Exchange'. Follow the instructions provided.</p>
+                  <p class="text-gray-600">Tip: Keep your order confirmation handy for a smoother process.</p>
+                </div>
+              </div>
+              <div class="issue-item" data-target="issue-return-status">
+                <div class="flex items-center justify-between">
+                  <span class="text-gray-700">How can I track my return?</span>
+                  <span class="toggle-arrow material-symbols-outlined">expand_more</span>
+                </div>
+                <div class="issue-details" id="issue-return-status">
+                  <p class="text-gray-600">Track your return status in your GlobalShopify account under 'Returns' after
+                    initiating the process.</p>
+                  <p class="text-gray-600">Additional info: You’ll receive a confirmation email with tracking details.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Credit & Insider Content -->
+            <div class="topic-content" id="credit-content">
+              <h3 class="text-lg font-semibold text-gray-800 mb-4">GlobalShopify Credit & Insider Queries</h3>
+              <p class="text-gray-600 mb-4">Explore benefits and queries related to GlobalShopify Credit and Insider
+                program.</p>
+              <div class="issue-item" data-target="issue-credit-balance">
+                <div class="flex items-center justify-between">
+                  <span class="text-gray-700">How do I check my GlobalShopify Credit balance?</span>
+                  <span class="toggle-arrow material-symbols-outlined">expand_more</span>
+                </div>
+                <div class="issue-details" id="issue-credit-balance">
+                  <p class="text-gray-600">Log into your GlobalShopify account and check your Credit balance under 'My
+                    Wallet'.</p>
+                  <p class="text-gray-600">Note: Credits expire after 6 months if unused.</p>
+                </div>
+              </div>
+              <div class="issue-item" data-target="issue-insider-benefits">
+                <div class="flex items-center justify-between">
+                  <span class="text-gray-700">What are the benefits of GlobalShopify Insider?</span>
+                  <span class="toggle-arrow material-symbols-outlined">expand_more</span>
+                </div>
+                <div class="issue-details" id="issue-insider-benefits">
+                  <p class="text-gray-600">Insider members get exclusive discounts, early access to sales, and free
+                    shipping. Join via your account settings.</p>
+                  <p class="text-gray-600">Tip: Upgrade to Insider for premium benefits.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Offers Content -->
+            <div class="topic-content" id="offers-content">
+              <h3 class="text-lg font-semibold text-gray-800 mb-4">Offers Queries</h3>
+              <p class="text-gray-600 mb-4">Find answers to questions about offers and promotions on GlobalShopify.</p>
+              <div class="issue-item" data-target="issue-offer-apply">
+                <div class="flex items-center justify-between">
+                  <span class="text-gray-700">How do I apply an offer on GlobalShopify?</span>
+                  <span class="toggle-arrow material-symbols-outlined">expand_more</span>
+                </div>
+                <div class="issue-details" id="issue-offer-apply">
+                  <p class="text-gray-600">Apply offers at checkout by entering the promo code in the 'Offers' section
+                    on the GlobalShopify cart page.</p>
+                  <p class="text-gray-600">Note: Offers are valid only during the specified period.</p>
+                </div>
+              </div>
+              <div class="issue-item" data-target="issue-offer-expiry">
+                <div class="flex items-center justify-between">
+                  <span class="text-gray-700">What happens if an offer expires?</span>
+                  <span class="toggle-arrow material-symbols-outlined">expand_more</span>
+                </div>
+                <div class="issue-details" id="issue-offer-expiry">
+                  <p class="text-gray-600">Expired offers cannot be applied. Check for new offers on the GlobalShopify
+                    website under 'Promotions'.</p>
+                  <p class="text-gray-600">Tip: Sign up for notifications to stay updated on new offers.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Payments Content -->
+            <div class="topic-content" id="payments-content">
+              <h3 class="text-lg font-semibold text-gray-800 mb-4">Payments Queries</h3>
+              <p class="text-gray-600 mb-4">Get help with payment-related issues on GlobalShopify.</p>
+              <div class="issue-item" data-target="issue-payment-methods">
+                <div class="flex items-center justify-between">
+                  <span class="text-gray-700">What payment methods are accepted by GlobalShopify?</span>
+                  <span class="toggle-arrow material-symbols-outlined">expand_more</span>
+                </div>
+                <div class="issue-details" id="issue-payment-methods">
+                  <p class="text-gray-600">GlobalShopify accepts credit/debit cards, UPI, net banking, and wallets. See
+                    all options at checkout.</p>
+                  <p class="text-gray-600">Additional info: International cards may require verification.</p>
+                </div>
+              </div>
+              <div class="issue-item" data-target="issue-payment-fail">
+                <div class="flex items-center justify-between">
+                  <span class="text-gray-700">Why did my payment fail?</span>
+                  <span class="toggle-arrow material-symbols-outlined">expand_more</span>
+                </div>
+                <div class="issue-details" id="issue-payment-fail">
+                  <p class="text-gray-600">Payment failures may occur due to insufficient funds or network issues. Retry
+                    or contact your bank, then try again on GlobalShopify.</p>
+                  <p class="text-gray-600">Tip: Ensure your payment method is active and funded.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Cancellations & Charges Content -->
+            <div class="topic-content" id="cancellations-content">
+              <h3 class="text-lg font-semibold text-gray-800 mb-4">Cancellations & Charges Queries</h3>
+              <p class="text-gray-600 mb-4">Learn about cancelling orders and associated charges on GlobalShopify.</p>
+              <div class="issue-item" data-target="issue-cancel-order">
+                <div class="flex items-center justify-between">
+                  <span class="text-gray-700">How do I cancel an order on GlobalShopify?</span>
+                  <span class="toggle-arrow material-symbols-outlined">expand_more</span>
+                </div>
+                <div class="issue-details" id="issue-cancel-order">
+                  <p class="text-gray-600">Cancel an order via your GlobalShopify account under 'Orders' before it
+                    ships. Post-shipment cancellations require a return.</p>
+                  <p class="text-gray-600">Note: Cancellation is free if done before dispatch.</p>
+                </div>
+              </div>
+              <div class="issue-item" data-target="issue-cancellation-charge">
+                <div class="flex items-center justify-between">
+                  <span class="text-gray-700">Are there charges for cancellations?</span>
+                  <span class="toggle-arrow material-symbols-outlined">expand_more</span>
+                </div>
+                <div class="issue-details" id="issue-cancellation-charge">
+                  <p class="text-gray-600">No charges apply for cancellations before shipping. Post-shipment
+                    cancellations may incur return shipping fees.</p>
+                  <p class="text-gray-600">Tip: Check cancellation eligibility in your order details.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Issues -->
+        <div class="toggle-section" data-target="recent-content">
+          <div class="flex items-center justify-between px-4 py-2">
+            <span class="text-gray-700 font-medium">Recent Issues</span>
+            <span class="toggle-arrow material-symbols-outlined">expand_more</span>
+          </div>
+          <div class="toggle-content" id="recent-content">
+            <p class="text-gray-600 mb-4">Check updates on recent issues or outages reported as of 01:50 PM IST, August
+              23, 2025.</p>
+            <div class="space-y-4">
+              <div class="recent-issue-item" data-target="issue-login-fail-recent">
+                <h3 class="text-lg font-medium text-gray-900">Login Failure Issue</h3>
+                <div class="issue-details" id="issue-login-fail-recent">
+                  <p class="text-gray-600">Users facing login failures due to server timeout.</p>
+                  <p class="text-gray-600">Reported: 01:30 PM IST, Aug 23, 2025. Status: Under investigation.</p>
+                  <p class="text-gray-600">Update: Temporary workaround - clear browser cache and retry.</p>
+                </div>
+              </div>
+              <div class="recent-issue-item" data-target="issue-payment-fail-recent">
+                <h3 class="text-lg font-medium text-gray-900">Payment Processing Delay</h3>
+                <div class="issue-details" id="issue-payment-fail-recent">
+                  <p class="text-gray-600">Delays in payment processing for UPI transactions.</p>
+                  <p class="text-gray-600">Reported: 01:10 PM IST, Aug 23, 2025. Status: Being resolved.</p>
+                  <p class="text-gray-600">Update: Expected resolution by 03:00 PM IST.</p>
+                </div>
+              </div>
+              <div class="recent-issue-item" data-target="issue-order-delay-recent">
+                <h3 class="text-lg font-medium text-gray-900">Order Dispatch Delay</h3>
+                <div class="issue-details" id="issue-order-delay-recent">
+                  <p class="text-gray-600">Delay in order dispatch from Mumbai warehouse.</p>
+                  <p class="text-gray-600">Reported: 12:45 PM IST, Aug 23, 2025. Status: Partially resolved.</p>
+                  <p class="text-gray-600">Update: Normal service resuming by 02:00 PM IST.</p>
+                </div>
+              </div>
+            </div>
+            <div class="issue-details">
+              <p class="text-gray-600">Stay tuned for updates on service disruptions or maintenance schedules.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Frequently Asked Questions -->
+        <div class="toggle-section" data-target="faq-content">
+          <div class="flex items-center justify-between px-4 py-2">
+            <span class="text-gray-700 font-medium">Frequently Asked Questions</span>
+            <span class="toggle-arrow material-symbols-outlined">expand_more</span>
+          </div>
+          <div class="toggle-content" id="faq-content">
+            <div class="space-y-4">
+              <div class="faq-item" data-target="faq-reset-password">
+                <h3 class="text-lg font-medium text-gray-900">How do I reset my password?</h3>
+                <div class="faq-details" id="faq-reset-password">
+                  <p class="text-gray-600">To reset your password, go to the login page and click "Forgot Password."
+                    Follow the instructions sent to your registered email.</p>
+                  <p class="text-gray-600">Tip: Use a strong password with letters, numbers, and symbols.</p>
+                </div>
+              </div>
+              <div class="faq-item" data-target="faq-track-order">
+                <h3 class="text-lg font-medium text-gray-900">How can I track my order?</h3>
+                <div class="faq-details" id="faq-track-order">
+                  <p class="text-gray-600">You can track your order by logging into your account and visiting the
+                    "Orders" section. A tracking link will be provided once your order ships.</p>
+                  <p class="text-gray-600">Note: Tracking updates may take up to 24 hours after shipping.</p>
+                </div>
+              </div>
+              <div class="faq-item" data-target="faq-return-policy">
+                <h3 class="text-lg font-medium text-gray-900">What is your return policy?</h3>
+                <div class="faq-details" id="faq-return-policy">
+                  <p class="text-gray-600">We offer a 30-day return policy for unused items in their original packaging.
+                    Please contact support to initiate a return.</p>
+                  <p class="text-gray-600">Additional info: Returns are free within the first 15 days.</p>
+                </div>
+              </div>
+              <div class="faq-item" data-target="faq-contact-support">
+                <h3 class="text-lg font-medium text-gray-900">How do I contact support?</h3>
+                <div class="faq-details" id="faq-contact-support">
+                  <p class="text-gray-600">You can reach our support team via the form below, email at
+                    support@globalshopify.com, or by calling 1-800-123-4567.</p>
+                  <p class="text-gray-600">Tip: Response time is typically within 24 hours.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Form Section -->
+      <div class="bg-white p-6 rounded-lg shadow mt-6">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6">Submit a Query</h2>
+        <p class="text-gray-600 mb-6">Fill out the form below, and our support team will get back to you within 24-48
+          hours.</p>
+        <form id="queryForm" class="space-y-6">
+          <div>
+            <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
+            <input type="text" id="name" name="name" required
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500">
+          </div>
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+            <input type="email" id="email" name="email" required
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500">
+          </div>
+          <div>
+            <label for="category" class="block text-sm font-medium text-gray-700">Issue Category</label>
+            <select id="category" name="category" required
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500">
+              <option value="">Select an issue</option>
+              <option value="account">Account Issues</option>
+              <option value="order">Order Issues</option>
+              <option value="payment">Payment Issues</option>
+              <option value="technical">Technical Issues</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div>
+            <label for="message" class="block text-sm font-medium text-gray-700">Your Message</label>
+            <textarea id="message" name="message" rows="5" required
+              class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+          </div>
+          <div>
+            <button type="submit"
+              class="w-full sm:w-auto bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">Submit
+              Query</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Contact Information -->
+      <div class="mt-12 text-center">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Other Ways to Reach Us</h2>
+        <p class="text-gray-600">Email: <a href="mailto:support@globalshopify.com"
+            class="text-blue-600 hover:underline">support@globalshopify.com</a></p>
+        <p class="text-gray-600">Phone: <a href="tel:+18001234567"
+            class="text-blue-600 hover:underline">1-800-123-4567</a></p>
+        <p class="text-gray-600">Live Chat: Available on our website from 9 AM to 5 PM, Monday to Friday.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t mt-auto">
+    <div id="footer-container"></div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="navbar.js"></script>
+  <script src="footer.js"></script>
+
+  <!-- Scripts -->
+  <script>
+    // Highlight the active sidebar link based on data-current
+    const current = document.body.getAttribute("data-current");
+    const links = document.querySelectorAll(".sidebar-link");
+    links.forEach(link => {
+      if (link.getAttribute("data-link") === current) {
+        link.classList.add("active-link");
+      } else {
+        link.classList.remove("active-link");
+      }
+    });
+
+    // Form submission with Toastify for main query form
+    document.getElementById('queryForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+      const form = event.target;
+      const formData = new FormData(form);
+      const data = {
+        name: formData.get('name'),
+        email: formData.get('email'),
+        category: formData.get('category'),
+        message: formData.get('message')
+      };
+      console.log('Form submitted:', data);
+      Toastify({
+        text: "Your query has been submitted successfully!",
+        duration: 3000,
+        gravity: "top",
+        position: "right",
+        backgroundColor: "#1E90FF",
+        stopOnFocus: true,
+      }).showToast();
+      form.reset();
+    });
+
+    // Toggle functionality for sections
+    document.querySelectorAll('.toggle-section').forEach(section => {
+      section.addEventListener('click', () => {
+        const contentId = section.getAttribute('data-target');
+        const content = document.getElementById(contentId);
+        const isActive = section.classList.contains('active');
+
+        document.querySelectorAll('.toggle-section').forEach(s => {
+          s.classList.remove('active');
+          const c = document.getElementById(s.getAttribute('data-target'));
+          if (c) c.style.display = 'none';
+        });
+
+        if (!isActive && content) {
+          section.classList.add('active');
+          content.style.display = 'block';
+          if (contentId === 'order-content') {
+            displayOrders();
+          }
+        }
+      });
+    });
+
+    // Toggle functionality for topic cards (instant toggle)
+    document.querySelectorAll('.topic-card').forEach(card => {
+      card.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const contentId = card.getAttribute('data-target');
+        const content = document.getElementById(contentId);
+        const isActive = card.classList.contains('active');
+
+        document.querySelectorAll('.topic-card').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.topic-content').forEach(c => c.classList.remove('active'));
+
+        if (!isActive && content) {
+          card.classList.add('active');
+          content.classList.add('active');
+        }
+      });
+    });
+
+    // Toggle functionality for issue items, recent issues, and FAQ items
+    document.querySelectorAll('.issue-item, .recent-issue-item, .faq-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const contentId = item.getAttribute('data-target');
+        const content = document.getElementById(contentId);
+        const isActive = item.classList.contains('active');
+
+        document.querySelectorAll('.issue-item, .recent-issue-item, .faq-item').forEach(i => {
+          i.classList.remove('active');
+          const c = document.getElementById(i.getAttribute('data-target'));
+          if (c) c.style.display = 'none';
+        });
+
+        if (!isActive && content) {
+          item.classList.add('active');
+          content.style.display = 'block';
+        }
+      });
+    });
+
+    // Fetch orders from localStorage
+    function displayOrders() {
+      const orderList = document.getElementById('order-list');
+      orderList.innerHTML = '';
+      let orderData = [];
+      try {
+        orderData = JSON.parse(localStorage.getItem("trackingOrder")) || [];
+      } catch (e) {
+        console.error("Error parsing trackingOrder:", e);
+      }
+
+      // Sort orders by orderDate in descending order (latest first)
+      orderData.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate));
+
+      if (orderData.length === 0) {
+        orderList.innerHTML = '<p class="text-gray-600">No orders found.</p>';
+        return;
+      }
+
+      orderData.forEach(order => {
+        const orderStatus = JSON.parse(localStorage.getItem(`orderStatus_${order.orderId}`)) || {};
+        const formattedDate = new Date(order.orderDate).toLocaleDateString('en-US', {
+          weekday: 'short',
+          day: 'numeric',
+          month: 'short'
+        });
+
+        const orderCard = document.createElement('div');
+        orderCard.className = 'order-card';
+        orderCard.setAttribute('data-order-id', order.orderId);
+        orderCard.innerHTML = `
+          <img src="${order.items[0]?.image || 'https://via.placeholder.com/50'}" alt="${order.items[0]?.productName || 'Product'}">
+          <div class="flex-1">
+            <div class="status">
+              <span class="material-symbols-outlined">check_circle</span>
+              <span>${order.status}</span>
+              <span>On ${formattedDate}</span>
+            </div>
+            <div class="text-gray-900 font-medium">${order.items[0]?.productName || 'Unknown Product'}</div>
+            <div class="text-gray-600">Quantity: ${order.items[0]?.quantity || 1}</div>
+            ${order.items.length > 1 ? `<div class="text-gray-500 text-xs">+ ${order.items.length - 1} more items</div>` : ''}
+          </div>
+          <span class="material-symbols-outlined toggle-arrow">expand_more</span>
+        `;
+
+        const productsDiv = document.createElement('div');
+        productsDiv.className = 'order-products';
+        order.items.forEach(item => {
+          const productItem = document.createElement('div');
+          productItem.className = 'product-item';
+          productItem.setAttribute('data-product-id', item.productId || item.id);
+          productItem.innerHTML = `
+            <img src="${item.image || 'https://via.placeholder.com/40'}" alt="${item.productName || 'Product'}">
+            <div>
+              <div class="text-gray-900 font-medium">${item.productName || 'Unknown Product'}</div>
+              <div class="text-gray-600">Qty: ${item.quantity || 1}</div>
+            </div>
+          `;
+          productsDiv.appendChild(productItem);
+        });
+
+        const requestSection = document.createElement('div');
+        requestSection.className = 'request-section';
+        requestSection.innerHTML = `
+          <h3 class="text-lg font-semibold text-gray-800">Raise a Request</h3>
+          <p class="text-gray-600 mb-4">Select an issue for <span class="font-medium" id="product-name"></span></p>
+          <select class="border border-gray-300 rounded-md p-2 w-full mb-4" id="issue-type">
+            <option value="">Select Issue</option>
+            <option value="return">Request Return</option>
+            <option value="query">Raise Query</option>
+          </select>
+          <textarea class="border border-gray-300 rounded-md p-2 w-full mb-4" rows="3" id="issue-description" placeholder="Describe your issue..."></textarea>
+          <div class="flex justify-between">
+            <div class="cancel-button" onclick="cancelRequest(this)">Cancel</div>
+            <div class="contact-button" onclick="submitRequest(this)">Submit Request</div>
+          </div>
+        `;
+
+        orderCard.appendChild(productsDiv);
+        orderCard.appendChild(requestSection);
+        orderList.appendChild(orderCard);
+      });
+
+      // Add event listeners to order cards
+      document.querySelectorAll('.order-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const isActive = card.classList.contains('active');
+          document.querySelectorAll('.order-card').forEach(c => {
+            c.classList.remove('active');
+            const products = c.querySelector('.order-products');
+            const request = c.querySelector('.request-section');
+            if (products) products.style.display = 'none';
+            if (request) request.classList.remove('active');
+          });
+
+          if (!isActive) {
+            card.classList.add('active');
+            const productsDiv = card.querySelector('.order-products');
+            if (productsDiv) productsDiv.style.display = 'block';
+          }
+        });
+
+        // Delegate click event to product items
+        const productsDiv = card.querySelector('.order-products');
+        if (productsDiv) {
+          productsDiv.addEventListener('click', (e) => {
+            const productItem = e.target.closest('.product-item');
+            if (productItem) {
+              e.stopPropagation();
+              const productName = productItem.querySelector('.text-gray-900').textContent;
+              const requestSection = card.querySelector('.request-section');
+              if (requestSection) {
+                requestSection.querySelector('#product-name').textContent = productName;
+                requestSection.classList.add('active');
+                card.classList.add('active');
+                const products = card.querySelector('.order-products');
+                if (products) products.style.display = 'block';
+              }
+            }
+          });
+        }
+
+        // Prevent event propagation for select and textarea in request section
+        const requestSection = card.querySelector('.request-section');
+        if (requestSection) {
+          requestSection.querySelector('#issue-type').addEventListener('click', (e) => e.stopPropagation());
+          requestSection.querySelector('#issue-description').addEventListener('click', (e) => e.stopPropagation());
+        }
+      });
+    }
+
+    function submitRequest(button) {
+      const requestSection = button.closest('.request-section');
+      const issueType = requestSection.querySelector('#issue-type').value;
+      const description = requestSection.querySelector('#issue-description').value;
+      const productName = requestSection.querySelector('#product-name').textContent;
+
+      if (issueType && description) {
+        Toastify({
+          text: `Request for ${issueType} on ${productName} submitted successfully!`,
+          duration: 3000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#34D399",
+        }).showToast();
+        requestSection.classList.remove('active');
+        requestSection.querySelector('#issue-type').value = '';
+        requestSection.querySelector('#issue-description').value = '';
+      } else {
+        Toastify({
+          text: "Please select an issue type and provide a description.",
+          duration: 3000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#EF4444",
+        }).showToast();
+      }
+    }
+
+    function cancelRequest(button) {
+      const requestSection = button.closest('.request-section');
+      requestSection.classList.remove('active');
+      requestSection.querySelector('#issue-type').value = '';
+      requestSection.querySelector('#issue-description').value = '';
+    }
+
+    // Load orders and setup issues when the page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      displayOrders();
+    });
+  </script>
+</body>
+
+</html>

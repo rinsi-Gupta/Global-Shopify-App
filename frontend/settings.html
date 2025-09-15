@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Notifications - GlobalShopify</title>
+
+  <!-- Google Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Toastify -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+  <style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+    }
+
+    .notification.read {
+      background: #f3f4f6;
+      opacity: 0.7;
+    }
+
+    .notification.read:hover {
+      background: #e5e7eb;
+      opacity: 0.9;
+    }
+
+    #noNotificationsMsg {
+      display: none;
+      color: #6b7280;
+      font-style: italic;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .sidebar-link {
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .sidebar-link:hover {
+      background-color: #e5eaf0;
+      color: #2791CF;
+    }
+
+    .active-link {
+      background-color: #e5eaf0;
+      color: #2791CF;
+      font-weight: 600;
+    }
+
+    /* Sticky sidebar */
+    aside {
+      position: sticky;
+      top: 0;
+      height: calc(100vh - 64px);
+      overflow-y: auto;
+    }
+
+    /* Notification Section Styling */
+    #notifications {
+      scrollbar-width: thin; /* Firefox */
+      scrollbar-color: #d1d5db transparent; /* Firefox */
+    }
+
+    #notifications::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    #notifications::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    #notifications::-webkit-scrollbar-thumb {
+      background-color: #e5eaf0;
+      border-radius: 3px;
+    }
+
+    .notification {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 12px;
+      background: #e5eaf0;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .notification:hover {
+      background: #e5eaf0;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .notification-icon {
+      color: #2791CF;
+      flex-shrink: 0;
+    }
+
+    /* Fade-in animation for notifications */
+    @keyframes fade-in {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fade-in {
+      animation: fade-in 0.3s ease-out;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col" data-current="notifications">
+  <!-- Navigation Bar -->
+  <div id="navbar-container"></div>
+
+  <!-- Main Content -->
+  <main class="flex-grow flex flex-col md:flex-row">
+    <!-- Sidebar -->
+    <aside class="w-full md:w-80 bg-white shadow-lg border-r">
+      <div class="p-6 border-b">
+        <h2 class="text-2xl font-bold text-gray-800">My Account</h2>
+      </div>
+      <nav class="px-6 py-6 space-y-4 text-sm">
+        <div>
+          <p class="text-xs text-gray-500 uppercase mb-2">Account Settings</p>
+          <a href="profile.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded" data-link="profile">
+            <i class="fas fa-user-circle"></i> Personal Info
+          </a>
+          <a href="security.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded" data-link="security">
+            <i class="fas fa-lock"></i> Security
+          </a>
+          <a href="settings.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded active-link" data-link="notifications">
+            <i class="fas fa-bell"></i> Notifications
+          </a>
+          <a href="privacy.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded" data-link="privacy">
+            <i class="fas fa-shield-alt"></i> Privacy
+          </a>
+        </div>
+        <div>
+          <p class="text-xs text-gray-500 uppercase mt-4 mb-2">Orders</p>
+          <a href="order.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded" data-link="orders">
+            <i class="fas fa-box"></i> Orders
+          </a>
+        </div>
+        <div>
+          <p class="text-xs text-gray-500 uppercase mt-4 mb-2">Wishlist</p>
+          <a href="wishlist.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded" data-link="wishlist">
+            <i class="fas fa-heart"></i> Wishlist
+          </a>
+        </div>
+        <div>
+          <p class="text-xs text-gray-500 uppercase mt-4 mb-2">Payments</p>
+          <a href="payment.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded" data-link="payments">
+            <i class="fas fa-credit-card"></i> Payments
+          </a>
+        </div>
+        <div>
+          <p class="text-xs text-gray-500 uppercase mt-4 mb-2">Support</p>
+          <a href="help.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded" data-link="help">
+            <i class="fas fa-question-circle"></i> Help Center
+          </a>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Notifications Section -->
+    <section id="main-content" class="flex-grow bg-gray-100 p-4 w-full">
+      <!-- Search & Actions Section -->
+      <section class="flex flex-col md:flex-row md:justify-between md:items-center mb-8 gap-4 w-full">
+        <div class="flex w-full md:max-w-md items-center border border-gray-300 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-blue-200">
+          <input type="text" id="searchInput" oninput="filterNotifications()" placeholder="Search notifications..." class="flex-1 px-4 py-2 text-sm outline-none" />
+          <button onclick="handleSearch()" class="px-3 py-2 text-gray-500 hover:text-blue-600 transition-colors" aria-label="Search notifications">
+            <span class="material-symbols-outlined">search</span>
+          </button>
+        </div>
+        <div class="flex items-center gap-3">
+          <button onclick="markAllRead()" class="text-sm border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors">
+            Mark all as Read
+          </button>
+          <img src="https://i.pravatar.cc/40" alt="User" class="h-10 w-10 rounded-full object-cover border border-gray-300" />
+        </div>
+      </section>
+
+      <section id="notificationsSection" class="flex-1 flex flex-col">
+        <header class="mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-blue-500">notifications</span>
+          <h2 class="text-2xl font-bold text-gray-800">Notifications</h2>
+        </header>
+        <p id="notificationCount" class="text-sm text-gray-500 mb-4">You have 6 notifications to go through</p>
+        <div id="notifications" class="space-y-3 overflow-auto max-h-[60vh] pr-2"></div>
+        <p id="noNotificationsMsg" class="text-sm font-medium text-gray-500 text-center py-4">No notifications found.</p>
+      </section>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t mt-auto">
+    <div id="footer-container"></div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="navbar.js"></script>
+  <script src="footer.js"></script>
+  <script>
+    // Shared notifications data (same as navbar.js)
+    let notifications = [
+      { id: 1, message: "Your order #1234 has been shipped!", read: false, timestamp: "2025-08-16T10:00:00Z" },
+      { id: 2, message: "New handicraft collection added!", read: false, timestamp: "2025-08-15T15:30:00Z" },
+      { id: 3, message: "15% OFF coupon expires soon!", read: true, timestamp: "2025-08-14T09:00:00Z" },
+      { id: 4, message: "Your wishlist item is back in stock!", read: false, timestamp: "2025-08-13T12:00:00Z" },
+      { id: 5, message: "Exclusive pottery sale starts tomorrow!", read: false, timestamp: "2025-08-12T08:45:00Z" },
+      { id: 6, message: "Order #1235 delivery delayed.", read: true, timestamp: "2025-08-11T16:20:00Z" },
+      { id: 7, message: "New textile designs now available!", read: false, timestamp: "2025-08-10T14:10:00Z" },
+      { id: 8, message: "Your review is requested for order #1233.", read: true, timestamp: "2025-08-09T11:30:00Z" },
+      { id: 9, message: "20% OFF on wooden items this weekend!", read: false, timestamp: "2025-08-08T09:15:00Z" },
+      { id: 10, message: "Thank you for your recent purchase!", read: true, timestamp: "2025-08-07T17:00:00Z" }
+    ];
+
+    const notificationsContainer = document.getElementById('notifications');
+    const notificationCount = document.getElementById('notificationCount');
+    const noNotificationsMsg = document.getElementById('noNotificationsMsg');
+
+    function updateNotificationCount() {
+      const visibleNotifications = notifications.filter(n => {
+        const text = n.message.toLowerCase();
+        const filter = document.getElementById('searchInput').value.toLowerCase().trim();
+        return text.includes(filter);
+      });
+      const count = visibleNotifications.length;
+      notificationCount.textContent = count > 0
+        ? `You have ${count} notification${count > 1 ? 's' : ''} to go through`
+        : 'You have no notifications to go through';
+      noNotificationsMsg.style.display = count === 0 ? 'block' : 'none';
+    }
+
+    function renderNotifications() {
+      console.log("Rendering notifications:", notifications);
+      notificationsContainer.innerHTML = "";
+      const filter = document.getElementById('searchInput').value.toLowerCase().trim();
+      const filteredNotifications = notifications.filter(n => n.message.toLowerCase().includes(filter));
+
+      if (filteredNotifications.length === 0) {
+        noNotificationsMsg.style.display = 'block';
+        return;
+      }
+
+      filteredNotifications.forEach(notification => {
+        const notificationItem = document.createElement("div");
+        notificationItem.className = `notification animate-fade-in ${notification.read ? "read" : ""}`;
+        notificationItem.innerHTML = `
+          <span class="material-symbols-outlined notification-icon">circle_notifications</span>
+          <div class="flex-1">
+            <p class="text-sm font-medium text-gray-800">${notification.message}</p>
+            <p class="text-xs text-gray-500">${new Date(notification.timestamp).toLocaleString()}</p>
+          </div>
+        `;
+        notificationItem.addEventListener("click", () => markAsRead(notification.id));
+        notificationsContainer.appendChild(notificationItem);
+      });
+      updateNotificationCount();
+    }
+
+    function markAsRead(notificationId) {
+      const notification = notifications.find(n => n.id === notificationId);
+      if (notification && !notification.read) {
+        notification.read = true;
+        renderNotifications();
+        // Sync with navbar by calling updateUI if available
+        if (window.updateUI) {
+          window.updateUI();
+        }
+        Toastify({
+          text: "Notification marked as read!",
+          duration: 3000,
+          gravity: "top",
+          position: "right",
+          backgroundColor: "#2563EB",
+          stopOnFocus: true,
+        }).showToast();
+      }
+    }
+
+    function filterNotifications() {
+      renderNotifications();
+    }
+
+    function handleSearch() {
+      filterNotifications();
+    }
+
+    function markAllRead() {
+      notifications.forEach(notification => {
+        notification.read = true;
+      });
+      renderNotifications();
+      // Sync with navbar
+      if (window.updateUI) {
+        window.updateUI();
+      }
+      Toastify({
+        text: "All notifications marked as read!",
+        duration: 3000,
+        gravity: "top",
+        position: "right",
+        backgroundColor: "#2563EB",
+        stopOnFocus: true,
+      }).showToast();
+    }
+
+    // Highlight the active sidebar link based on data-current
+    const current = document.body.getAttribute("data-current");
+    const links = document.querySelectorAll(".sidebar-link");
+    links.forEach(link => {
+      if (link.getAttribute("data-link") === current) {
+        link.classList.add("active-link");
+      } else {
+        link.classList.remove("active-link");
+      }
+    });
+
+    // Initialize notifications on page load
+    document.addEventListener("DOMContentLoaded", () => {
+      renderNotifications();
+    });
+  </script>
+</body>
+</html>

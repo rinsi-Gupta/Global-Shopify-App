@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Coupons</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .sidebar-link {
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .sidebar-link:hover {
+            background-color: #e5eaf0;
+            color: #3791CF;
+        }
+
+        .active-link {
+            background-color: #e5eaf0;
+            color: #3791CF;
+            font-weight: 600;
+        }
+
+        .filter-btn {
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            background-color: #f3f4f6;
+            color: #374151;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .filter-btn:hover {
+            background-color: #ede9fe;
+            color: #4f46e5;
+            border-color: #4f46e5;
+        }
+
+        .active-filter {
+            background-color: #4f46e5;
+            color: white !important;
+            border-color: #4f46e5;
+        }
+
+        .active-filter:hover {
+            background-color: #4338ca;
+            color: white !important;
+            border-color: #4338ca;
+        }
+
+        .coupon-card {
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s ease;
+        }
+
+        .coupon-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .copy-btn {
+            background-color: #ef4444;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background-color: #dc2626;
+        }
+
+        .copy-message {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translate(-50%, -6px);
+            background: #111827;
+            color: white;
+            padding: 4px 10px;
+            font-size: 12px;
+            border-radius: 6px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 50;
+        }
+
+        .copy-message.show {
+            opacity: 1;
+        }
+
+        aside {
+            position: sticky;
+            top: 0;
+            height: calc(100vh - 64px);
+            overflow-y: auto;
+        }
+
+        @media (max-width: 768px) {
+            aside {
+                position: fixed;
+                top: 0;
+                left: -100%;
+                height: 100%;
+                transition: left 0.3s ease;
+                z-index: 50;
+            }
+
+            aside.open {
+                left: 0;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col" data-current="coupons">
+
+    <!-- Navbar -->
+    <div class="sticky top-0 z-50" id="navbar-container"></div>
+
+    <main class="flex-grow flex flex-col md:flex-row">
+        <!-- Sidebar -->
+        <aside class="w-full md:w-72 bg-white shadow-lg border-r">
+            <div class="p-6 border-b">
+                <h2 class="text-2xl font-bold text-gray-800">My Account</h2>
+            </div>
+            <nav class="px-6 py-6 space-y-4 text-sm">
+                <a href="overview.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded"
+                    data-link="overview">
+                    <i class="fas fa-chart-line"></i> Overview
+                </a>
+
+                <div>
+                    <p class="text-xs text-gray-500 uppercase mb-2">Orders</p>
+                    <a href="order.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded"
+                        data-link="orders">
+                        <i class="fas fa-box"></i> Orders & Returns
+                    </a>
+                </div>
+
+                <div>
+                    <p class="text-xs text-gray-500 uppercase mt-4 mb-2">Credits</p>
+                    <a href="coupons.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded"
+                        data-link="coupons">
+                        <i class="fas fa-ticket-alt"></i> Coupons
+                    </a>
+                </div>
+
+                <div>
+                    <p class="text-xs text-gray-500 uppercase mt-4 mb-2">Account</p>
+                    <a href="user.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded"
+                        data-link="profile">
+                        <i class="fas fa-user-circle"></i> Profile
+                    </a>
+                    <a href="address.html" class="flex items-center gap-2 sidebar-link px-3 py-2 rounded"
+                        data-link="addresses">
+                        <i class="fas fa-address-book"></i> Addresses
+                    </a>
+                    <a href="delete.html"
+                        class="flex items-center gap-2 sidebar-link px-3 py-2 rounded text-red-500 hover:bg-red-100"
+                        data-link="delete">
+                        <i class="fas fa-trash-alt"></i> Delete Account
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-y-auto">
+            <div class="pb-4 pt-4 pl-4">
+                <div class="relative">
+                    <a href="./index.html">
+                        <img src="./images//big-sale-background-with-offer/5177120.jpg"
+                            alt="Hero Banner" class="w-full h-96 object-cover cursor-pointer mx-auto rounded-md" />
+                    </a>
+                </div>
+            </div>
+
+            <!-- Header & Filter -->
+            <div class="pl-6">
+                <div
+                    class="bg-gray-200 shadow p-6 border-b flex flex-wrap md:flex-nowrap justify-between items-center gap-4">
+                    <h1 class="text-2xl font-bold text-gray-800">Available Coupons</h1>
+                    <div class="flex gap-3 flex-wrap">
+                        <button class="filter-btn active-filter" onclick="filterCoupons('all', event)">All</button>
+                        <button class="filter-btn" onclick="filterCoupons('trending', event)">Trending</button>
+                        <button class="filter-btn" onclick="filterCoupons('discount', event)">Discount</button>
+                        <button class="filter-btn" onclick="filterCoupons('expiring', event)">Expiring Soon</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coupon Grid -->
+            <section class="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+                id="couponContainer"></section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t mt-auto">
+        <div id="footer-container"></div>
+    </footer>
+
+    <script>
+        const current = document.body.getAttribute("data-current");
+        const links = document.querySelectorAll(".sidebar-link");
+        links.forEach(link => {
+            if (link.getAttribute("data-link") === current) {
+                link.classList.add("active-link");
+            } else {
+                link.classList.remove("active-link");
+            }
+        });
+
+        let coupons = [];
+        let copiedCodes = new Set();
+
+        async function fetchCoupons() {
+            try {
+                const res = await fetch('http://localhost:5000/api/coupons');
+                if (!res.ok) {
+                    throw new Error('Failed to fetch coupons');
+                }
+                const data = await res.json();
+                return data;
+            } catch (err) {
+                console.error('Error fetching coupons:', err);
+                return [];
+            }
+        }
+
+        function formatDate(dateStr) {
+            return new Date(dateStr).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+        }
+
+        function renderCoupons(filter = 'all') {
+            const container = document.getElementById("couponContainer");
+            container.innerHTML = "";
+            coupons.forEach(coupon => {
+                if (filter !== 'all' && coupon.category !== filter) return;
+                const card = document.createElement("div");
+                card.className = `coupon-card ${coupon.category} relative`;
+                card.innerHTML = `
+                    <div class="bg-white p-4 rounded-b-xl space-y-3 relative">
+                        <a href="${coupon.link}">
+                            <img src="${coupon.image || 'https://via.placeholder.com/150'}" class="rounded w-full h-40 object-cover" />
+                        </a>
+                        <div class="text-blue-500 p-4 rounded-t-xl space-y-2">
+                            <h3 class="text-lg font-semibold">${coupon.title}</h3>
+                            <p class="text-sm">Use code: <span class="font-bold">${coupon.code}</span></p>
+                            <p class="text-xs text-gray-600">Expires: ${formatDate(coupon.expiry)}</p>
+                        </div>
+                        <div class="relative flex flex-col items-center">
+                            <div class="copy-message">Code Copied!</div>
+                            <button onclick="copyCode(this)" data-code="${coupon.code}" class="w-full text-white rounded py-1 copy-btn">Copy Code</button>
+                        </div>
+                    </div>`;
+                container.appendChild(card);
+            });
+        }
+
+        function filterCoupons(category, event) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active-filter'));
+            event.target.classList.add('active-filter');
+            renderCoupons(category);
+        }
+
+        function copyCode(button) {
+            const code = button.getAttribute("data-code");
+            const messageEl = button.previousElementSibling;
+
+            if (copiedCodes.has(code)) {
+                messageEl.textContent = "Already Copied!";
+            } else {
+                navigator.clipboard.writeText(code).then(() => {
+                    copiedCodes.add(code);
+                    messageEl.textContent = "Code Copied!";
+                }).catch(err => {
+                    console.error('Failed to copy:', err);
+                });
+            }
+
+            messageEl.classList.add("show");
+            setTimeout(() => {
+                messageEl.classList.remove("show");
+            }, 1500);
+        }
+
+        function toggleSidebar() {
+            document.querySelector("aside").classList.toggle("open");
+        }
+
+        async function init() {
+            coupons = await fetchCoupons();
+            renderCoupons();
+        }
+
+        init();
+    </script>
+
+    <script src="navbar.js"></script>
+    <script src="footer.js"></script>
+</body>
+
+</html>

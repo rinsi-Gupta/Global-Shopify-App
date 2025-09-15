@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendor Request</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Reset default margins for form header to prevent gaps */
+        #webcrumbs h1 {
+            margin: 0;
+        }
+        /* Ensure full-page layout with flexbox */
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+        main {
+            flex: 1;
+            padding: 3rem 0;
+        }
+        #footer-container {
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Navbar -->
+    <div id="navbar-container"></div>
+
+    <!-- Main Form -->
+    <main class="flex justify-center items-center bg-gray-100">
+        <div id="webcrumbs" class="w-full max-w-2xl bg-gradient-to-br from-white to-blue-50 rounded-xl shadow-xl p-8 font-sans">
+            <h1 class="text-2xl font-bold mb-8 text-center flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined text-blue-600">store</span>
+                Vendor Request Form
+            </h1>
+    
+            <form id="vendor-request-form" class="space-y-5">
+                <!-- Company Name -->
+                <div>
+                    <label class="block text-sm font-medium mb-1 items-center gap-1" for="company_name">
+                        <span class="material-symbols-outlined text-blue-600 text-lg">business</span>
+                        Company Name <span class="text-red-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <input type="text" id="company_name" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 hover:border-blue-400" placeholder="Enter your company name" required>
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 material-symbols-outlined">storefront</span>
+                    </div>
+                </div>
+
+                <!-- Person Name -->
+                <div>
+                    <label class="block text-sm font-medium mb-1 items-center gap-1" for="person_name">
+                        <span class="material-symbols-outlined text-blue-600 text-lg">person</span>
+                        Contact Person Name <span class="text-red-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <input type="text" id="person_name" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 hover:border-blue-400" placeholder="Enter contact person name" required>
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 material-symbols-outlined">person</span>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div>
+                    <label class="block text-sm font-medium mb-1 items-center gap-1" for="business_email">
+                        <span class="material-symbols-outlined text-blue-600 text-lg">email</span>
+                        Business Email <span class="text-red-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <input type="email" id="business_email" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 hover:border-blue-400" placeholder="example@business.com" required>
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 material-symbols-outlined">alternate_email</span>
+                    </div>    
+                </div>
+
+                <!-- Phone Numbers -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1 items-center gap-1" for="contact_number">
+                            <span class="material-symbols-outlined text-blue-600 text-lg">phone</span>
+                            Contact Number <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <input type="text" id="contact_number" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 hover:border-blue-400" placeholder="+91 XXXXX XXXXX" required>
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 material-symbols-outlined">smartphone</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1 items-center gap-1" for="alt_contact_number">
+                            <span class="material-symbols-outlined text-blue-600 text-lg">phone</span>
+                            Alternate Contact Number <span class="text-xs font-light">(Optional)</span>
+                        </label>
+                        <div class="relative">
+                            <input type="text" id="alt_contact_number" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 hover:border-blue-400" placeholder="+91 XXXXX XXXXX">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 material-symbols-outlined">smartphone</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Address -->
+                <div>
+                    <label class="block text-sm font-medium mb-1 items-center gap-1" for="address_line1">
+                        <span class="material-symbols-outlined text-blue-600 text-lg">location_on</span>
+                        Address Line 1 <span class="text-red-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <input type="text" id="address_line1" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 hover:border-blue-400" placeholder="Street address" required>
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 material-symbols-outlined">home</span>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1 items-center gap-1" for="address_line2">
+                        <span class="material-symbols-outlined text-blue-600 text-lg">location_on</span>
+                        Address Line 2
+                    </label>
+                    <div class="relative">
+                        <input type="text" id="address_line2" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 hover:border-blue-400" placeholder="Apartment, suite, etc. (optional)">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 material-symbols-outlined">home</span>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1 items-center gap-1" for="landmark">
+                            <span class="material-symbols-outlined text-blue-600 text-lg">place</span>
+                            Landmark
+                        </label>
+                        <div class="relative">
+                            <input type="text" id="landmark" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 hover:border-blue-400" placeholder="Nearby landmark">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 material-symbols-outlined">place</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1 items-center gap-1" for="city">
+                            <span class="material-symbols-outlined text-blue-600 text-lg">location_city</span>
+                            City <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <input type="text" id="city" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 hover:border-blue-400" placeholder="Enter city" required>
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 material-symbols-outlined">location_city</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1 items-center gap-1" for="pincode">
+                            <span class="material-symbols-outlined text-blue-600 text-lg">pin</span>
+                            Pincode <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <input type="text" id="pincode" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 hover:border-blue-400" placeholder="Enter pincode" required>
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 material-symbols-outlined">pin</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1 items-center gap-1" for="state">
+                            <span class="material-symbols-outlined text-blue-600 text-lg">map</span>
+                            State <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <input type="text" id="state" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 hover:border-blue-400" placeholder="Enter state" required>
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 material-symbols-outlined">map</span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1 items-center gap-1" for="country">
+                        <span class="material-symbols-outlined text-blue-600 text-lg">public</span>
+                        Country <span class="text-red-500">*</span>
+                    </label>
+                    <div class="relative">
+                        <input type="text" id="country" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 hover:border-blue-400" placeholder="Enter country" required>
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 material-symbols-outlined">public</span>
+                    </div>
+                </div>
+
+                <!-- Optional Fields -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1 items-center gap-1" for="aadhar_no">
+                            <span class="material-symbols-outlined text-blue-600 text-lg">badge</span>
+                            Aadhar Number <span class="text-xs font-light">(Optional)</span>
+                        </label>
+                        <div class="relative">
+                            <input type="text" id="aadhar_no" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 hover:border-blue-400" placeholder="XXXX XXXX XXXX">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 material-symbols-outlined">pin</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1 items-center gap-1" for="pan_no">
+                            <span class="material-symbols-outlined text-blue-600 text-lg">credit_card</span>
+                            PAN Number <span class="text-xs font-light">(Optional)</span>
+                        </label>
+                        <div class="relative">
+                            <input type="text" id="pan_no" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 hover:border-blue-400" placeholder="ABCDE1234F">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 material-symbols-outlined">assignment_ind</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-1 items-center gap-1" for="gst_no">
+                            <span class="material-symbols-outlined text-blue-600 text-lg">receipt_long</span>
+                            GST Number <span class="text-xs font-light">(Optional)</span>
+                        </label>
+                        <div class="relative">
+                            <input type="text" id="gst_no" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 hover:border-blue-400" placeholder="22AAAAA0000A1Z5">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 material-symbols-outlined">receipt</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-1 items-center gap-1" for="cin_no">
+                            <span class="material-symbols-outlined text-blue-600 text-lg">numbers</span>
+                            CIN Number <span class="text-xs font-light">(Optional)</span>
+                        </label>
+                        <div class="relative">
+                            <input type="text" id="cin_no" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 hover:border-blue-400" placeholder="U74999XX2023PTC123456">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 material-symbols-outlined">tag</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Business Details -->
+                <div>
+                    <label class="block text-sm font-medium mb-1 items-center gap-1" for="business_details">
+                        <span class="material-symbols-outlined text-blue-600 text-lg">description</span>
+                        Business Details
+                    </label>
+                    <div class="relative">
+                        <textarea id="business_details" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 hover:border-blue-400 resize-none" placeholder="Describe your business" rows="3"></textarea>
+                        <span class="absolute left-3 top-4 text-gray-400 material-symbols-outlined">article</span>
+                    </div>
+                </div>
+
+                <!-- Sector -->
+                <div>
+                    <label class="block text-sm font-medium mb-1 items-center gap-1" for="sector">
+                        <span class="material-symbols-outlined text-blue-600 text-lg">category</span>
+                        Sector
+                    </label>
+                    <div class="relative">
+                        <select id="sector" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 hover:border-blue-400">
+                            <option value="">Select sector</option>
+                            <option value="electronics">Electronics</option>
+                            <option value="clothing">Clothing</option>
+                            <option value="food">Food & Beverages</option>
+                            <option value="stationary">Stationary</option>
+                            <option value="automotive">Automotive</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 material-symbols-outlined">category</span>
+                    </div>
+                </div>
+
+                <!-- Provider Region -->
+                <div>
+                    <label class="block text-sm font-medium mb-1 items-center gap-1" for="provider_region">
+                        <span class="material-symbols-outlined text-blue-600 text-lg">public</span>
+                        Provider Region
+                    </label>
+                    <div class="relative">
+                        <select id="provider_region" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 hover:border-blue-400">
+                            <option value="">Select region</option>
+                            <option value="state">State-wise</option>
+                            <option value="national">National</option>
+                            <option value="international">International</option>
+                        </select>
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 material-symbols-outlined">public</span>
+                    </div>
+                </div>
+
+                <!-- Product Type -->
+                <div>
+                    <label class="block text-sm font-medium mb-1 items-center gap-1" for="product_type">
+                        <span class="material-symbols-outlined text-blue-600 text-lg">inventory</span>
+                        Product Type
+                    </label>
+                    <div class="relative">
+                        <select id="product_type" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 hover:border-blue-400">
+                            <option value="">Select product type</option>
+                            <option value="fragile">Fragile/Delicate</option>
+                            <option value="hard">Hard/Durable</option>
+                        </select>
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 material-symbols-outlined">inventory</span>
+                    </div>
+                </div>
+
+                <!-- Business Type -->
+                <div>
+                    <label class="block text-sm font-medium mb-1 items-center gap-1" for="business_type">
+                        <span class="material-symbols-outlined text-blue-600 text-lg">business_center</span>
+                        Business Type
+                    </label>
+                    <div class="relative">
+                        <select id="business_type" class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 hover:border-blue-400">
+                            <option value="">Select business type</option>
+                            <option value="supplier">Supplier</option>
+                            <option value="retailer">Retailer</option>
+                            <option value="trader">Trader</option>
+                            <option value="manufacturer">Manufacturer</option>
+                            <option value="distributor">Distributor</option>
+                        </select>
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 material-symbols-outlined">business_center</span>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="pt-4">
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3.5 px-6 rounded-lg shadow-lg hover:shadow-blue-200 transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2 group">
+                        <span class="material-symbols-outlined group-hover:rotate-12 transition-transform duration-300">check_circle</span>
+                        Submit Request
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer-container"></div>
+
+    <!-- External JS -->
+    <script src="navbar.js"></script>
+    <script src="footer.js"></script>
+
+    <script>
+        document.getElementById("vendor-request-form").addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            // Validation function
+            function validateField(id, regex, errorMessage) {
+                const field = document.getElementById(id);
+                const value = field.value.trim();
+                if (field.hasAttribute('required') && !value) {
+                    alert(errorMessage);
+                    field.focus();
+                    return false;
+                }
+                if (value && !regex.test(value)) {
+                    alert(errorMessage);
+                    field.focus();
+                    return false;
+                }
+                return true;
+            }
+
+            // Mandatory fields validation
+            if (!validateField("company_name", /^.+$/, "Company Name is required!")) return;
+            if (!validateField("person_name", /^.+$/, "Contact Person Name is required!")) return;
+            if (!validateField("business_email", /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/, "Enter a valid email!")) return;
+            if (!validateField("contact_number", /^[6-9]\d{9}$/, "Enter a valid 10-digit Contact Number!")) return;
+            if (!validateField("address_line1", /^.+$/, "Address Line 1 is required!")) return;
+            if (!validateField("city", /^.+$/, "City is required!")) return;
+            if (!validateField("pincode", /^\d{6}$/, "Enter a valid 6-digit Pincode!")) return;
+            if (!validateField("state", /^.+$/, "State is required!")) return;
+            if (!validateField("country", /^.+$/, "Country is required!")) return;
+
+            // Optional fields validation (if provided)
+            if (document.getElementById("aadhar_no").value.trim() && !validateField("aadhar_no", /^\d{12}$/, "Enter a valid 12-digit Aadhar Number!")) return;
+            if (document.getElementById("pan_no").value.trim() && !validateField("pan_no", /^[A-Z]{5}\d{4}[A-Z]$/, "Enter a valid PAN Number (ABCDE1234F)!")) return;
+            if (document.getElementById("gst_no").value.trim() && !validateField("gst_no", /^\d{2}[A-Z]{5}\d{4}[A-Z]{1}\d{1}[A-Z]{1}\d{1}$/, "Enter a valid 15-character GST Number!")) return;
+            if (document.getElementById("alt_contact_number").value.trim() && !validateField("alt_contact_number", /^[6-9]\d{9}$/, "Enter a valid 10-digit Alternate Contact Number!")) return;
+
+            // Check if user is logged in
+            const storedData = localStorage.getItem("loggedInUser");
+            if (!storedData) {
+                alert("Please log in to submit a vendor request!");
+                return;
+            }
+            const parsedData = JSON.parse(storedData);
+            const token = parsedData?.token;
+            if (!token) {
+                alert("You are not logged in!");
+                return;
+            }
+
+            // Gather form data
+            const vendorData = {
+                company_name: document.getElementById("company_name").value.trim(),
+                person_name: document.getElementById("person_name").value.trim(),
+                business_email: document.getElementById("business_email").value.trim(),
+                contact_number: document.getElementById("contact_number").value.trim(),
+                alt_contact_number: document.getElementById("alt_contact_number").value.trim(),
+                address: {
+                    line1: document.getElementById("address_line1").value.trim(),
+                    line2: document.getElementById("address_line2").value.trim(),
+                    landmark: document.getElementById("landmark").value.trim(),
+                    city: document.getElementById("city").value.trim(),
+                    pincode: document.getElementById("pincode").value.trim(),
+                    state: document.getElementById("state").value.trim(),
+                    country: document.getElementById("country").value.trim()
+                },
+                aadhar_no: document.getElementById("aadhar_no").value.trim(),
+                pan_no: document.getElementById("pan_no").value.trim(),
+                gst_no: document.getElementById("gst_no").value.trim(),
+                cin_no: document.getElementById("cin_no").value.trim(),
+                business_details: document.getElementById("business_details").value.trim(),
+                sector: document.getElementById("sector").value,
+                provider_region: document.getElementById("provider_region").value,
+                product_type: document.getElementById("product_type").value,
+                business_type: document.getElementById("business_type").value
+            };
+
+            // Submit form
+            try {
+                const response = await fetch("http://localhost:5000/api/vendor/request", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify(vendorData)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert("Vendor request submitted successfully!");
+                    document.getElementById("vendor-request-form").reset();
+                } else {
+                    alert(data.message || "Failed to submit request");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("Something went wrong. Please try again.");
+            }
+        });
+    </script>
+</body>
+</html>

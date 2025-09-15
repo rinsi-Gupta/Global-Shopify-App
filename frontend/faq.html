@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shipping Policies - GlobalShopify</title>
+  <meta name="description" content="GlobalShopify's shipping policies including methods, charges, tracking, and international shipping.">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=PT+Sans&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .active-tab {
+      font-weight: 700;
+      color: #EA580C;
+      border-bottom: 3px solid #EA580C;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+  </style>
+</head>
+
+<body class="bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800">
+  <div id="navbar-container"></div>
+
+  <!-- Header -->
+  <header class="bg-indigo-900 text-white py-6 text-center shadow-md">
+    <h1 class="text-4xl font-bold">Shipping Policies</h1>
+    <p class="text-sm mt-1">Last Updated: March 1, 2025</p>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-4 py-10 flex flex-col lg:flex-row gap-10">
+
+    <!-- Sidebar Tabs -->
+    <aside class="lg:w-1/4 w-full sticky top-10 self-start">
+      <nav class="space-y-4 text-blue-900" id="tab-menu">
+        <button class="block w-full text-left hover:text-orange-600 active-tab" data-tab="methods">Shipping Methods</button>
+        <button class="block w-full text-left hover:text-orange-600" data-tab="charges">Shipping Charges</button>
+        <button class="block w-full text-left hover:text-orange-600" data-tab="processing">Order Processing</button>
+        <button class="block w-full text-left hover:text-orange-600" data-tab="tracking">Tracking Your Order</button>
+        <button class="block w-full text-left hover:text-orange-600" data-tab="international">International Shipping</button>
+        <button class="block w-full text-left hover:text-orange-600" data-tab="delays">Delayed Shipments</button>
+        <button class="block w-full text-left hover:text-orange-600" data-tab="damaged">Damaged or Lost Packages</button>
+        <button class="block w-full text-left hover:text-orange-600" data-tab="restricted">Restricted Locations</button>
+        <button class="block w-full text-left hover:text-orange-600" data-tab="eco">Eco-Friendly Packaging</button>
+        <button class="block w-full text-left hover:text-orange-600" data-tab="returns">Returns Due to Shipping Issues</button>
+        <button class="block w-full text-left hover:text-orange-600" data-tab="help">Need Help?</button>
+      </nav>
+    </aside>
+
+    <!-- Tab Content -->
+    <section class="lg:w-3/4 w-full space-y-12" id="tab-content">
+
+      <div id="methods" class="tab-content active">
+        <h2 class="text-2xl font-semibold text-indigo-800 mb-2">Shipping Methods</h2>
+        <p class="mb-4">We offer a range of shipping options to ensure timely delivery of your orders:</p>
+        <ul class="list-disc pl-5 space-y-2">
+          <li><strong>Standard Shipping (5-7 Business Days):</strong> Cost-effective delivery for domestic orders.</li>
+          <li><strong>Express Shipping (2-3 Business Days):</strong> Faster delivery for urgent orders, available at an additional cost.</li>
+          <li><strong>Overnight Shipping (1 Business Day):</strong> Next-day delivery for extremely urgent orders.</li>
+          <li><strong>International Shipping (7-14 Business Days):</strong> Available for customers worldwide.</li>
+        </ul>
+      </div>
+
+      <div id="charges" class="tab-content">
+        <h2 class="text-2xl font-semibold text-indigo-800 mb-2">Shipping Charges</h2>
+        <p>Shipping costs depend on destination, package weight, and selected shipping method. Orders above $100 qualify for free standard shipping.</p>
+      </div>
+
+      <div id="processing" class="tab-content">
+        <h2 class="text-2xl font-semibold text-indigo-800 mb-2">Order Processing</h2>
+        <p>Orders are processed within 1–2 business days, excluding weekends and holidays. You will receive an email confirmation once your order is processed.</p>
+      </div>
+
+      <div id="tracking" class="tab-content">
+        <h2 class="text-2xl font-semibold text-indigo-800 mb-2">Tracking Your Order</h2>
+        <p>Once your order is shipped, a tracking number will be emailed to you. Use this to monitor delivery status.</p>
+      </div>
+
+      <div id="international" class="tab-content">
+        <h2 class="text-2xl font-semibold text-indigo-800 mb-2">International Shipping</h2>
+        <p>Customs fees, taxes, and import duties vary by country. These charges must be paid by the recipient.</p>
+      </div>
+
+      <div id="delays" class="tab-content">
+        <h2 class="text-2xl font-semibold text-indigo-800 mb-2">Delayed Shipments</h2>
+        <p>Shipments may be delayed due to weather, customs, or high-demand periods. Contact our support team for assistance.</p>
+      </div>
+
+      <div id="damaged" class="tab-content">
+        <h2 class="text-2xl font-semibold text-indigo-800 mb-2">Damaged or Lost Packages</h2>
+        <p>If your package arrives damaged, take photos and contact our support team immediately.</p>
+      </div>
+
+      <div id="restricted" class="tab-content">
+        <h2 class="text-2xl font-semibold text-indigo-800 mb-2">Restricted Shipping Locations</h2>
+        <p>We do not ship to PO boxes, APO/FPO addresses, or restricted regions. Contact us for more details.</p>
+      </div>
+
+      <div id="eco" class="tab-content">
+        <h2 class="text-2xl font-semibold text-indigo-800 mb-2">Eco-Friendly Packaging</h2>
+        <p>We use biodegradable and recyclable packaging materials. Please recycle responsibly.</p>
+      </div>
+
+      <div id="returns" class="tab-content">
+        <h2 class="text-2xl font-semibold text-indigo-800 mb-2">Returns Due to Shipping Issues</h2>
+        <p>If an order is returned due to an incorrect address or failed delivery attempts, the customer may be responsible for re-shipping fees.</p>
+      </div>
+
+      <div id="help" class="tab-content">
+        <h2 class="text-2xl font-semibold text-indigo-800 mb-2">Need Help?</h2>
+        <ul class="space-y-2">
+          <li><strong>Email:</strong> <a href="mailto:support@GlobalShopify.com" class="text-blue-700 underline">support@GlobalShopify.com</a></li>
+          <li><strong>Phone:</strong> +1234567890</li>
+          <li><strong>Customer Support Hours:</strong> Monday – Friday, 9 AM – 6 PM (EST)</li>
+        </ul>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- JS for Tab Switching -->
+  <script>
+    const tabs = document.querySelectorAll('#tab-menu button');
+    const contents = document.querySelectorAll('.tab-content');
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(btn => btn.classList.remove('active-tab'));
+        contents.forEach(content => content.classList.remove('active'));
+
+        tab.classList.add('active-tab');
+        document.getElementById(tab.dataset.tab).classList.add('active');
+      });
+    });
+  </script>
+
+  <div id="footer-container"></div>
+
+  <script src="navbar.js"></script>
+  <script src="footer.js"></script>
+</body>
+
+</html>
