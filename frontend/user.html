@@ -259,7 +259,7 @@
       }
 
       try {
-        const response = await fetch("http://localhost:5000/api/users/profile/getprofile?t=" + Date.now(), {
+        const response = await fetch("https://global-shopify-app.onrender.com/api/users/profile/getprofile?t=" + Date.now(), {
           method: "GET",
           headers: {
             "Authorization": `Bearer ${token}`,
@@ -320,7 +320,7 @@
 
       try {
         if (token && token !== "undefined" && token.match(/^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+$/)) {
-          const response = await fetch("http://localhost:5000/api/users/logout", {
+          const response = await fetch("https://global-shopify-app.onrender.com/api/users/logout", {
             method: "POST",
             headers: {
               "Authorization": `Bearer ${token}`,

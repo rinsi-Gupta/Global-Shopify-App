@@ -347,7 +347,7 @@
             }
 
             try {
-                const response = await fetch("http://localhost:5000/api/orders/orders", {
+                const response = await fetch("https://global-shopify-app.onrender.com/api/orders/orders", {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -468,7 +468,7 @@
             const button = document.querySelector(`#action-button-${orderId} button[onclick="toggleTracking('${orderId}'); event.stopPropagation();"]`);
             button.textContent = isHidden ? "Hide Tracking" : "Track";
             if (isHidden) {
-                fetch(`http://localhost:5000/api/orders/filter?orderId=${orderId}`, {
+                fetch(`https://global-shopify-app.onrender.com/api/orders/filter?orderId=${orderId}`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("authToken")}`,
                     },
@@ -536,7 +536,7 @@
         async function openDetailsPopup(orderId) {
             const content = document.getElementById("details-content");
             try {
-                const response = await fetch(`http://localhost:5000/api/orders/filter?orderId=${orderId}`, {
+                const response = await fetch(`https://global-shopify-app.onrender.com/api/orders/filter?orderId=${orderId}`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("authToken")}`,
                     },
@@ -686,7 +686,7 @@
                         }).showToast();
                         return;
                     }
-                    const response = await fetch("http://localhost:5000/api/orders/cancel", {
+                    const response = await fetch("https://global-shopify-app.onrender.com/api/orders/cancel", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
@@ -726,7 +726,7 @@
                         }
                         bankDetails = { accountNumber, ifscCode, accountHolder };
                     }
-                    const response = await fetch("http://localhost:5000/api/orders/return", {
+                    const response = await fetch("https://global-shopify-app.onrender.com/api/orders/return", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
@@ -771,7 +771,7 @@
 
             try {
                 const query = new URLSearchParams({ status, time, search }).toString();
-                const response = await fetch(`http://localhost:5000/api/orders/filter?${query}`, {
+                const response = await fetch(`https://global-shopify-app.onrender.com/api/orders/filter?${query}`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem("authToken")}`,
                     },

@@ -227,7 +227,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         try {
-            const response = await fetch("http://localhost:5000/api/users/profile/getprofile", {
+            const response = await fetch("https://global-shopify-app.onrender.com/api/users/profile/getprofile", {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -383,7 +383,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (!token || token === "undefined") {
                         console.log("No valid token found, proceeding with logout");
                     } else {
-                        const res = await fetch("http://localhost:5000/api/users/logout", {
+                        const res = await fetch("https://global-shopify-app.onrender.com/api/users/logout", {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json",

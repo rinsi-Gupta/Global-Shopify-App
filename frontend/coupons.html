@@ -227,7 +227,7 @@
 
         async function fetchCoupons() {
             try {
-                const res = await fetch('http://localhost:5000/api/coupons');
+                const res = await fetch('https://global-shopify-app.onrender.com/api/coupons');
                 if (!res.ok) {
                     throw new Error('Failed to fetch coupons');
                 }

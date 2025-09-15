@@ -177,7 +177,7 @@
         submitBtn.disabled = true;
         submitBtn.textContent = "Signing in...";
 
-        const res = await fetch("http://localhost:5000/api/users/signin", {
+        const res = await fetch("https://global-shopify-app.onrender.com/api/users/signin", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password })
